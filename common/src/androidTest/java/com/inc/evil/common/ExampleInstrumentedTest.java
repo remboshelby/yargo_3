@@ -1,4 +1,4 @@
-package com.inc.evil.yargo_3;
+package com.inc.evil.common;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.inc.evil.yargo_3", appContext.getPackageName());
+        assertEquals("com.inc.evil.common.test", appContext.getPackageName());
     }
 }
