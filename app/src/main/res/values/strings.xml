@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">yargo_3</string>
+    <string name="server_name">http://api.yargo.pro</string>
 </resources>
