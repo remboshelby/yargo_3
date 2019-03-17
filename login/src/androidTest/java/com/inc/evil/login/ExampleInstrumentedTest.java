@@ -1,8 +1,8 @@
-package com.inc.evil.yargo_3;
+package com.inc.evil.login;
 
 import android.content.Context;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +18,9 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the App under test.
+        // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.inc.evil.yargo_3", appContext.getPackageName());
+        assertEquals("com.inc.evil.login.test", appContext.getPackageName());
     }
 }
