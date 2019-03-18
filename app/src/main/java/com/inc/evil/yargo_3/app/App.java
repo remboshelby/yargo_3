@@ -11,10 +11,6 @@ import com.inc.evil.yargo_3.app.di.DaggerApplicationComponent;
 public class App extends Application implements CommonApplication {
     private static ApplicationComponent applicationComponent;
 
-    public static ApplicationComponent getApplicationComponent(){
-        return applicationComponent;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
