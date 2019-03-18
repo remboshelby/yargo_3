@@ -4,8 +4,9 @@ import com.inc.evil.common.base.BaseViewModel;
 import com.inc.evil.common.network.data.Login.LoginResponse;
 import com.inc.evil.common.network.repository.LoginRepository;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import io.reactivex.Scheduler;
+import androidx.lifecycle.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -19,6 +20,9 @@ public class LoginViewModel extends BaseViewModel {
         this.loginRepository = loginRepository;
     }
 
+    public void observeData(LifecycleOwner owner, Observer<LoginResponse> observer){
+        data.observe(owner,observer);
+    }
     public void makeLoginWithPassword(String login, String password, String app_id){
         addDisposible(loginRepository.makeLoginWithPass(login, password, app_id)
         .subscribeOn(Schedulers.io())

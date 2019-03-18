@@ -20,10 +20,10 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inject();
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return inflate(inflater, container);
     }
 
     protected void inject(){};
 
-    protected abstract View infate(LayoutInflater inflater, ViewGroup container);
+    protected abstract View inflate(LayoutInflater inflater, ViewGroup container);
 }
