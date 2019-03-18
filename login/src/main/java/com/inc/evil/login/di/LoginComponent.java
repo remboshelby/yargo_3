@@ -10,6 +10,8 @@ import dagger.Component;
 @Component(dependencies = CommonComponent.class, modules = {LoginModule.class})
 public interface LoginComponent {
 
+    void inject(LoginFragment loginFragment);
+
     @Component.Builder
     interface Builder{
         @BindsInstance
