@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">login</string>
+
+    <!--Login Fragment-->
+    <string name="action_regist_new_account">Зарегистрироваться</string>
+    <string name="action_sign_in_account">Войти</string>
+    <string name="action_sign_in_short">Вход</string>
+    <string name="prompt_email">Логин (электронная почта)</string>
+    <string name="prompt_password">Пароль</string>
 </resources>
