@@ -15,6 +15,5 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textColor">#89000000</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textAppearance">textAppearanceSmall</item>
     </style>
 </resources>
