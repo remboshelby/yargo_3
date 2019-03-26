@@ -1,5 +1,6 @@
 package com.inc.evil.login.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +41,6 @@ public class LoginFragment extends BaseFragment {
     TextInputLayout textInputLayoutEmail;
     @BindView(R2.id.textInputLayoutPassword)
     TextInputLayout textInputLayoutPassword;
-    @BindView(R2.id.loginProgressBar)
-    ContentLoadingProgressBar loginProgressBar;
     @BindView(R2.id.imageView3)
     ImageView imageView3;
     @BindView(R2.id.email)
@@ -59,6 +58,8 @@ public class LoginFragment extends BaseFragment {
     @Inject
     protected CommonSharedPreferences preferences;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.login_fragment, container, false);
@@ -71,21 +72,20 @@ public class LoginFragment extends BaseFragment {
         viewModel.observeData(this, new Observer<LoginResponse>() {
             @Override
             public void onChanged(LoginResponse loginResponse) {
-                String t = "fsdfsfdsf";
 
-                preferences.putObject("Response", loginResponse.getResponse());
+                preferences.putObject("user_about_response", loginResponse.getResponse());
                 preferences.putObject("auth_key", loginResponse.getResponse().getAuthKey());
-//
-                String auth_key = (String) preferences.getObject("auth_key", String.class);
 
-                final Response resp = (Response) preferences.getObject("Response", Response.class);
-                String auth_key_1 = resp.getAuthKey();
-                String sdgdf = "fdsfs";
+                if (!loginResponse.getResponse().getType().equals("OK")) {
+                    getRoot().pushFragment(new OrderListsFragment());
+                    getRoot().removeFragment(LoginFragment.this);
+                }
+                else {
+                    textInputLayoutEmail.setErrorEnabled(true);
+                    textInputLayoutPassword.setErrorEnabled(true);
+                }
+                progressDialog.dismiss();
 
-                componentsVisibility(View.VISIBLE);
-
-                getRoot().pushFragment(new OrderListsFragment());
-                getRoot().removeFragment(LoginFragment.this);
             }
         });
     }
@@ -105,23 +105,12 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R2.id.email_sign_in_button)
     void onSingInBtnClick() {
-        componentsVisibility(View.INVISIBLE);
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
         viewModel.makeLoginWithPassword("admin", "admin", UUID.randomUUID().toString());
     }
 
-    private void componentsVisibility(int visible) {
-        email_sign_button.setVisibility(visible);
-        email_sign_in_button.setVisibility(visible);
-        textInputLayoutEmail.setVisibility(visible);
-        textInputLayoutPassword.setVisibility(visible);
-        if (visible == View.VISIBLE) {
-            loginProgressBar.setVisibility(View.INVISIBLE);
-            loginProgressBar.hide();
-        } else {
-            loginProgressBar.setVisibility(View.VISIBLE);
-            loginProgressBar.show();
-        }
-    }
 
     @OnClick(R2.id.email_sign_button)
     void click() {
