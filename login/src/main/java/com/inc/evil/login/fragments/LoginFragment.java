@@ -94,7 +94,7 @@ public class LoginFragment extends BaseFragment {
                     preferences.putObject(AUTH_KEY, "");
                     textInputLayoutEmail.setErrorEnabled(true);
                     textInputLayoutPassword.setErrorEnabled(true);
-                    
+
                     viewComponentVisibility(View.VISIBLE);
                 }
                 if (progressDialog.isShowing())
@@ -111,8 +111,8 @@ public class LoginFragment extends BaseFragment {
         });
 
         if (viewModel.isAuthKeyExist()) {
-            viewComponentVisibility(View.INVISIBLE);
-            viewModel.makeLoginWithToken();
+//            viewComponentVisibility(View.INVISIBLE);
+//            viewModel.makeLoginWithToken();
         }
     }
 

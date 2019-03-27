@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#fad900</color>
+    <color name="colorButtonDisable">#B9797979</color>
+    <color name="colorButtonEnabled">#B9AAAAAA</color>
+</resources>

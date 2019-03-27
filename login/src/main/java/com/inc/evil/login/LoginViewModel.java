@@ -80,14 +80,14 @@ public class LoginViewModel extends BaseViewModel {
 
     public void setEmail(String emailValue) {
         loginInfo.getValue().setEmail(emailValue);
-        if (!emailValue.isEmpty()) {
+        if (!emailValue.isEmpty() && emailValue.length()>5) {
             invisiblity.setValue(loginInfo.getValue().isFieldNotEmpty());
         }
     }
 
     public void setPassword(String password) {
         loginInfo.getValue().setPassword(password);
-        if (!password.isEmpty()) {
+        if (!password.isEmpty() && password.length()>5) {
             invisiblity.setValue(loginInfo.getValue().isFieldNotEmpty());
         }
     }
