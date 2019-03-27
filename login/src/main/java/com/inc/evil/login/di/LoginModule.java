@@ -1,5 +1,6 @@
 package com.inc.evil.login.di;
 
+import com.inc.evil.common.dto.CommonSharedPreferences;
 import com.inc.evil.common.network.repository.LoginRepository;
 import com.inc.evil.login.LoginViewModel;
 import com.inc.evil.login.fragments.LoginFragment;
@@ -17,12 +18,14 @@ import dagger.Provides;
 public class LoginModule {
     @Provides
     @LoginScope
-    public LoginViewModel provideLoginViewModel(LoginFragment host, final LoginRepository loginRepository){
+    public LoginViewModel provideLoginViewModel(LoginFragment host,
+                                                final LoginRepository loginRepository,
+                                                CommonSharedPreferences commonSharedPreferences){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new LoginViewModel(loginRepository);
+                return (T) new LoginViewModel(loginRepository,commonSharedPreferences);
             }
         }).get(LoginViewModel.class);
     }

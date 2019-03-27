@@ -12,6 +12,7 @@ public interface LoginApiService {
                                                 @Query("LoginForm[password]") String password,
                                                 @Query("app_id") String app_id);
 
+    @GET("/login")
     Observable<LoginResponse> makeLogingWithToken(@Query("LoginForm[auth_key]") String auth_key,
                                                   @Query("app_id") String app_id);
 }

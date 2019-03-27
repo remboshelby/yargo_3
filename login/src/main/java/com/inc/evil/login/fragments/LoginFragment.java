@@ -33,6 +33,11 @@ import androidx.lifecycle.Observer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
+
+import static com.inc.evil.common.dto.CommonSharedPreferences.APP_ID;
+import static com.inc.evil.common.dto.CommonSharedPreferences.AUTH_KEY;
+import static com.inc.evil.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 
 public class LoginFragment extends BaseFragment {
 
@@ -69,25 +74,79 @@ public class LoginFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        init();
+    }
+
+    private void init() {
+        progressDialog = new ProgressDialog(getContext());
+
+        viewModel.initLoginInfo();
         viewModel.observeData(this, new Observer<LoginResponse>() {
             @Override
             public void onChanged(LoginResponse loginResponse) {
+                preferences.putObject(USER_ABOUT_RESPONSE, loginResponse.getResponse());
 
-                preferences.putObject("user_about_response", loginResponse.getResponse());
-                preferences.putObject("auth_key", loginResponse.getResponse().getAuthKey());
-
-                if (!loginResponse.getResponse().getType().equals("OK")) {
+                if (loginResponse.getResponse().getType().equals("OK")) {
+                    preferences.putObject(AUTH_KEY, loginResponse.getResponse().getAuthKey());
                     getRoot().pushFragment(new OrderListsFragment());
                     getRoot().removeFragment(LoginFragment.this);
-                }
-                else {
+                } else {
+                    preferences.putObject(AUTH_KEY, "");
                     textInputLayoutEmail.setErrorEnabled(true);
                     textInputLayoutPassword.setErrorEnabled(true);
+                    
+                    viewComponentVisibility(View.VISIBLE);
                 }
-                progressDialog.dismiss();
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
 
             }
         });
+        viewModel.observeFieldsContent(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (!aBoolean) email_sign_in_button.setEnabled(false);
+                else email_sign_in_button.setEnabled(true);
+            }
+        });
+
+        if (viewModel.isAuthKeyExist()) {
+            viewComponentVisibility(View.INVISIBLE);
+            viewModel.makeLoginWithToken();
+        }
+    }
+
+    private void viewComponentVisibility(int viewVisibility) {
+        textInputLayoutEmail.setVisibility(viewVisibility);
+        textInputLayoutPassword.setVisibility(viewVisibility);
+        email_sign_button.setVisibility(viewVisibility);
+        email_sign_in_button.setVisibility(viewVisibility);
+
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+    }
+
+    @OnClick(R2.id.email_sign_in_button)
+    void onSingInBtnClick() {
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+
+        viewModel.makeLoginWithPassword();
+    }
+
+
+    @OnClick(R2.id.email_sign_button)
+    void onClickSignInButton() {
+    }
+
+    @OnTextChanged(R2.id.email)
+    void onEmailChanged() {
+        viewModel.setEmail(email.getText().toString());
+    }
+
+    @OnTextChanged(R2.id.password)
+    void onPasswordChanged() {
+        viewModel.setPassword(password.getText().toString());
     }
 
     @Override
@@ -103,17 +162,5 @@ public class LoginFragment extends BaseFragment {
         loginComponent.inject(this);
     }
 
-    @OnClick(R2.id.email_sign_in_button)
-    void onSingInBtnClick() {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();
-        viewModel.makeLoginWithPassword("admin", "admin", UUID.randomUUID().toString());
-    }
 
-
-    @OnClick(R2.id.email_sign_button)
-    void click() {
-        String t = "DSFSDF";
-    }
 }

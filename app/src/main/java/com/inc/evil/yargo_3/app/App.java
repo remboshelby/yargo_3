@@ -1,12 +1,16 @@
 package com.inc.evil.yargo_3.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.inc.evil.common.di.CommonApplication;
 import com.inc.evil.common.di.CommonComponent;
 import com.inc.evil.yargo_3.R;
 import com.inc.evil.yargo_3.app.di.ApplicationComponent;
 import com.inc.evil.yargo_3.app.di.DaggerApplicationComponent;
+
+import java.util.UUID;
 
 public class App extends Application implements CommonApplication {
     private static ApplicationComponent applicationComponent;
@@ -15,6 +19,15 @@ public class App extends Application implements CommonApplication {
     public void onCreate() {
         super.onCreate();
         makeComponent();
+        isFirstStart();
+    }
+
+    private void isFirstStart() {
+        SharedPreferences preferences;
+        preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE);
+        if (preferences.getString("app_id", "").isEmpty()){
+            preferences.edit().putString("app_id", UUID.randomUUID().toString());
+        }
     }
 
     private void makeComponent() {
