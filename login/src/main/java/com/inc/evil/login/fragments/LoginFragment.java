@@ -14,28 +14,21 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.inc.evil.common.base.BaseFragment;
 import com.inc.evil.common.di.CommonApplication;
 import com.inc.evil.common.dto.CommonSharedPreferences;
-import com.inc.evil.common.network.data.Login.LoginResponse;
-import com.inc.evil.common.network.data.Login.Response;
 import com.inc.evil.login.LoginViewModel;
 import com.inc.evil.login.R;
 import com.inc.evil.login.R2;
 import com.inc.evil.login.di.DaggerLoginComponent;
 import com.inc.evil.login.di.LoginComponent;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.lifecycle.Observer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-import static com.inc.evil.common.dto.CommonSharedPreferences.APP_ID;
 import static com.inc.evil.common.dto.CommonSharedPreferences.AUTH_KEY;
 import static com.inc.evil.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 
@@ -94,7 +87,7 @@ public class LoginFragment extends BaseFragment {
                 textInputLayoutEmail.setErrorEnabled(true);
                 textInputLayoutPassword.setErrorEnabled(true);
 
-                showAbstractDialog("Ошибка", "Yt ggdfgdfg");
+                showErrorDialog("Неправильный логин или пароль");
                 viewComponentVisibility(View.VISIBLE);
             }
             if (progressDialog.isShowing())
@@ -107,8 +100,8 @@ public class LoginFragment extends BaseFragment {
         });
 
         if (viewModel.isAuthKeyExist()) {
-            viewComponentVisibility(View.INVISIBLE);
-            viewModel.makeLoginWithToken();
+//            viewComponentVisibility(View.INVISIBLE);
+//            viewModel.makeLoginWithToken();
         }
     }
 
@@ -129,7 +122,6 @@ public class LoginFragment extends BaseFragment {
 
         viewModel.makeLoginWithPassword();
     }
-
 
     @OnClick(R2.id.email_sign_button)
     void onClickSignInButton() {

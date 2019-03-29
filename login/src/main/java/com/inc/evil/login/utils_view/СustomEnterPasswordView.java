@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 
 public class СustomEnterPasswordView extends ConstraintLayout {
@@ -55,18 +56,29 @@ public class СustomEnterPasswordView extends ConstraintLayout {
         super(context, attrs);
         init(context);
     }
+
     @OnTextChanged(R2.id.password)
     void onPasswordChanged() {
         viewModel.setPassword(password.getText().toString());
     }
 
     @OnCheckedChanged(R2.id.imgToggleButton)
-    void onToogleStatusChanged(ToggleButton toggleButton, boolean checked){
-        if (checked){
+    void onToogleStatusChanged(boolean checked) {
+        if (checked) {
             password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-        }
-        else {
+        } else {
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+    }
+
+    @OnFocusChange(R2.id.password)
+    void onFocusChanged(boolean focused) {
+        if (focused) {
+            imgToggleButton.setVisibility(VISIBLE);
+        } else {
+            imgToggleButton.setVisibility(GONE);
+            imgToggleButton.setChecked(false);
+            onToogleStatusChanged(false);
         }
     }
 }
