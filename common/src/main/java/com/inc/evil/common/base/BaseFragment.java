@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -26,4 +27,13 @@ public abstract class BaseFragment extends Fragment {
     protected void inject(){};
 
     protected abstract View inflate(LayoutInflater inflater, ViewGroup container);
+
+    public void showAbstractDialog(String message, String title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.setPositiveButton("OK", null);
+        builder.setCancelable(true);
+        builder.create().show();
+    }
 }

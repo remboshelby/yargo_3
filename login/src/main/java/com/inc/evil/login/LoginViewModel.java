@@ -1,6 +1,7 @@
 package com.inc.evil.login;
 
 import android.app.Application;
+import android.widget.ToggleButton;
 
 import com.inc.evil.common.base.BaseViewModel;
 import com.inc.evil.common.dto.CommonSharedPreferences;
@@ -11,6 +12,7 @@ import com.inc.evil.login.data.LoginData;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import butterknife.OnCheckedChanged;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -22,6 +24,9 @@ import static com.inc.evil.common.dto.CommonSharedPreferences.AUTH_KEY;
 public class LoginViewModel extends BaseViewModel {
     private LoginRepository loginRepository;
     private CommonSharedPreferences commonSharedPreferences;
+
+    private static final int PASSWORD_LENTH = 5;
+    private static final int EMAIL_LENTH = 5;
 
     MutableLiveData<LoginResponse> data = new MutableLiveData<>();
     MutableLiveData<LoginData> loginInfo = new MutableLiveData<>();
@@ -61,34 +66,29 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public void makeLoginWithToken() {
-        addDisposible(loginRepository.makeLoginWithToken(loginInfo.getValue().getAuthKey(),loginInfo.getValue().getAppId())
+        addDisposible(loginRepository.makeLoginWithToken(loginInfo.getValue().getAuthKey(), loginInfo.getValue().getAppId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<LoginResponse>() {
-                    @Override
-                    public void accept(LoginResponse loginResponse) throws Exception {
-                        data.postValue(loginResponse);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                    }
-                }));
+                .subscribe(loginResponse -> data.postValue(loginResponse),
+                        throwable -> throwable.printStackTrace()));
     }
 
 
     public void setEmail(String emailValue) {
         loginInfo.getValue().setEmail(emailValue);
-        if (!emailValue.isEmpty() && emailValue.length()>5) {
+        if (!emailValue.isEmpty() && emailValue.length() > EMAIL_LENTH) {
             invisiblity.setValue(loginInfo.getValue().isFieldNotEmpty());
+        } else if (emailValue.length() <= EMAIL_LENTH) {
+            invisiblity.setValue(false);
         }
     }
 
-    public void setPassword(String password) {
-        loginInfo.getValue().setPassword(password);
-        if (!password.isEmpty() && password.length()>5) {
+    public void setPassword(String passwordValue) {
+        loginInfo.getValue().setPassword(passwordValue);
+        if (!passwordValue.isEmpty() && passwordValue.length() > PASSWORD_LENTH) {
             invisiblity.setValue(loginInfo.getValue().isFieldNotEmpty());
+        } else if (passwordValue.length() <= PASSWORD_LENTH) {
+            invisiblity.setValue(false);
         }
     }
 

@@ -1,9 +1,11 @@
 package com.inc.evil.login.di;
 
+import android.media.session.PlaybackState;
 import android.os.Build;
 
 import com.inc.evil.common.di.CommonComponent;
 import com.inc.evil.login.fragments.LoginFragment;
+import com.inc.evil.login.utils_view.СustomEnterPasswordView;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -13,6 +15,8 @@ import dagger.Component;
 public interface LoginComponent {
 
     void inject(LoginFragment loginFragment);
+
+    void inject(СustomEnterPasswordView сustomEnterPasswordView);
 
     @Component.Builder
     interface Builder{

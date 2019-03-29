@@ -24,6 +24,7 @@ public class LoginModule {
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
+            @Singleton
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 return (T) new LoginViewModel(loginRepository,commonSharedPreferences);
             }

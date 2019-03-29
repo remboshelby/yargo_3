@@ -59,10 +59,11 @@ public class LoginFragment extends BaseFragment {
 
     @Inject
     protected LoginViewModel viewModel;
+
     protected static LoginComponent loginComponent;
+
     @Inject
     protected CommonSharedPreferences preferences;
-
     private ProgressDialog progressDialog;
 
     @Override
@@ -81,38 +82,33 @@ public class LoginFragment extends BaseFragment {
         progressDialog = new ProgressDialog(getContext());
 
         viewModel.initLoginInfo();
-        viewModel.observeData(this, new Observer<LoginResponse>() {
-            @Override
-            public void onChanged(LoginResponse loginResponse) {
-                preferences.putObject(USER_ABOUT_RESPONSE, loginResponse.getResponse());
+        viewModel.observeData(this, loginResponse -> {
+            preferences.putObject(USER_ABOUT_RESPONSE, loginResponse.getResponse());
 
-                if (loginResponse.getResponse().getType().equals("OK")) {
-                    preferences.putObject(AUTH_KEY, loginResponse.getResponse().getAuthKey());
-                    getRoot().pushFragment(new OrderListsFragment());
-                    getRoot().removeFragment(LoginFragment.this);
-                } else {
-                    preferences.putObject(AUTH_KEY, "");
-                    textInputLayoutEmail.setErrorEnabled(true);
-                    textInputLayoutPassword.setErrorEnabled(true);
+            if (loginResponse.getResponse().getType().equals("OK")) {
+                preferences.putObject(AUTH_KEY, loginResponse.getResponse().getAuthKey());
+                getRoot().pushFragment(new OrderListsFragment());
+                getRoot().removeFragment(LoginFragment.this);
+            } else {
+                preferences.putObject(AUTH_KEY, "");
+                textInputLayoutEmail.setErrorEnabled(true);
+                textInputLayoutPassword.setErrorEnabled(true);
 
-                    viewComponentVisibility(View.VISIBLE);
-                }
-                if (progressDialog.isShowing())
-                    progressDialog.dismiss();
-
+                showAbstractDialog("Ошибка", "Yt ggdfgdfg");
+                viewComponentVisibility(View.VISIBLE);
             }
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
+
         });
-        viewModel.observeFieldsContent(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (!aBoolean) email_sign_in_button.setEnabled(false);
-                else email_sign_in_button.setEnabled(true);
-            }
+        viewModel.observeFieldsContent(this, aBoolean -> {
+            if (!aBoolean) email_sign_in_button.setEnabled(false);
+            else email_sign_in_button.setEnabled(true);
         });
 
         if (viewModel.isAuthKeyExist()) {
-//            viewComponentVisibility(View.INVISIBLE);
-//            viewModel.makeLoginWithToken();
+            viewComponentVisibility(View.INVISIBLE);
+            viewModel.makeLoginWithToken();
         }
     }
 
@@ -144,10 +140,6 @@ public class LoginFragment extends BaseFragment {
         viewModel.setEmail(email.getText().toString());
     }
 
-    @OnTextChanged(R2.id.password)
-    void onPasswordChanged() {
-        viewModel.setPassword(password.getText().toString());
-    }
 
     @Override
     protected void inject() {
@@ -162,5 +154,7 @@ public class LoginFragment extends BaseFragment {
         loginComponent.inject(this);
     }
 
-
+    public static LoginComponent getLoginComponent() {
+        return loginComponent;
+    }
 }
