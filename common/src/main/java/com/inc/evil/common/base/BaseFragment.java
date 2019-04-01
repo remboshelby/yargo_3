@@ -33,7 +33,7 @@ public abstract class BaseFragment extends Fragment {
     public void showErrorDialog(String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(message);
-        builder.setTitle(getString(R.string.Error));
+        builder.setTitle(getString(R.string.Error_));
         builder.setPositiveButton("OK", null);
         builder.setCancelable(true);
         builder.create().show();

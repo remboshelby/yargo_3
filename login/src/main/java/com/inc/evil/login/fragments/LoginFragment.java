@@ -22,6 +22,8 @@ import com.inc.evil.login.R2;
 import com.inc.evil.login.di.DaggerLoginComponent;
 import com.inc.evil.login.di.LoginComponent;
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+import static com.inc.evil.common.dto.CommonSharedPreferences.APP_ID;
 import static com.inc.evil.common.dto.CommonSharedPreferences.AUTH_KEY;
 import static com.inc.evil.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 
@@ -75,6 +78,10 @@ public class LoginFragment extends BaseFragment {
 
     private void init() {
         progressDialog = new ProgressDialog(getContext());
+
+        String auth= (String) preferences.getObject(AUTH_KEY, String.class);
+        String app_id=  UUID.randomUUID().toString();
+
 
         viewModel.initLoginInfo();
         viewModel.observeData(this, loginResponse -> {

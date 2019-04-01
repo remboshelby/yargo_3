@@ -1,6 +1,6 @@
 package com.inc.evil.common.network.api;
 
-import com.inc.evil.common.network.data.Login.LoginResponse;
+import com.inc.evil.common.network.data.login.LoginResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

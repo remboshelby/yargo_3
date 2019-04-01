@@ -1,4 +1,4 @@
-package com.inc.evil.common.network.data.Login;
+package com.inc.evil.common.network.data.login;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;

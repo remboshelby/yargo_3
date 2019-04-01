@@ -1,7 +1,7 @@
 package com.inc.evil.common.network.repository;
 
 import com.inc.evil.common.network.api.LoginApiService;
-import com.inc.evil.common.network.data.Login.LoginResponse;
+import com.inc.evil.common.network.data.login.LoginResponse;
 
 import io.reactivex.Observable;
 

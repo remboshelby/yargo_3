@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">common</string>
-    <string name="Error">Ошибка</string>
+    <string name="Error_">Ошибка</string>
 </resources>

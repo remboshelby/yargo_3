@@ -1,21 +1,15 @@
 package com.inc.evil.login;
 
-import android.app.Application;
-import android.widget.ToggleButton;
-
 import com.inc.evil.common.base.BaseViewModel;
 import com.inc.evil.common.dto.CommonSharedPreferences;
-import com.inc.evil.common.network.data.Login.LoginResponse;
+import com.inc.evil.common.network.data.login.LoginResponse;
 import com.inc.evil.common.network.repository.LoginRepository;
 import com.inc.evil.login.data.LoginData;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import butterknife.OnCheckedChanged;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.inc.evil.common.dto.CommonSharedPreferences.APP_ID;

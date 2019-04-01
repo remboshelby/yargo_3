@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.inc.evil.common.base.BaseFragment;
 import com.inc.evil.login.R;
 import com.inc.evil.login.R2;
+import com.inc.evil.login.fragments.order_list.OrderList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,12 +45,15 @@ public class OrderListsFragment extends BaseFragment {
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
+        pushFragment(new OrderList());
         return inflater.inflate(R.layout.oder_lists_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
         ButterKnife.bind(this, view);
 
         getRoot().setSupportActionBar(toolbar);
@@ -80,5 +84,11 @@ public class OrderListsFragment extends BaseFragment {
         });
 
 
+    }
+    public void pushFragment(BaseFragment fragment){
+            getRoot().getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(fragment.getClass().getSimpleName())
+                    .replace(R.id.list_container, fragment)
+                    .commit();
     }
 }
