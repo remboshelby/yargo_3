@@ -25,8 +25,8 @@ public class LoginViewModel extends BaseViewModel {
     private LoginRepository loginRepository;
     private CommonSharedPreferences commonSharedPreferences;
 
-    private static final int PASSWORD_LENTH = 5;
-    private static final int EMAIL_LENTH = 5;
+    private static final int PASSWORD_LENTH = 4;
+    private static final int EMAIL_LENTH = 4;
 
     MutableLiveData<LoginResponse> data = new MutableLiveData<>();
     MutableLiveData<LoginData> loginInfo = new MutableLiveData<>();
@@ -52,17 +52,8 @@ public class LoginViewModel extends BaseViewModel {
                 loginInfo.getValue().getAppId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<LoginResponse>() {
-                    @Override
-                    public void accept(LoginResponse loginResponse) throws Exception {
-                        data.postValue(loginResponse);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                    }
-                }));
+                .subscribe(loginResponse -> data.postValue(loginResponse),
+                        Throwable::printStackTrace));
     }
 
     public void makeLoginWithToken() {

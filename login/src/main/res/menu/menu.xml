@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app ="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_orders"
+            android:icon="@drawable/ic_folder_special_black_24dp"
+            android:title="@string/menu_all_orders" />
+        <item
+            android:id="@+id/menu_my_orders"
+            android:icon="@drawable/ic_folder_black_24dp"
+            android:title="@string/menu_my_orders" />
+        <item
+            android:id="@+id/menu_call"
+            android:icon="@drawable/ic_local_phone_black_24dp"
+            android:title="@string/menu_call_to_dispatcher" />
+        <item
+            android:id="@+id/menu_exit"
+            android:icon="@drawable/ic_exit_to_app_black_24dp"
+            android:title="@string/menu_exit" />
+    </group>
+    <item android:title="@string/menu_instruction">
+        <menu>
+            <item
+                android:id="@+id/menu_instruction"
+                android:icon="@drawable/ic_assignment_black_24dp"
+                android:title="@string/menu_help" />
+        </menu>
+    </item>
+
+</menu>

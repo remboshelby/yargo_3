@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">login</string>
-
+    <!--System-->
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
     <!--Login Fragment-->
     <string name="action_regist_new_account">Зарегистрироваться</string>
     <string name="action_sign_in_account">Войти</string>
@@ -10,4 +12,13 @@
 
     <!--Utils-->
     <string name="loading">Загрузка</string>
+    <!--Drawler_Menu_Items-->
+    <string name="menu_all_orders">Все заявки</string>
+    <string name="menu_my_orders">Мои заявки</string>
+    <string name="menu_call_to_dispatcher">Позвонить диспетчеру</string>
+    <string name="menu_exit">Выйти</string>
+    <string name="menu_instruction">Инструкции</string>
+    <string name="menu_help">Помощь</string>
+
+
 </resources>

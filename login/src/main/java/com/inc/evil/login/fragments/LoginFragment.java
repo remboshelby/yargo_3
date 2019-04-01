@@ -1,10 +1,12 @@
 package com.inc.evil.login.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -100,8 +102,8 @@ public class LoginFragment extends BaseFragment {
         });
 
         if (viewModel.isAuthKeyExist()) {
-//            viewComponentVisibility(View.INVISIBLE);
-//            viewModel.makeLoginWithToken();
+            viewComponentVisibility(View.INVISIBLE);
+            viewModel.makeLoginWithToken();
         }
     }
 
@@ -117,6 +119,7 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R2.id.email_sign_in_button)
     void onSingInBtnClick() {
+        hideKeyboard();
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
 
@@ -148,5 +151,10 @@ public class LoginFragment extends BaseFragment {
 
     public static LoginComponent getLoginComponent() {
         return loginComponent;
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getRoot().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getRoot().getCurrentFocus().getWindowToken(), 0);
     }
 }
