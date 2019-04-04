@@ -1,12 +1,13 @@
 package com.inc.evil.common.di.modules;
 
+import android.app.Application;
 import android.content.Context;
 
+import com.inc.evil.common.database.VacantOrdersDao;
 import com.inc.evil.common.database.YargoDataBase;
-import com.inc.evil.common.database.listofcitycoordinate.ManagerOfCityCoordinate;
-import com.inc.evil.common.database.listofspeciality.SpecialityManager;
-import com.inc.evil.common.database.userslistorders.ManagerUserOrders;
-import com.inc.evil.common.database.vacantlistorders.ManagerVanactOrders;
+import com.inc.evil.common.database.listofcitycoordinate.CityCoordinateDao;
+import com.inc.evil.common.database.listofspeciality.SpecialityDao;
+import com.inc.evil.common.database.userslistorders.UserOrdersDao;
 
 import javax.inject.Singleton;
 
@@ -18,33 +19,32 @@ import dagger.Provides;
 public class DataBaseModule {
     @Provides
     @Singleton
-    public YargoDataBase provideYargoDataBase(Context context){
-        return Room.databaseBuilder(context,YargoDataBase.class, YargoDataBase.DATABASE_NAME)
+    public YargoDataBase provideYargoDataBase(Application application){
+        return Room.databaseBuilder(application,YargoDataBase.class, YargoDataBase.DATABASE_NAME)
                 .fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
                 .build();
     }
     @Provides
     @Singleton
-    public ManagerOfCityCoordinate provideManagerOfCityCoordinate(YargoDataBase yargoDataBase){
-        return yargoDataBase.managerOfCityCoordinate();
+    public CityCoordinateDao provideManagerOfCityCoordinate(YargoDataBase yargoDataBase){
+        return yargoDataBase.cityCoordinateDao();
     }
 
     @Provides
     @Singleton
-    public SpecialityManager provideSpecialityManager(YargoDataBase yargoDataBase){
-        return yargoDataBase.specialityManager();
+    public SpecialityDao provideSpecialityManager(YargoDataBase yargoDataBase){
+        return yargoDataBase.specialityDao();
     }
 
     @Provides
     @Singleton
-    public ManagerUserOrders provideManagerUserOrders(YargoDataBase yargoDataBase){
-        return yargoDataBase.managerUserOrders();
+    public UserOrdersDao provideManagerUserOrders(YargoDataBase yargoDataBase){
+        return yargoDataBase.userOrdersDao();
     }
 
     @Provides
     @Singleton
-    public ManagerVanactOrders provideManagerVanactOrders(YargoDataBase yargoDataBase){
-        return yargoDataBase.managerVanactOrders();
+    public VacantOrdersDao provideManagerVanactOrders(YargoDataBase yargoDataBase){
+        return yargoDataBase.vacantOrdersDao();
     }
 }

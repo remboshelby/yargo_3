@@ -6,11 +6,8 @@ import androidx.room.PrimaryKey;
 
 @Entity (tableName = "city_coordinate")
 public class CityCoordinate {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long idCity;
-
-    @Nullable
-    private long idCityBack;
 
     @Nullable
     private String cityName;
@@ -34,14 +31,6 @@ public class CityCoordinate {
 
     public void setIdCity(long idCity) {
         this.idCity = idCity;
-    }
-
-    public long getIdCityBack() {
-        return idCityBack;
-    }
-
-    public void setIdCityBack(long idCityBack) {
-        this.idCityBack = idCityBack;
     }
 
     @Nullable

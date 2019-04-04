@@ -2,7 +2,7 @@ package com.inc.evil.login;
 
 import com.inc.evil.common.base.BaseViewModel;
 import com.inc.evil.common.dto.CommonSharedPreferences;
-import com.inc.evil.common.network.data.login.LoginResponse;
+import com.inc.evil.common.network.models.login.LoginResponse;
 import com.inc.evil.common.network.repository.LoginRepository;
 import com.inc.evil.login.data.LoginData;
 

@@ -5,6 +5,7 @@ import android.os.Build;
 
 import com.inc.evil.common.di.CommonComponent;
 import com.inc.evil.common.di.ServerUrl;
+import com.inc.evil.common.di.modules.DataBaseModule;
 import com.inc.evil.common.di.modules.NetworkModule;
 import com.inc.evil.common.di.modules.RepositoryModule;
 import com.inc.evil.common.di.modules.SharedPreferenceModule;
@@ -15,7 +16,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 
 @Singleton
-@Component (modules = {NetworkModule.class, RepositoryModule.class, SharedPreferenceModule.class})
+@Component (modules = {NetworkModule.class, RepositoryModule.class, SharedPreferenceModule.class, DataBaseModule.class})
 public interface ApplicationComponent extends CommonComponent {
     @Component.Builder
     interface Builder{

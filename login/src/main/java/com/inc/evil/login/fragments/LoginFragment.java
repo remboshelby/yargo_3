@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.orders.fragments.order_list.OrderListsFragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.inc.evil.common.base.BaseFragment;
 import com.inc.evil.common.di.CommonApplication;
@@ -33,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-import static com.inc.evil.common.dto.CommonSharedPreferences.APP_ID;
 import static com.inc.evil.common.dto.CommonSharedPreferences.AUTH_KEY;
 import static com.inc.evil.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 

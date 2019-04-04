@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 
 @Entity (tableName = "user_orders")
 public class ListOfUserOrders {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long idUsersOrder;
 
     public long getIdUsersOrder() {
@@ -17,13 +17,6 @@ public class ListOfUserOrders {
         this.idUsersOrder = idUsersOrder;
     }
 
-    public long getIdUserOrderBack() {
-        return idUserOrderBack;
-    }
-
-    public void setIdUserOrderBack(long idUserOrderBack) {
-        this.idUserOrderBack = idUserOrderBack;
-    }
 
     @Nullable
     public String getAddress() {
@@ -178,8 +171,6 @@ public class ListOfUserOrders {
         this.exactAddress = exactAddress;
     }
 
-    @Nullable
-    private long idUserOrderBack;
     @Nullable
     private String address;
     @Nullable

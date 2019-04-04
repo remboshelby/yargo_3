@@ -1,6 +1,6 @@
 package com.inc.evil.common.network.api;
 
-import com.inc.evil.common.network.data.order.OrdersResponse;
+import com.inc.evil.common.network.models.order.OrdersResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
