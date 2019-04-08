@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.orders.fragments.order_list.OrderListsFragment;
 import com.google.android.material.textfield.TextInputLayout;
@@ -23,12 +24,11 @@ import com.inc.evil.login.R2;
 import com.inc.evil.login.di.DaggerLoginComponent;
 import com.inc.evil.login.di.LoginComponent;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,6 +40,10 @@ import static com.inc.evil.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONS
 public class LoginFragment extends BaseFragment {
 
 
+    @BindView(R2.id.root_swipe_layout)
+    SwipeRefreshLayout root_swipe_layout;
+    @BindView(R2.id.no_internet_img)
+    ImageView no_internet_img;
     @BindView(R2.id.textInputLayoutEmail)
     TextInputLayout textInputLayoutEmail;
     @BindView(R2.id.textInputLayoutPassword)
@@ -79,25 +83,36 @@ public class LoginFragment extends BaseFragment {
     private void init() {
         progressDialog = new ProgressDialog(getContext());
 
-        String auth= (String) preferences.getObject(AUTH_KEY, String.class);
-        String app_id=  UUID.randomUUID().toString();
-
-
         viewModel.initLoginInfo();
+
+        viewModel.observeIsNetworkError(this, aBoolean -> {
+            if (aBoolean) {
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+
+                if (root_swipe_layout.isRefreshing())
+                    root_swipe_layout.setRefreshing(false);
+
+                root_swipe_layout.setEnabled(true);
+                no_internet_img.setVisibility(View.VISIBLE);
+                //TODO показать банер нет интернета и добавить скрол вью
+                Toast.makeText(getContext(), "no internet", Toast.LENGTH_LONG).show();
+            }
+        });
         viewModel.observeData(this, loginResponse -> {
             preferences.putObject(USER_ABOUT_RESPONSE, loginResponse.getResponse());
 
             if (loginResponse.getResponse().getType().equals("OK")) {
                 preferences.putObject(AUTH_KEY, loginResponse.getResponse().getAuthKey());
-                getRoot().pushFragment(new OrderListsFragment());
-                getRoot().removeFragment(LoginFragment.this);
+                LoginFragment.this.getRoot().pushFragment(new OrderListsFragment());
+                LoginFragment.this.getRoot().removeFragment(LoginFragment.this);
             } else {
                 preferences.putObject(AUTH_KEY, "");
                 textInputLayoutEmail.setErrorEnabled(true);
                 textInputLayoutPassword.setErrorEnabled(true);
 
-                showErrorDialog("Неправильный логин или пароль");
-                viewComponentVisibility(View.VISIBLE);
+                LoginFragment.this.showErrorDialog("Неправильный логин или пароль");
+                LoginFragment.this.viewComponentVisibility(View.VISIBLE);
             }
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
@@ -161,7 +176,7 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getRoot().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getRoot().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getRoot().getCurrentFocus().getWindowToken(), 0);
     }
 }

@@ -3,11 +3,13 @@ package com.inc.evil.common.network.repository;
 import android.util.Log;
 
 import com.inc.evil.common.database.VacantOrdersDao;
+import com.inc.evil.common.dto.CommonSharedPreferences;
 import com.inc.evil.common.network.api.OrderApiService;
 import com.inc.evil.common.network.models.order.OrdersItem;
 import com.inc.evil.common.network.models.order.OrdersResponse;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Notification;
@@ -16,14 +18,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.inc.evil.common.dto.CommonSharedPreferences.AUTH_KEY;
+
 public class OrdersRepository {
     private OrderApiService orderApiService;
     private VacantOrdersDao vacantOrdersDao;
     private static final String TAG = OrdersRepository.class.getSimpleName();
+    private CommonSharedPreferences commonSharedPreferences;
 
-    public OrdersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao) {
+    public OrdersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao, CommonSharedPreferences commonSharedPreferences) {
         this.orderApiService = orderApiService;
         this.vacantOrdersDao = vacantOrdersDao;
+        this.commonSharedPreferences = commonSharedPreferences;
     }
 
     public Observable<OrdersResponse> getVacantOrders(String authKey, String appId) {
@@ -38,7 +44,10 @@ public class OrdersRepository {
         return orderApiService.getOrderWatchedCount(authKey, appId, idOrder);
     }
 
-    public Observable<List<OrdersItem>> getAllVacantOrders(String authKey, String appId) {
+    public Observable<List<OrdersItem>> getAllVacantOrders() {
+        String appId = UUID.randomUUID().toString();
+        String authKey = (String) commonSharedPreferences.getObject(AUTH_KEY, String.class);
+
         return Observable.concatArrayEager(getAllVacantOrdersFromDb(), getVacantOrdersFromRemote(authKey, appId))
                 .materialize()
                 .observeOn(AndroidSchedulers.mainThread())

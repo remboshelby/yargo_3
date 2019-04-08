@@ -10,7 +10,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void pushFragment(BaseFragment fragment){
         if (!getSupportFragmentManager().popBackStackImmediate(fragment.getClass().getSimpleName(), 0)){
             getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(fragment.getClass().getSimpleName())
+//                    .addToBackStack(fragment.getClass().getSimpleName())
                     .replace(containerResId(), fragment)
                     .commit();
         }

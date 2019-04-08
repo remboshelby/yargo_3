@@ -3,7 +3,6 @@ package com.example.orders.di;
 import com.example.orders.fragments.order_list.OrderListsFragment;
 import com.inc.evil.common.dto.CommonSharedPreferences;
 import com.inc.evil.common.network.repository.OrdersRepository;
-import com.example.orders.fragments.order_list.OrderList;
 import com.example.orders.fragments.order_list.OrdersViewModel;
 
 import javax.inject.Singleton;
@@ -19,14 +18,13 @@ public class OrdersModule {
     @Provides
     @OrdersScope
     public OrdersViewModel provideOrdersViewModel(OrderListsFragment host,
-                                                  final OrdersRepository ordersRepository,
-                                                  CommonSharedPreferences commonSharedPreferences){
+                                                  final OrdersRepository ordersRepository){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             @Singleton
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new OrdersViewModel(ordersRepository, commonSharedPreferences);
+                return (T) new OrdersViewModel(ordersRepository);
             }
         }).get(OrdersViewModel.class);
     }

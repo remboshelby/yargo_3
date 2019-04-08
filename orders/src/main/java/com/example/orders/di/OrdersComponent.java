@@ -1,6 +1,6 @@
 package com.example.orders.di;
 
-import com.example.orders.fragments.order_list.OrderList;
+import com.example.orders.fragments.order_list.VacantOrderList;
 import com.example.orders.fragments.order_list.OrderListsFragment;
 import com.inc.evil.common.di.CommonComponent;
 
@@ -12,7 +12,7 @@ import dagger.Component;
 public interface OrdersComponent {
 
     void inject(OrderListsFragment orderListsFragment);
-    void inject(OrderList orderList);
+    void inject(VacantOrderList vacantOrderList);
 
     @Component.Builder
     interface Builder{

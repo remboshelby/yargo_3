@@ -19,6 +19,14 @@
     <string name="menu_exit">Выйти</string>
     <string name="menu_instruction">Инструкции</string>
     <string name="menu_help">Помощь</string>
-
+    <!--Vacant_Orders_Menu_Items-->
+    <string name="menu_orders_vacant_1">1</string>
+    <string name="menu_orders_vacant_2">2</string>
+    <string name="menu_orders_vacant_3">3</string>
+    <string name="menu_orders_vacant_4">4</string>
+    <!--UserOrdersList-->
+    <string name="my_orders">Мои заказы</string>
+    <!--VacantOrdersList-->
+    <string name="vacant_orders">Вакантные заказы</string>
 
 </resources>

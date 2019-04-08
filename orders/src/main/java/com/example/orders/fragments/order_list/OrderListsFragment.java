@@ -1,6 +1,7 @@
 package com.example.orders.fragments.order_list;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,10 @@ import com.example.orders.R;
 import com.example.orders.R2;
 import com.example.orders.di.DaggerOrdersComponent;
 import com.example.orders.di.OrdersComponent;
-import com.example.orders.fragments.order_list.OrderList;
-import com.example.orders.fragments.order_list.OrdersViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.inc.evil.common.base.BaseFragment;
 import com.inc.evil.common.di.CommonApplication;
-import com.inc.evil.common.di.CommonComponent;
 import com.inc.evil.common.dto.CommonSharedPreferences;
 
 import javax.inject.Inject;
@@ -32,15 +30,8 @@ import butterknife.ButterKnife;
 public class OrderListsFragment extends BaseFragment {
 
 
-    protected static OrdersComponent ordersComponent;
-
-    @Inject
-    protected OrdersViewModel ordersViewModel;
-    @Inject
-    protected CommonSharedPreferences preferences;
-
-    @BindView(R2.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R2.id.toolbar_main)
+    Toolbar toolbar_main;
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
     @BindView(R2.id.list_container)
@@ -49,6 +40,12 @@ public class OrderListsFragment extends BaseFragment {
     NavigationView navigationView;
     @BindView(R2.id.drawerLayout)
     DrawerLayout drawerLayout;
+    protected static OrdersComponent ordersComponent;
+
+    @Inject
+    protected OrdersViewModel ordersViewModel;
+    @Inject
+    protected CommonSharedPreferences preferences;
 
     @Nullable
     @Override
@@ -57,54 +54,21 @@ public class OrderListsFragment extends BaseFragment {
     }
 
     @Override
+    protected int containerResId() {
+        return R.id.list_container;
+    }
+
+    @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
-        pushFragment(new OrderList());
         return inflater.inflate(R.layout.oder_lists_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         ButterKnife.bind(this, view);
 
-        getRoot().setSupportActionBar(toolbar);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getRoot(), drawerLayout, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-
-        ordersViewModel.fecthVacantOrders();
-
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.menu_orders) {
-
-            }
-            else if (menuItem.getItemId() == R.id.menu_my_orders){
-
-            }
-            else if (menuItem.getItemId() == R.id.menu_call){
-                    String t ="";
-            }
-            else if (menuItem.getItemId() == R.id.menu_exit){
-
-            }
-            else if (menuItem.getItemId() == R.id.menu_instruction){
-
-            }
-            return false;
-        });
-
-    }
-    public void pushFragment(BaseFragment fragment){
-            getRoot().getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(fragment.getClass().getSimpleName())
-                    .replace(R.id.list_container, fragment)
-                    .commit();
+        init();
     }
 
     @Override
@@ -118,5 +82,33 @@ public class OrderListsFragment extends BaseFragment {
                 .build();
 
         ordersComponent.inject(this);
+    }
+
+    private void init() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getRoot(), drawerLayout ,toolbar_main, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        pushFragmentIntoFragment(new VacantOrderList());
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.menu_orders) {
+                pushFragmentIntoFragment(new VacantOrderList());
+            }
+            else if (menuItem.getItemId() == R.id.menu_my_orders){
+                pushFragmentIntoFragment(new UserOrderList());
+            }
+            else if (menuItem.getItemId() == R.id.menu_call){
+                String t ="";
+            }
+            else if (menuItem.getItemId() == R.id.menu_exit){
+
+            }
+            else if (menuItem.getItemId() == R.id.menu_instruction){
+
+            }
+            drawerLayout.closeDrawer(Gravity.LEFT);
+            return false;
+        });
     }
 }

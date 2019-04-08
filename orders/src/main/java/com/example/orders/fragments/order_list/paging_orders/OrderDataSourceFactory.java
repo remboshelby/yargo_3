@@ -1,13 +1,13 @@
 package com.example.orders.fragments.order_list.paging_orders;
 
+import com.inc.evil.common.network.models.order.OrdersItem;
 import com.inc.evil.common.network.repository.OrdersRepository;
-import com.example.orders.fragments.order_list.paging_orders.data.Order;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class OrderDataSourceFactory extends DataSource.Factory<Integer, Order> {
+public class OrderDataSourceFactory extends DataSource.Factory<Integer, OrdersItem> {
     private OrdersRepository ordersRepository;
     private CompositeDisposable compositeDisposable;
     private MutableLiveData<OrdersDataSource> dataSourceLiveData;
@@ -18,7 +18,7 @@ public class OrderDataSourceFactory extends DataSource.Factory<Integer, Order> {
     }
 
     @Override
-    public DataSource<Integer, Order> create() {
+    public DataSource<Integer, OrdersItem> create() {
         OrdersDataSource ordersDataSource = new OrdersDataSource(ordersRepository, compositeDisposable);
         dataSourceLiveData.postValue(ordersDataSource);
         return ordersDataSource;

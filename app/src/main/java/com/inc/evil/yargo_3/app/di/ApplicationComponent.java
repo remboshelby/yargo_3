@@ -1,6 +1,7 @@
 package com.inc.evil.yargo_3.app.di;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 
 import com.inc.evil.common.di.CommonComponent;
@@ -22,6 +23,9 @@ public interface ApplicationComponent extends CommonComponent {
     interface Builder{
         @BindsInstance
         Builder application(Application application);
+
+        @BindsInstance
+        Builder context(Context context);
 
         @BindsInstance
         Builder serverUrl(@ServerUrl String serverUrl);

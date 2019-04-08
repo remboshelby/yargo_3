@@ -34,6 +34,7 @@ public class App extends Application implements CommonApplication {
         applicationComponent = DaggerApplicationComponent
                 .builder()
                 .application(this)
+                .context(this)
                 .serverUrl(getString(R.string.server_name))
                 .build();
     }

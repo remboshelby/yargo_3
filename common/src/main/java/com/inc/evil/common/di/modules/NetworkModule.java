@@ -1,10 +1,14 @@
 package com.inc.evil.common.di.modules;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.inc.evil.common.di.ServerUrl;
 import com.inc.evil.common.network.api.LoginApiService;
 import com.inc.evil.common.network.api.OrderApiService;
+import com.inc.evil.common.network.utils.ConnectivityInterceptor;
 
 import javax.inject.Singleton;
 
@@ -24,12 +28,14 @@ public class NetworkModule {
     }
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient() {
-        return new OkHttpClient.Builder().build();
+    OkHttpClient provideOkHttpClient(Context context) {
+        return new OkHttpClient.Builder()
+                .addInterceptor(new ConnectivityInterceptor(context))
+                .build();
     }
     @Provides
     @Singleton
-    Retrofit provideRetrofit(Gson gson, @ServerUrl String baseUrl, OkHttpClient okHttpClient){
+    Retrofit provideRetrofit(@ServerUrl String baseUrl, OkHttpClient okHttpClient){
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

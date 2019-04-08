@@ -38,4 +38,16 @@ public abstract class BaseFragment extends Fragment {
         builder.setCancelable(true);
         builder.create().show();
     }
+    public void pushFragmentIntoFragment(BaseFragment fragment){
+        if (!getChildFragmentManager().popBackStackImmediate(fragment.getClass().getSimpleName(), 0)) {
+            getChildFragmentManager().beginTransaction()
+                    .addToBackStack(fragment.getClass().getSimpleName())
+                    .replace(containerResId(), fragment)
+                    .commit();
+        }
+    }
+    protected int containerResId(){
+        return 0;
+    };
+
 }
