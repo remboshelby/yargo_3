@@ -23,6 +23,7 @@ import com.inc.evil.login.R;
 import com.inc.evil.login.R2;
 import com.inc.evil.login.di.DaggerLoginComponent;
 import com.inc.evil.login.di.LoginComponent;
+import com.inc.evil.login.fragments.registration.RegistrationFragment;
 
 import javax.inject.Inject;
 
@@ -83,36 +84,43 @@ public class LoginFragment extends BaseFragment {
     private void init() {
         progressDialog = new ProgressDialog(getContext());
 
+        root_swipe_layout.setOnRefreshListener(this::makeLogin);
+        root_swipe_layout.setEnabled(false);
+
         viewModel.initLoginInfo();
 
         viewModel.observeIsNetworkError(this, aBoolean -> {
             if (aBoolean) {
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
-
                 if (root_swipe_layout.isRefreshing())
                     root_swipe_layout.setRefreshing(false);
-
                 root_swipe_layout.setEnabled(true);
+
+                viewComponentVisibility(View.INVISIBLE, false);
                 no_internet_img.setVisibility(View.VISIBLE);
-                //TODO показать банер нет интернета и добавить скрол вью
                 Toast.makeText(getContext(), "no internet", Toast.LENGTH_LONG).show();
+            }
+            else {
+                viewComponentVisibility(View.VISIBLE, false);
             }
         });
         viewModel.observeData(this, loginResponse -> {
             preferences.putObject(USER_ABOUT_RESPONSE, loginResponse.getResponse());
 
             if (loginResponse.getResponse().getType().equals("OK")) {
+
                 preferences.putObject(AUTH_KEY, loginResponse.getResponse().getAuthKey());
-                LoginFragment.this.getRoot().pushFragment(new OrderListsFragment());
-                LoginFragment.this.getRoot().removeFragment(LoginFragment.this);
+                LoginFragment.this.getRoot().pushFragment(new OrderListsFragment(), false);
+//                LoginFragment.this.getRoot().removePreviousFragment(LoginFragment.class.getName());
+//                LoginFragment.this.getRoot().removeFragment(LoginFragment.this);
             } else {
                 preferences.putObject(AUTH_KEY, "");
                 textInputLayoutEmail.setErrorEnabled(true);
                 textInputLayoutPassword.setErrorEnabled(true);
 
                 LoginFragment.this.showErrorDialog("Неправильный логин или пароль");
-                LoginFragment.this.viewComponentVisibility(View.VISIBLE);
+                LoginFragment.this.viewComponentVisibility(View.VISIBLE, false);
             }
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
@@ -122,21 +130,24 @@ public class LoginFragment extends BaseFragment {
             if (!aBoolean) email_sign_in_button.setEnabled(false);
             else email_sign_in_button.setEnabled(true);
         });
-
-        if (viewModel.isAuthKeyExist()) {
-            viewComponentVisibility(View.INVISIBLE);
-            viewModel.makeLoginWithToken();
-        }
+        makeLogin();
     }
 
-    private void viewComponentVisibility(int viewVisibility) {
+    private void viewComponentVisibility(int viewVisibility, boolean showProgress) {
         textInputLayoutEmail.setVisibility(viewVisibility);
         textInputLayoutPassword.setVisibility(viewVisibility);
         email_sign_button.setVisibility(viewVisibility);
         email_sign_in_button.setVisibility(viewVisibility);
 
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();
+        if (no_internet_img.getVisibility()==View.VISIBLE && viewVisibility==View.VISIBLE){
+            no_internet_img.setVisibility(View.GONE);
+            root_swipe_layout.setRefreshing(false);
+            root_swipe_layout.setEnabled(false);
+        }
+        if (showProgress) {
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.show();
+        }
     }
 
     @OnClick(R2.id.email_sign_in_button)
@@ -145,11 +156,12 @@ public class LoginFragment extends BaseFragment {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
 
-        viewModel.makeLoginWithPassword();
+        makeLogin();
     }
 
     @OnClick(R2.id.email_sign_button)
     void onClickSignInButton() {
+        getRoot().pushFragment(new RegistrationFragment() ,true);
     }
 
     @OnTextChanged(R2.id.email)
@@ -157,6 +169,18 @@ public class LoginFragment extends BaseFragment {
         viewModel.setEmail(email.getText().toString());
     }
 
+    private void makeLogin() {
+        if (false) {
+//        if (viewModel.isAuthKeyExist()) {
+            viewComponentVisibility(View.INVISIBLE, true);
+            viewModel.makeLoginWithToken();
+        }
+        else {
+            if (email_sign_in_button.isEnabled()){
+                viewModel.makeLoginWithPassword();
+            }
+        }
+    }
 
     @Override
     protected void inject() {
@@ -176,7 +200,9 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getRoot().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getRoot().getCurrentFocus().getWindowToken(), 0);
+        if (getRoot().getCurrentFocus()!=null) {
+            InputMethodManager imm = (InputMethodManager) getRoot().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getRoot().getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

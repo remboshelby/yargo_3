@@ -18,7 +18,7 @@ public class ConnectivityInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        if(NetworkUtils.isOnline(mContext))
+        if(!NetworkUtils.isOnline(mContext))
         throw new NoConnectivityException();
 
         Request.Builder builder = chain.request().newBuilder();

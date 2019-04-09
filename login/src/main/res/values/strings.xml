@@ -7,7 +7,7 @@
     <string name="action_regist_new_account">Зарегистрироваться</string>
     <string name="action_sign_in_account">Войти</string>
     <string name="action_sign_in_short">Вход</string>
-    <string name="prompt_email">Логин (электронная почта)</string>
+    <string name="prompt_email">Логин (электронная почта):</string>
     <string name="prompt_password">Пароль</string>
 
     <!--Utils-->
@@ -19,6 +19,15 @@
     <string name="menu_exit">Выйти</string>
     <string name="menu_instruction">Инструкции</string>
     <string name="menu_help">Помощь</string>
+    <!--Registr Person Data Fragment-->
+    <string name="your_surname">Ваша фамилия:</string>
+    <string name="your_name">Ваше имя:</string>
+    <string name="your_city">Город:</string>
+    <string name="your_sex">Ваш пол:</string>
+    <string name="male">Мужской</string>
+    <string name="female">Женский</string>
+    <string name="your_bithday">День рождения:</string>
+    <string name="your_birthday">День рождения:</string>
 
 
 </resources>

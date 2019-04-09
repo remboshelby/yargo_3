@@ -28,5 +28,8 @@
     <string name="my_orders">Мои заказы</string>
     <!--VacantOrdersList-->
     <string name="vacant_orders">Вакантные заказы</string>
+    <!--Registration Fragments-->
+    <string name="registration">Регистрация</string>
+    <string name="next">Далее</string>
 
 </resources>

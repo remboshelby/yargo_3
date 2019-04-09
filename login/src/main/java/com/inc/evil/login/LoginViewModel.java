@@ -10,9 +10,7 @@ import com.inc.evil.login.data.LoginData;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.inc.evil.common.dto.CommonSharedPreferences.APP_ID;
@@ -30,7 +28,6 @@ public class LoginViewModel extends BaseViewModel {
     MutableLiveData<Boolean> invisiblity = new MutableLiveData<>();
 
 
-
     public LoginViewModel(LoginRepository loginRepository, CommonSharedPreferences commonSharedPreferences) {
         this.loginRepository = loginRepository;
         this.commonSharedPreferences = commonSharedPreferences;
@@ -45,17 +42,29 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public void observeIsNetworkError(LifecycleOwner lifecycleOwner, Observer<Boolean> observer) {
-        isError.observe(lifecycleOwner, observer);
+        isNoInternetConnection.observe(lifecycleOwner, observer);
     }
 
     public void makeLoginWithPassword() {
+        String t1 = loginInfo.getValue().getEmail();
+        String t2 = loginInfo.getValue().getPassword();
+        String t3 = loginInfo.getValue().getAppId();
+
+
         addDisposible(loginRepository.makeLoginWithPass(loginInfo.getValue().getEmail(),
                 loginInfo.getValue().getPassword(),
                 loginInfo.getValue().getAppId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(loginResponse -> data.postValue(loginResponse),
-                        throwable -> throwable.printStackTrace()));
+                .subscribe(loginResponse -> {
+                            data.postValue(loginResponse);
+                            isNoInternetConnection.postValue(false);
+                        },
+                        throwable -> {
+                            if (throwable instanceof NoConnectivityException) {
+                                isNoInternetConnection.postValue(true);
+                            }
+                        }));
     }
 
     public void makeLoginWithToken() {
@@ -64,10 +73,11 @@ public class LoginViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(loginResponse -> {
                             data.postValue(loginResponse);
+                            isNoInternetConnection.postValue(false);
                         },
                         throwable -> {
                             if (throwable instanceof NoConnectivityException) {
-                                    isError.postValue(true);
+                                isNoInternetConnection.postValue(true);
                             }
                         }));
     }

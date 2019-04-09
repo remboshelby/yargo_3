@@ -91,6 +91,7 @@ public class OrderListsFragment extends BaseFragment {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         pushFragmentIntoFragment(new VacantOrderList());
+
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             if (menuItem.getItemId() == R.id.menu_orders) {
                 pushFragmentIntoFragment(new VacantOrderList());
@@ -99,7 +100,7 @@ public class OrderListsFragment extends BaseFragment {
                 pushFragmentIntoFragment(new UserOrderList());
             }
             else if (menuItem.getItemId() == R.id.menu_call){
-                String t ="";
+
             }
             else if (menuItem.getItemId() == R.id.menu_exit){
 
@@ -111,4 +112,5 @@ public class OrderListsFragment extends BaseFragment {
             return false;
         });
     }
+
 }

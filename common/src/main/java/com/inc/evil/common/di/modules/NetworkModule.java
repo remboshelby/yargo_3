@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.inc.evil.common.di.ServerUrl;
 import com.inc.evil.common.network.api.LoginApiService;
 import com.inc.evil.common.network.api.OrderApiService;
+import com.inc.evil.common.network.api.RegistrApiService;
 import com.inc.evil.common.network.utils.ConnectivityInterceptor;
 
 import javax.inject.Singleton;
@@ -52,5 +53,10 @@ public class NetworkModule {
     @Singleton
     OrderApiService provideOrderApiService(Retrofit retrofit){
         return retrofit.create(OrderApiService.class);
+    }
+    @Provides
+    @Singleton
+    RegistrApiService provideRegistrApiService(Retrofit retrofit){
+        return retrofit.create(RegistrApiService.class);
     }
 }

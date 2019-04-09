@@ -8,7 +8,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 
 @LoginScope
-@Component(dependencies = CommonComponent.class, modules = {LoginModule.class})
+@Component(dependencies = CommonComponent.class, modules = {LoginModule.class, RegistrModule.class})
 public interface LoginComponent {
 
     void inject(LoginFragment loginFragment);

@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable;
 
 public abstract class BaseViewModel extends ViewModel {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    public MutableLiveData<Boolean> isError = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isNoInternetConnection = new MutableLiveData<>();
 
     protected void addDisposible(Disposable disposable) {
         compositeDisposable.add(disposable);
