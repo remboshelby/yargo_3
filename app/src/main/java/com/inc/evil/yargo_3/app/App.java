@@ -4,12 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.crashlytics.android.Crashlytics;
 import com.inc.evil.common.di.CommonApplication;
 import com.inc.evil.common.di.CommonComponent;
 import com.inc.evil.yargo_3.R;
 import com.inc.evil.yargo_3.app.di.ApplicationComponent;
 import com.inc.evil.yargo_3.app.di.DaggerApplicationComponent;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.UUID;
 
 public class App extends Application implements CommonApplication {
@@ -18,6 +20,7 @@ public class App extends Application implements CommonApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         makeComponent();
         isFirstStart();
     }

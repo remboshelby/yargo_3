@@ -10,6 +10,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected int containerResId() {
+//        return 0;
         return R.id.activity_container;
     }
 

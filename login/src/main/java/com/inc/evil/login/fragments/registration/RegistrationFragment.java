@@ -33,12 +33,6 @@ public class RegistrationFragment extends BaseFragment {
     TextView tvToobarName_registration;
     @BindView(R2.id.BtnRegistNext)
     Button BtnRegistNext;
-    @BindView(R2.id.tabItem)
-    TabItem tabItem;
-    @BindView(R2.id.tabItem1)
-    TabItem tabItem1;
-    @BindView(R2.id.tabItem2)
-    TabItem tabItem2;
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
     @BindView(R2.id.registration_container)

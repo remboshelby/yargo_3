@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
 import com.example.orders.fragments.order_list.OrderListsFragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.inc.evil.common.base.BaseFragment;
@@ -109,6 +111,9 @@ public class LoginFragment extends BaseFragment {
             preferences.putObject(USER_ABOUT_RESPONSE, loginResponse.getResponse());
 
             if (loginResponse.getResponse().getType().equals("OK")) {
+                Answers.getInstance().logLogin(new LoginEvent()
+                        .putMethod("vasya")
+                        .putSuccess(true));
 
                 preferences.putObject(AUTH_KEY, loginResponse.getResponse().getAuthKey());
                 LoginFragment.this.getRoot().pushFragment(new OrderListsFragment(), false);
