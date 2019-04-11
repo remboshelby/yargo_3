@@ -8,6 +8,7 @@ import com.inc.evil.common.network.repository.RegistrRepository;
 public interface CommonComponent {
     LoginRepository loginRepository();
     OrdersRepository ordersRepository();
-    RegistrRepository registrRepository();
     CommonSharedPreferences commonSharedPreferences();
+    ApplicationNavigator navigator();
+    RegistrRepository registrRepository();
 }

@@ -10,6 +10,7 @@ import com.inc.evil.common.di.CommonComponent;
 import com.inc.evil.yargo_3.R;
 import com.inc.evil.yargo_3.app.di.ApplicationComponent;
 import com.inc.evil.yargo_3.app.di.DaggerApplicationComponent;
+import com.inc.evil.yargo_3.app.di.module.AppModule;
 
 import io.fabric.sdk.android.Fabric;
 import java.util.UUID;

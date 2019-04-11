@@ -2,16 +2,19 @@ package com.inc.evil.login.di;
 
 import com.inc.evil.common.di.CommonComponent;
 import com.inc.evil.login.fragments.LoginFragment;
+import com.inc.evil.login.fragments.registration.RegistrationFragment;
 import com.inc.evil.login.utils_view.СustomEnterPasswordView;
 
 import dagger.BindsInstance;
 import dagger.Component;
 
 @LoginScope
-@Component(dependencies = CommonComponent.class, modules = {LoginModule.class, RegistrModule.class})
+@Component(dependencies = CommonComponent.class, modules = {LoginModule.class})
 public interface LoginComponent {
 
     void inject(LoginFragment loginFragment);
+
+    void inject(RegistrationFragment registrationFragment);
 
     void inject(СustomEnterPasswordView сustomEnterPasswordView);
 

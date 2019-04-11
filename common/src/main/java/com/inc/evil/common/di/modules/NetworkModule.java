@@ -59,4 +59,5 @@ public class NetworkModule {
     RegistrApiService provideRegistrApiService(Retrofit retrofit){
         return retrofit.create(RegistrApiService.class);
     }
+
 }

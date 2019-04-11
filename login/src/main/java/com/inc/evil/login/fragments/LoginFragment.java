@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.LoginEvent;
-import com.example.orders.fragments.order_list.OrderListsFragment;
 import com.google.android.material.textfield.TextInputLayout;
 import com.inc.evil.common.base.BaseFragment;
+import com.inc.evil.common.di.ApplicationNavigator;
 import com.inc.evil.common.di.CommonApplication;
 import com.inc.evil.common.dto.CommonSharedPreferences;
 import com.inc.evil.login.LoginViewModel;
@@ -70,6 +70,7 @@ public class LoginFragment extends BaseFragment {
     @Inject
     protected CommonSharedPreferences preferences;
     private ProgressDialog progressDialog;
+    private ApplicationNavigator navigator;
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -116,7 +117,9 @@ public class LoginFragment extends BaseFragment {
                         .putSuccess(true));
 
                 preferences.putObject(AUTH_KEY, loginResponse.getResponse().getAuthKey());
-                LoginFragment.this.getRoot().pushFragment(new OrderListsFragment(), false);
+
+                navigator.openFragment(getRoot(), "Orders");
+//                LoginFragment.this.getRoot().pushFragment(new OrderListsFragment(), false);
 //                LoginFragment.this.getRoot().removePreviousFragment(LoginFragment.class.getName());
 //                LoginFragment.this.getRoot().removeFragment(LoginFragment.this);
             } else {
@@ -190,7 +193,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     protected void inject() {
         CommonApplication application = (CommonApplication) getRoot().getApplication();
-
+        navigator = application.component().navigator();
         loginComponent = DaggerLoginComponent
                 .builder()
                 .commonComponent(application.component())

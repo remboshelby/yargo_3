@@ -13,7 +13,10 @@ import com.google.android.material.tabs.TabItem;
 import com.inc.evil.common.base.BaseFragment;
 import com.inc.evil.login.R;
 import com.inc.evil.login.R2;
+import com.inc.evil.login.fragments.LoginFragment;
 import com.inc.evil.login.utils_view.LockableViewPager;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +29,8 @@ import butterknife.ButterKnife;
 
 public class RegistrationFragment extends BaseFragment {
 
+    @Inject
+    protected RegistrationViewModel registrationViewModel;
 
     @BindView(R2.id.imgBtnBackPress)
     ImageButton imgBtnBackPress;
@@ -49,12 +54,16 @@ public class RegistrationFragment extends BaseFragment {
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
+        LoginFragment.getLoginComponent().inject(this);
         return inflater.inflate(R.layout.registration_fragment, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+
+
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
