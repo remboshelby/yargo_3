@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.inc.evil.yargo_3">
+    package="yargo.inc">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,13 +14,16 @@
         android:theme="@style/AppTheme"
 
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity">
+        <activity android:name="yargo.inc.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="52eca52e860633f8994539c7ec21c4058e2cd5fb" />
     </application>
 
 </manifest>

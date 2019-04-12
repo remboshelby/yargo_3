@@ -56,12 +56,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmail">
 
-            <com.inc.evil.login.utils_view.СustomEnterPasswordView
+            <yargo.inc.login.utils_view.СustomEnterPasswordView
                 android:layout_width="match_parent"
                 android:layout_margin="0dp"
                 android:layout_height="wrap_content" >
 
-            </com.inc.evil.login.utils_view.СustomEnterPasswordView>
+            </yargo.inc.login.utils_view.СustomEnterPasswordView>
         </com.google.android.material.textfield.TextInputLayout>
 
 

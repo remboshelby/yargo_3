@@ -18,7 +18,7 @@ repositories {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.inc.evil.yargo_3"
+        applicationId "yargo.inc"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    apply plugin: 'com.google.gms.google-services'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
     //Material JetPack
     implementation 'com.google.android.material:material:1.0.0-beta01'
 

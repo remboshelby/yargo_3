@@ -93,7 +93,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.inc.evil.login.utils_view.LockableViewPager
+    <yargo.inc.login.utils_view.LockableViewPager
         android:id="@+id/registration_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
