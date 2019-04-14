@@ -10,11 +10,15 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+import androidx.lifecycle.Observer;
 import yargo.inc.common.base.BaseFragment;
 
 import yargo.inc.login.R;
 import yargo.inc.login.R2;
 import yargo.inc.login.fragments.LoginFragment;
+import yargo.inc.login.fragments.registration.registration_pages.RegistrConfirmMobile;
+import yargo.inc.login.fragments.registration.registration_pages.RegistrMobilePhone;
+import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonalData;
 import yargo.inc.login.utils_view.LockableViewPager;
 
 import javax.inject.Inject;
@@ -37,8 +41,8 @@ public class RegistrationFragment extends BaseFragment {
     ImageButton imgBtnBackPress;
     @BindView(R2.id.tvToobarName_registration)
     TextView tvToobarName_registration;
-    @BindView(R2.id.BtnRegistNext)
-    Button BtnRegistNext;
+    @BindView(R2.id.btnRegistNext)
+    Button btnRegistNext;
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
     @BindView(R2.id.registration_container)
@@ -64,7 +68,17 @@ public class RegistrationFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
 
-
+        registrationViewModel.observeBtnStatus(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean){
+                    btnRegistNext.setEnabled(true);
+                }
+                else {
+                    btnRegistNext.setEnabled(false);
+                }
+            }
+        });
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 

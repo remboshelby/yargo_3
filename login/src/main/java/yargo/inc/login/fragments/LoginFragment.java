@@ -71,8 +71,8 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(0, container, false);
-//        return inflater.inflate(R.layout.login_fragment, container, false);
+//        return inflater.inflate(0, container, false);
+        return inflater.inflate(R.layout.login_fragment, container, false);
     }
 
     @Override
@@ -117,9 +117,6 @@ public class LoginFragment extends BaseFragment {
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, loginResponse.getResponse().getAuthKey());
 
                 navigator.openFragment(getRoot(), "Orders");
-//                LoginFragment.this.getRoot().pushFragment(new OrderListsFragment(), false);
-//                LoginFragment.this.getRoot().removePreviousFragment(LoginFragment.class.getName());
-//                LoginFragment.this.getRoot().removeFragment(LoginFragment.this);
             } else {
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, "");
                 textInputLayoutEmail.setErrorEnabled(true);
@@ -205,10 +202,4 @@ public class LoginFragment extends BaseFragment {
         return loginComponent;
     }
 
-    private void hideKeyboard() {
-        if (getRoot().getCurrentFocus()!=null) {
-            InputMethodManager imm = (InputMethodManager) getRoot().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getRoot().getCurrentFocus().getWindowToken(), 0);
-        }
-    }
 }

@@ -21,15 +21,22 @@ public class PersonData {
     private String birthday;
     @SerializedName("SignupForm[password]")
     private String password;
+    @SerializedName("SignupForm[sex]")
+    private String sex;
 
-    public PersonData(String surname, String name, String email, String cityId, String telephonNumber, String isTelephoneConfirmed, String birthday, String password) {
-        this.surname = surname;
+
+
+    public PersonData(String surname, String name, String email, String cityId, String telephonNumber, String isTelephoneConfirmed, String birthday,String sex, String password) {
+        this.surname = surname;  //PegistrPersonData
         this.name = name;
         this.email = email;
         this.cityId = cityId;
-        this.telephonNumber = telephonNumber;
-        this.isTelephoneConfirmed = isTelephoneConfirmed;
         this.birthday = birthday;
+        this.sex = sex;
+
+        this.telephonNumber = telephonNumber; //RegistrMobilePhone
+        this.isTelephoneConfirmed = isTelephoneConfirmed; //RerigstConfirmMobile
+
         this.password = password;
     }
 
@@ -96,5 +103,19 @@ public class PersonData {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isPersonEmpty(){
+        return !surname.equals("") && !name.equals("") && !email.equals("")
+                && !cityId.equals("") && !birthday.equals("");
+    }
+
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

@@ -1,10 +1,12 @@
 package yargo.inc.common.base;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,4 +49,10 @@ public abstract class BaseFragment extends Fragment {
         return 0;
     };
 
+    public void hideKeyboard() {
+        if (getRoot().getCurrentFocus()!=null) {
+            InputMethodManager imm = (InputMethodManager) getRoot().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getRoot().getCurrentFocus().getWindowToken(), 0);
+        }
+    }
 }

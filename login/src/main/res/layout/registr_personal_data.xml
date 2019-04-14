@@ -20,24 +20,24 @@
 
 
         <AutoCompleteTextView
-            android:id="@+id/fr_r1_editSurname"
+            android:id="@+id/editSurname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
             android:hint="@string/your_surname"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true" />
 
         <AutoCompleteTextView
-            android:id="@+id/fr_r1_editName"
+            android:id="@+id/editName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="@string/your_name"
@@ -45,20 +45,22 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@android:color/black" />
+
         <AutoCompleteTextView
 
-            android:id="@+id/fr_r1_editEmail"
+            android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true" />
 
         <TextView
+            android:id="@+id/cityId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
@@ -66,18 +68,17 @@
             android:text="@string/your_city"
             android:textSize="16sp" />
 
-        <!--<Spinner-->
-            <!--android:id="@+id/spinner_city"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="20dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_marginRight="20dp"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:entries="@array/grazdanstvo"></Spinner>-->
+        <Spinner
+            android:id="@+id/spinCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:entries="@array/citiesName" />
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
@@ -86,16 +87,17 @@
             android:textSize="16sp" />
 
         <RadioGroup
-            android:id="@+id/RadioGroup"
+            android:id="@+id/sexRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="20dp">
+            android:checkedButton="@id/sexMale"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp">
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/sexMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -103,7 +105,7 @@
                 android:textSize="16sp" />
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/sexFemale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -122,19 +124,19 @@
             android:textSize="16sp" />
 
         <AutoCompleteTextView
-            android:id="@+id/r1_editBdate"
+            android:id="@+id/editBdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:focusable="false"
             android:hint="@string/your_birthday"
-            android:inputType="textEmailAddress"
+
+            android:longClickable="false"
             android:maxLines="1"
-            android:singleLine="true"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
     </LinearLayout>

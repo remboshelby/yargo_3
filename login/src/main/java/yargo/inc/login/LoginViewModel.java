@@ -43,11 +43,6 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public void makeLoginWithPassword() {
-        String t1 = loginInfo.getValue().getEmail();
-        String t2 = loginInfo.getValue().getPassword();
-        String t3 = loginInfo.getValue().getAppId();
-
-
         addDisposible(loginRepository.makeLoginWithPass(loginInfo.getValue().getEmail(),
                 loginInfo.getValue().getPassword(),
                 loginInfo.getValue().getAppId())
