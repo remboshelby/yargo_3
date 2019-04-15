@@ -1,5 +1,7 @@
 package yargo.inc.login.fragments.registration;
 
+import android.view.View;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +21,7 @@ public class RegistrationViewModel extends BaseViewModel {
     private RegistrRepository registrRepository;
     private CommonSharedPreferences commonSharedPreferences;
 
+
     private static final int SURNAME_LENTH = 2;
     private static final int NAME_LENTH = 2;
 
@@ -27,80 +30,115 @@ public class RegistrationViewModel extends BaseViewModel {
 
     private MutableLiveData<PersonData> personData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isBtnNextOn = new MutableLiveData<>();
+    private MutableLiveData<Boolean> onBtnClick = new MutableLiveData<>();
 
     public RegistrationViewModel(RegistrRepository registrRepository, CommonSharedPreferences commonSharedPreferences) {
         this.registrRepository = registrRepository;
         this.commonSharedPreferences = commonSharedPreferences;
-        personData.setValue(new PersonData("", "", "", "", "", "", "","male",""));
+        personData.setValue(new PersonData("", "", "", "", "", false, false, "", "male", ""));
         isBtnNextOn.setValue(false);
     }
 
-    public void observePersonData(LifecycleOwner owner, Observer<PersonData> observer){
-        personData.observe(owner, observer);
+    public void getBtnStatus(int position) {
+        switch (position) {
+            case 0:
+                isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
+                break;
+            case 1:
+                isBtnNextOn.setValue(false);
+                break;
+            case 2:
+                break;
+        }
     }
-    public void observeBtnStatus(LifecycleOwner owner, Observer<Boolean> observer){
+
+    public void observeBtnStatus(LifecycleOwner owner, Observer<Boolean> observer) {
         isBtnNextOn.observe(owner, observer);
     }
 
-    public void setSurname(String textSurname){
+    public void setSurname(String textSurname) {
         personData.getValue().setSurname(textSurname);
-        if (!textSurname.isEmpty() && textSurname.length() > SURNAME_LENTH){
+        if (!textSurname.isEmpty() && textSurname.length() > SURNAME_LENTH) {
             isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
-        }
-        else {
-            isBtnNextOn.setValue(false);
-        }
-    }
-    public void setName(String textName){
-        personData.getValue().setName(textName);
-        if (!textName.isEmpty() && textName.length() > NAME_LENTH){
-            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
-        }
-        else {
-            isBtnNextOn.setValue(false);
-        }
-    }
-    public void setEmail(String textEmail){
-        personData.getValue().setEmail(textEmail);
-        if (isEmailValid(textEmail)){
-            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
-        }
-        else {
-            isBtnNextOn.setValue(false);
-        }
-    }
-    public void setCityId(String cityId){
-        personData.getValue().setCityId(cityId);
-        if (!cityId.isEmpty()){
-           isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
-        }else {
-            isBtnNextOn.setValue(false);
-        }
-    }
-    public void setBirthday(String birthday){
-        personData.getValue().setBirthday(birthday);
-        if (!birthday.isEmpty()){
-            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
-        }
-        else {
-            isBtnNextOn.setValue(false);
-        }
-    }
-    public void setSex(String sex){
-        personData.getValue().setSex(sex);
-        if (!sex.isEmpty()){
-            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
-        }
-        else {
+        } else {
             isBtnNextOn.setValue(false);
         }
     }
 
-    public void setTelephoneNumber(String telephoneNumber){
-        personData.getValue().setTelephonNumber(telephoneNumber);
+    public void setName(String textName) {
+        personData.getValue().setName(textName);
+        if (!textName.isEmpty() && textName.length() > NAME_LENTH) {
+            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
+        } else {
+            isBtnNextOn.setValue(false);
+        }
     }
-    public void setPhoneConfirm(String phoneConfirm){
-        personData.getValue().setIsTelephoneConfirmed(phoneConfirm);
+
+    public void setEmail(String textEmail) {
+        personData.getValue().setEmail(textEmail);
+        if (isEmailValid(textEmail)) {
+            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
+        } else {
+            isBtnNextOn.setValue(false);
+        }
+    }
+
+    public void setCityId(String cityId) {
+        personData.getValue().setCityId(cityId);
+        if (!cityId.isEmpty()) {
+            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
+        } else {
+            isBtnNextOn.setValue(false);
+        }
+    }
+
+    public void setBirthday(String birthday) {
+        personData.getValue().setBirthday(birthday);
+        if (!birthday.isEmpty()) {
+            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
+        } else {
+            isBtnNextOn.setValue(false);
+        }
+    }
+
+    public void click(){
+
+    }
+
+    public void setSex(String sex) {
+        personData.getValue().setSex(sex);
+        if (!sex.isEmpty()) {
+            isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
+        } else {
+            isBtnNextOn.setValue(false);
+        }
+    }
+
+    public void setTelephoneNumber(String telephoneNumber) {
+        personData.getValue().setTelephonNumber(telephoneNumber);
+        if (!telephoneNumber.isEmpty() && telephoneNumber.length() > PHONE_LENTH) {
+            isBtnNextOn.setValue(personData.getValue().isPhoneConfirm());
+        } else {
+            isBtnNextOn.setValue(false);
+        }
+    }
+
+    public void setRuleConfirm(boolean isConfirmd) {
+        personData.getValue().setTelephoneConfirmed(isConfirmd);
+        if (isConfirmd) {
+            isBtnNextOn.setValue(personData.getValue().isPhoneConfirm());
+        } else {
+            isBtnNextOn.setValue(false);
+        }
+    }
+
+    public void setPhoneConfirm(boolean isConfirmd) {
+//        personData.getValue().setTelephoneConfirmed(isConfirmd);
+//        if (isConfirmd) {
+//            isBtnNextOn.setValue(personData.getValue().isPhoneConfirm());
+//        } else {
+//            isBtnNextOn.setValue(false);
+//        }
     }
 
     public static boolean isEmailValid(String email) {

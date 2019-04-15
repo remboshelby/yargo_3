@@ -16,7 +16,9 @@ public class PersonData {
     @SerializedName("SignupForm[phone]")
     private String telephonNumber;
 
-    private String isTelephoneConfirmed;
+    public boolean isRulseConfirmed;
+
+    private boolean isTelephoneConfirmed;
     @SerializedName("SignupForm[birthday]")
     private String birthday;
     @SerializedName("SignupForm[password]")
@@ -25,8 +27,7 @@ public class PersonData {
     private String sex;
 
 
-
-    public PersonData(String surname, String name, String email, String cityId, String telephonNumber, String isTelephoneConfirmed, String birthday,String sex, String password) {
+    public PersonData(String surname, String name, String email, String cityId, String telephonNumber, boolean isTelephoneConfirmed, boolean isRulseConfirmed, String birthday, String sex, String password) {
         this.surname = surname;  //PegistrPersonData
         this.name = name;
         this.email = email;
@@ -36,6 +37,7 @@ public class PersonData {
 
         this.telephonNumber = telephonNumber; //RegistrMobilePhone
         this.isTelephoneConfirmed = isTelephoneConfirmed; //RerigstConfirmMobile
+        this.isRulseConfirmed = isRulseConfirmed;
 
         this.password = password;
     }
@@ -81,12 +83,12 @@ public class PersonData {
         this.telephonNumber = telephonNumber;
     }
 
-    public String getIsTelephoneConfirmed() {
+    public boolean isTelephoneConfirmed() {
         return isTelephoneConfirmed;
     }
 
-    public void setIsTelephoneConfirmed(String isTelephoneConfirmed) {
-        this.isTelephoneConfirmed = isTelephoneConfirmed;
+    public void setTelephoneConfirmed(boolean telephoneConfirmed) {
+        isTelephoneConfirmed = telephoneConfirmed;
     }
 
     public String getBirthday() {
@@ -105,11 +107,6 @@ public class PersonData {
         this.password = password;
     }
 
-    public boolean isPersonEmpty(){
-        return !surname.equals("") && !name.equals("") && !email.equals("")
-                && !cityId.equals("") && !birthday.equals("");
-    }
-
 
     public String getSex() {
         return sex;
@@ -117,5 +114,21 @@ public class PersonData {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public boolean isPersonEmpty(){
+        return !surname.equals("") && !name.equals("") && !email.equals("")
+                && !cityId.equals("") && !birthday.equals("");
+    }
+
+    public boolean isPhoneConfirm(){
+        return !telephonNumber.equals("") && isRulseConfirmed;
+    }
+    public boolean isRulseConfirmed() {
+        return isRulseConfirmed;
+    }
+
+    public void setRulseConfirmed(boolean rulseConfirmed) {
+        isRulseConfirmed = rulseConfirmed;
     }
 }

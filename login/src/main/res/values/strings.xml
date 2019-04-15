@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">login</string>
     <!--System-->
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
@@ -30,6 +29,12 @@
     <string name="female">Женский</string>
     <string name="your_bithday">День рождения:</string>
     <string name="your_birthday">День рождения:</string>
+    <!--Registr Phone Fragment-->
+    <string name="sms_information">На указанный номер телефона будет отправлено сообщение с кодом подтверждения</string>
+    <string name="enter_phone_number">Введите номер телефона</string>
+    <string name="confirmation_text">Я ознакомлен/а с <a href="http://api.yargo.pro/site/oferta">правилами</a> и <a href="http://api.yargo.pro/pdn">политикой конфиденциальности</a> и принимаю их условия</string>
+    <string name="getRegistrationCode">Получить код</string>
+
 
     <string-array name="citiesName">
         <item>Сургут</item>

@@ -55,4 +55,5 @@ public abstract class BaseFragment extends Fragment {
             imm.hideSoftInputFromWindow(getRoot().getCurrentFocus().getWindowToken(), 0);
         }
     }
+
 }

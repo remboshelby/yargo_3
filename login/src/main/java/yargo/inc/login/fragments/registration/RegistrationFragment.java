@@ -1,6 +1,7 @@
 package yargo.inc.login.fragments.registration;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +10,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
-
-import androidx.lifecycle.Observer;
-import yargo.inc.common.base.BaseFragment;
-
-import yargo.inc.login.R;
-import yargo.inc.login.R2;
-import yargo.inc.login.fragments.LoginFragment;
-import yargo.inc.login.fragments.registration.registration_pages.RegistrConfirmMobile;
-import yargo.inc.login.fragments.registration.registration_pages.RegistrMobilePhone;
-import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonalData;
-import yargo.inc.login.utils_view.LockableViewPager;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import javax.inject.Inject;
 
@@ -28,15 +20,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import yargo.inc.common.base.BaseFragment;
+import yargo.inc.login.R;
+import yargo.inc.login.R2;
+import yargo.inc.login.fragments.LoginFragment;
+import yargo.inc.login.fragments.registration.registration_pages.RegistrConfirmMobile;
+import yargo.inc.login.fragments.registration.registration_pages.RegistrMobilePhone;
+import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonalData;
+import yargo.inc.login.utils_view.LockableViewPager;
 
 public class RegistrationFragment extends BaseFragment {
+
 
     @Inject
     protected RegistrationViewModel registrationViewModel;
 
+    @BindView(R2.id.tabLayout)
+    TabLayout tabLayout;
     @BindView(R2.id.imgBtnBackPress)
     ImageButton imgBtnBackPress;
     @BindView(R2.id.tvToobarName_registration)
@@ -63,25 +68,19 @@ public class RegistrationFragment extends BaseFragment {
         return inflater.inflate(R.layout.registration_fragment, container, false);
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-
-        registrationViewModel.observeBtnStatus(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean){
-                    btnRegistNext.setEnabled(true);
-                }
-                else {
-                    btnRegistNext.setEnabled(false);
-                }
-            }
-        });
-
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
+        registrationViewModel.observeBtnStatus(this, aBoolean -> {
+            if (aBoolean){
+                btnRegistNext.setVisibility(View.VISIBLE);
+            }
+            else {
+                btnRegistNext.setVisibility(View.GONE);
+            }
+        });
         registration_container.setSwipeable(false);
         registration_container.setAdapter(sectionsPagerAdapter);
         registration_container.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -92,7 +91,7 @@ public class RegistrationFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-
+                registrationViewModel.getBtnStatus(position);
             }
 
             @Override
@@ -100,7 +99,8 @@ public class RegistrationFragment extends BaseFragment {
 
             }
         });
-
+        registration_container.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(registration_container));
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -128,5 +128,18 @@ public class RegistrationFragment extends BaseFragment {
         public int getCount() {
             return REGISTR_PAGE_COUNT;
         }
+    }
+    @OnClick(R2.id.btnRegistNext)
+    public void onBtnRegistNextClick(){
+        if(registration_container.getCurrentItem()!=2){
+            registration_container.setCurrentItem(registration_container.getCurrentItem()+1);
+        }
+    }
+    @OnClick(R2.id.imgBtnBackPress)
+    public void onBtnBackPressClick(){
+        if (registration_container.getCurrentItem()>0) {
+            registration_container.setCurrentItem(registration_container.getCurrentItem()-1);
+        }
+        else getRoot().onBackPressed();
     }
 }
