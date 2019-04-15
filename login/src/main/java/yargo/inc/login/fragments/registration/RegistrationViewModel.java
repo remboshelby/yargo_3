@@ -30,7 +30,6 @@ public class RegistrationViewModel extends BaseViewModel {
 
     private MutableLiveData<PersonData> personData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isBtnNextOn = new MutableLiveData<>();
-    private MutableLiveData<Boolean> onBtnClick = new MutableLiveData<>();
 
     public RegistrationViewModel(RegistrRepository registrRepository, CommonSharedPreferences commonSharedPreferences) {
         this.registrRepository = registrRepository;

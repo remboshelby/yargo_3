@@ -17,13 +17,16 @@
     <string name="menu_my_orders">Мои заявки</string>
     <string name="menu_call_to_dispatcher">Позвонить диспетчеру</string>
     <string name="menu_exit">Выйти</string>
+    <string name="exit_question">При выходе из учетной записи из устройства будут удалены все связанные с ней данный.
+    Продолжить?</string>
     <string name="menu_instruction">Инструкции</string>
     <string name="menu_help">Помощь</string>
     <!--Vacant_Orders_Menu_Items-->
-    <string name="menu_orders_vacant_1">1</string>
-    <string name="menu_orders_vacant_2">2</string>
-    <string name="menu_orders_vacant_3">3</string>
-    <string name="menu_orders_vacant_4">4</string>
+
+    <string name="menu_orders_vacant_1">Ожидает оплаты</string>
+    <string name="menu_orders_vacant_2">В работе</string>
+    <string name="menu_orders_vacant_3">Выполнен</string>
+    <string name="menu_orders_vacant_4">Отказ клиента</string>
     <!--UserOrdersList-->
     <string name="my_orders">Мои заказы</string>
     <!--VacantOrdersList-->
@@ -31,5 +34,4 @@
     <!--Registration Fragments-->
     <string name="registration">Регистрация</string>
     <string name="next">Далее</string>
-
 </resources>

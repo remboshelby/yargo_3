@@ -1,4 +1,4 @@
-package yargo.inc.orders.fragments.order_list;
+package yargo.inc.orders.fragments.order_list.user_orders;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

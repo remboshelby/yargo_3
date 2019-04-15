@@ -71,7 +71,6 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
-//        return inflater.inflate(0, container, false);
         return inflater.inflate(R.layout.login_fragment, container, false);
     }
 

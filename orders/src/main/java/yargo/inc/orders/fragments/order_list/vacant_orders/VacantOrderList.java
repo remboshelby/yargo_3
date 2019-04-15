@@ -1,4 +1,4 @@
-package yargo.inc.orders.fragments.order_list;
+package yargo.inc.orders.fragments.order_list.vacant_orders;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.OrdersViewModel;
 
 public class VacantOrderList extends BaseFragment {
 
@@ -44,7 +46,7 @@ public class VacantOrderList extends BaseFragment {
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
-        OrderListsFragment.ordersComponent.inject(this);
+        OrderListsFragment.getOrdersComponent().inject(this);
         return inflater.inflate(R.layout.order_list, container, false);
     }
 

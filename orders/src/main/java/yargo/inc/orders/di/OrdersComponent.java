@@ -1,6 +1,6 @@
 package yargo.inc.orders.di;
 
-import yargo.inc.orders.fragments.order_list.VacantOrderList;
+import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.common.di.CommonComponent;
 

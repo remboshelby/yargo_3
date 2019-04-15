@@ -15,4 +15,5 @@ public class RegistrRepository {
     public Observable<RegistResponse> makeRegistr(PersonData personData){
         return registrApiService.makeRegistNewUser(personData);
     }
+    //TODO запрос на регистрацию сотового
 }

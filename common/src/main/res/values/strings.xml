@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">common</string>
     <string name="Error_">Ошибка</string>
+
+    <string name="YES">Да</string>
+    <string name="NO">НЕТ</string>
 </resources>
