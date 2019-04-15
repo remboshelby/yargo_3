@@ -3,8 +3,8 @@
     <color name="colorPrimary">#FAD900</color>
     <color name="colorButtonDisable">#B9797979</color>
     <color name="colorButtonEnabled">#B9AAAAAA</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimaryDark">#FAD900</color>
+    <color name="colorAccent">#000000</color>
 
     <color name="registBackgroundCollor">#d6d5d2</color>
 

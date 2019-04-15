@@ -68,15 +68,12 @@ public class RegistrPersonalData extends BaseFragment {
     }
 
     private void init() {
-        spinCity.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction()==MotionEvent.ACTION_UP)
-                {
-                    hideKeyboard();
-                }
-                return false;
+        spinCity.setOnTouchListener((v, event) -> {
+            if (event.getAction()==MotionEvent.ACTION_UP)
+            {
+                hideKeyboard();
             }
+            return false;
         });
     }
 

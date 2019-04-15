@@ -1,5 +1,8 @@
 package yargo.inc.orders.fragments.order_list.paging_orders;
 
+import java.util.List;
+
+import io.reactivex.functions.Consumer;
 import yargo.inc.common.network.models.order.OrdersItem;
 import yargo.inc.common.network.repository.OrdersRepository;
 
@@ -15,21 +18,41 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
     private CompositeDisposable compositeDisposable;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
+    private int totalCount;
+
     public OrdersDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable) {
         this.ordersRepository = ordersRepository;
         this.compositeDisposable = compositeDisposable;
+
+        compositeDisposable.add(ordersRepository.getAllVacantOrders()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<OrdersItem>>() {
+                    @Override
+                    public void accept(List<OrdersItem> ordersItems) throws Exception {
+                        OrdersDataSource.this.setTotalCount(ordersItems.size());
+                    }
+                }, throwable -> throwable.printStackTrace()));
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<OrdersItem> callback) {
         isLoading.postValue(true);
-//        compositeDisposable.add()
+        compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.requestedLoadSize, params.requestedStartPosition)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<OrdersItem>>() {
+                    @Override
+                    public void accept(List<OrdersItem> ordersItems) throws Exception {
+                        callback.onResult(ordersItems, params.requestedStartPosition, getTotalCount());
+                    }
+                }, throwable -> throwable.printStackTrace()));
     }
 
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<OrdersItem> callback) {
         isLoading.postValue(true);
-        compositeDisposable.add(ordersRepository.getAllVacantOrders().
+        compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.loadSize, params.startPosition).
                 observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(ordersItemList -> {
@@ -40,5 +63,13 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
 
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 }

@@ -172,8 +172,8 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void makeLogin() {
-        if (false) {
-//        if (viewModel.isAuthKeyExist()) {
+//        if (false) {
+        if (viewModel.isAuthKeyExist()) {
             viewComponentVisibility(View.INVISIBLE, true);
             viewModel.makeLoginWithToken();
         }

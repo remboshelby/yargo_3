@@ -2,6 +2,7 @@ package yargo.inc.common.network.repository;
 
 import android.util.Log;
 
+import io.reactivex.functions.Function;
 import yargo.inc.common.database.VacantOrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.api.OrderApiService;
@@ -24,22 +25,26 @@ public class OrdersRepository {
     private static final String TAG = OrdersRepository.class.getSimpleName();
     private CommonSharedPreferences commonSharedPreferences;
 
+    private static final int PAGE_SIZE =3;
+
     public OrdersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao, CommonSharedPreferences commonSharedPreferences) {
         this.orderApiService = orderApiService;
         this.vacantOrdersDao = vacantOrdersDao;
         this.commonSharedPreferences = commonSharedPreferences;
     }
 
-    public Observable<OrdersResponse> getVacantOrders(String authKey, String appId) {
-        return orderApiService.getVacantOrders(authKey, appId);
-    }
-
-    public Observable<OrdersResponse> getUsersOrders(String authKey, String appId) {
-        return orderApiService.getUsersOrders(authKey, appId);
-    }
-
-    public Observable<OrdersResponse> getOrderWatchedCount(String authKey, String appId, String idOrder) {
-        return orderApiService.getOrderWatchedCount(authKey, appId, idOrder);
+    public Observable<List<OrdersItem>> getAllVacantOrdersFotView(int size, int startPos){
+        return getAllVacantOrders().map(new Function<List<OrdersItem>, List<OrdersItem>>() {
+            @Override
+            public List<OrdersItem> apply(List<OrdersItem> ordersItems) throws Exception {
+                if (size>ordersItems.size()){
+                    return ordersItems;
+                }
+                else {
+                    return ordersItems.subList(size, startPos);
+                }
+            }
+        });
     }
 
     public Observable<List<OrdersItem>> getAllVacantOrders() {
@@ -90,4 +95,19 @@ public class OrdersRepository {
         }).toObservable();
     }
 
+    public Observable<OrdersResponse> getVacantOrders(String authKey, String appId) {
+        return orderApiService.getVacantOrders(authKey, appId);
+    }
+
+    public Observable<OrdersResponse> getUsersOrders(String authKey, String appId) {
+        return orderApiService.getUsersOrders(authKey, appId);
+    }
+
+    public Observable<OrdersResponse> getOrderWatchedCount(String authKey, String appId, String idOrder) {
+        return orderApiService.getOrderWatchedCount(authKey, appId, idOrder);
+    }
+
+    public static int getPageSize() {
+        return PAGE_SIZE;
+    }
 }

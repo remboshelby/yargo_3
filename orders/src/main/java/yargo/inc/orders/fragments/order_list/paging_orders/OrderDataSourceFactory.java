@@ -15,6 +15,7 @@ public class OrderDataSourceFactory extends DataSource.Factory<Integer, OrdersIt
     public OrderDataSourceFactory(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable) {
         this.ordersRepository = ordersRepository;
         this.compositeDisposable = compositeDisposable;
+        this.dataSourceLiveData = new MutableLiveData<>();
     }
 
     @Override

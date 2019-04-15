@@ -9,7 +9,7 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 public class OrderDataModel extends BaseViewModel {
-    private static final int PER_PAGE = 20;
+    private static final int PER_PAGE = 3;
     private OrdersRepository ordersRepository;
 
     private LiveData<PagedList<OrdersItem>> orders;
