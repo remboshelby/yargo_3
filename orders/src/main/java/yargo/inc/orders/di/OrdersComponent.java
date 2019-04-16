@@ -13,6 +13,7 @@ public interface OrdersComponent {
 
     void inject(OrderListsFragment orderListsFragment);
     void inject(VacantOrderList vacantOrderList);
+    void inject(VacantOrderList.OrdersItemAdapter ordersItemAdapter);
 
     @Component.Builder
     interface Builder{

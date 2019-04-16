@@ -27,7 +27,12 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
         compositeDisposable.add(ordersRepository.getAllVacantOrders()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(ordersItems -> OrdersDataSource.this.setTotalCount(ordersItems.size()), throwable -> throwable.printStackTrace()));
+                .subscribe(new Consumer<List<OrdersItem>>() {
+                    @Override
+                    public void accept(List<OrdersItem> ordersItems) throws Exception {
+                        OrdersDataSource.this.setTotalCount(ordersItems.size());
+                    }
+                }, throwable -> throwable.printStackTrace()));
     }
 
     @Override

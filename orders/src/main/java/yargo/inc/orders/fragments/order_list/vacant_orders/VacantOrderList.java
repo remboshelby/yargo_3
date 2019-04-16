@@ -1,6 +1,7 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class VacantOrderList extends BaseFragment {
     private OrdersItemAdapter ordersItemAdapter;
 
     @Inject
-    OrdersViewModel ordersViewModel;
+    public OrdersViewModel ordersViewModel;
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -88,9 +89,13 @@ public class VacantOrderList extends BaseFragment {
             super(DIFF_CALLBACK);
         }
 
+        @Inject
+        public OrdersViewModel ordersViewModel;
+
         @NonNull
         @Override
         public OrdersItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            OrderListsFragment.getOrdersComponent().inject(this);
             return new OrdersItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent,false));
         }
 
@@ -103,7 +108,11 @@ public class VacantOrderList extends BaseFragment {
                 holder.pbItemIsLoading.setVisibility(View.GONE);
 
                 holder.tvOrderAbout.setText(ordersItem.getAddress());
-
+                holder.imgOrderType.setImageResource(ordersViewModel.getIconByOrderType(ordersItem.getIdSpecialization()));
+                holder.tvOrderAbout.setText(ordersItem.getDescription());
+                holder.tvOrderData.setText(ordersItem.getDeadline());
+                holder.tvOrderPrice.setText(String.valueOf(ordersItem.getPrice())+ Html.fromHtml(" &#x20bd"));
+                holder.imgPayType.setImageResource(ordersItem.getIdPaymentMethod()==1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
             }
             else {
                 holder.tvOrderAbout.setVisibility(View.GONE);

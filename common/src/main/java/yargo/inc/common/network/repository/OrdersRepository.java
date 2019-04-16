@@ -36,8 +36,12 @@ public class OrdersRepository {
 
     public Observable<List<OrdersItem>> getAllVacantOrdersFotView(int size, int startPos){
         return getAllVacantOrders().map(ordersItems -> {
+            int outputSize = size+startPos;
+            if (outputSize>ordersItems.size())
+                outputSize = ordersItems.size();
+
             List<OrdersItem> ordersItems1 = new ArrayList<>();
-            for (int i = startPos; i< (size+startPos); i++)
+            for (int i = startPos; i< outputSize; i++)
             {ordersItems1.add(ordersItems.get(i)); }
             return ordersItems1;
         }).delay(10, TimeUnit.MILLISECONDS);
