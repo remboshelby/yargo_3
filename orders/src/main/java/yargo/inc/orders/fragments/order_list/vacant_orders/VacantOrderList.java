@@ -4,32 +4,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
-
-import androidx.paging.PagedList;
-import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.base.BaseViewHolder;
-import yargo.inc.common.network.models.order.OrdersItem;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import yargo.inc.common.base.BaseFragment;
+import yargo.inc.common.base.BaseViewHolder;
+import yargo.inc.common.network.models.order.OrdersItem;
+import yargo.inc.common.utils.AutoResizeTextView;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
@@ -77,11 +74,15 @@ public class VacantOrderList extends BaseFragment {
         recyclerOrders.addItemDecoration(dividerItemDecoration);
         recyclerOrders.setLayoutManager(layoutManager);
         recyclerOrders.setAdapter(ordersItemAdapter);
+
         ordersViewModel.getOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
+        ordersViewModel.getIsLoading().observe(this, this::setLoadingState);
         ordersViewModel.onViewCreated();
     }
 
     public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, OrdersItemViewHolder>{
+
+
 
         protected OrdersItemAdapter() {
             super(DIFF_CALLBACK);
@@ -97,22 +98,43 @@ public class VacantOrderList extends BaseFragment {
         public void onBindViewHolder(@NonNull OrdersItemViewHolder holder, int position) {
             OrdersItem ordersItem = getItem(position);
 
-            if(ordersItem!=null)
-            holder.textView.setText(ordersItem.getAddress());
+            if(ordersItem!=null) {
+                holder.tvOrderAbout.setVisibility(View.VISIBLE);
+                holder.pbItemIsLoading.setVisibility(View.GONE);
+
+                holder.tvOrderAbout.setText(ordersItem.getAddress());
+
+            }
+            else {
+                holder.tvOrderAbout.setVisibility(View.GONE);
+                holder.pbItemIsLoading.setVisibility(View.VISIBLE);
+            }
         }
     }
-    private static class OrdersItemViewHolder extends BaseViewHolder<OrdersItem>{
-        private TextView textView;
+
+    protected static class OrdersItemViewHolder extends BaseViewHolder<OrdersItem>{
+        @BindView(R2.id.imgOrderType)
+        ImageView imgOrderType;
+        @BindView(R2.id.tvOrderAbout)
+        TextView tvOrderAbout;
+        @BindView(R2.id.tvOrderData)
+        TextView tvOrderData;
+        @BindView(R2.id.tvOrderPrice)
+        AutoResizeTextView tvOrderPrice;
+        @BindView(R2.id.imgPayType)
+        ImageView imgPayType;
+        @BindView(R2.id.pbItemIsLoading)
+        ProgressBar pbItemIsLoading;
 
         public OrdersItemViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            textView = (TextView)itemView.findViewById(R.id.tv_id);
+            ButterKnife.bind(this,itemView);
         }
+
 
         @Override
         public void bind(OrdersItem item) {
-            textView.setText(item.getAddress());
+//            tvOrderAbout.setText(item.getAddress());
         }
     }
     public static final DiffUtil.ItemCallback<OrdersItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<OrdersItem>() {
@@ -126,4 +148,13 @@ public class VacantOrderList extends BaseFragment {
             return oldItem.getID() == newItem.getID();
         }
     };
+    public void setLoadingState(boolean isLoading){
+        if (isLoading){
+            recyclerOrders.setVisibility(ordersItemAdapter.getItemCount()>0 ? View.VISIBLE : View.GONE);
+            progressBarLoadOrders.setVisibility(ordersItemAdapter.getItemCount()>0 ? View.GONE : View.VISIBLE);
+        }else {
+            recyclerOrders.setVisibility(View.VISIBLE);
+            progressBarLoadOrders.setVisibility(View.GONE);
+        }
+    }
 }

@@ -9,6 +9,7 @@ import yargo.inc.common.network.api.OrderApiService;
 import yargo.inc.common.network.models.order.OrdersItem;
 import yargo.inc.common.network.models.order.OrdersResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +26,7 @@ public class OrdersRepository {
     private static final String TAG = OrdersRepository.class.getSimpleName();
     private CommonSharedPreferences commonSharedPreferences;
 
-    private static final int PAGE_SIZE =3;
+    private static final int PAGE_SIZE =5;
 
     public OrdersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao, CommonSharedPreferences commonSharedPreferences) {
         this.orderApiService = orderApiService;
@@ -34,17 +35,12 @@ public class OrdersRepository {
     }
 
     public Observable<List<OrdersItem>> getAllVacantOrdersFotView(int size, int startPos){
-        return getAllVacantOrders().map(new Function<List<OrdersItem>, List<OrdersItem>>() {
-            @Override
-            public List<OrdersItem> apply(List<OrdersItem> ordersItems) throws Exception {
-                if (size>ordersItems.size()){
-                    return ordersItems;
-                }
-                else {
-                    return ordersItems.subList(size, startPos);
-                }
-            }
-        });
+        return getAllVacantOrders().map(ordersItems -> {
+            List<OrdersItem> ordersItems1 = new ArrayList<>();
+            for (int i = startPos; i< (size+startPos); i++)
+            {ordersItems1.add(ordersItems.get(i)); }
+            return ordersItems1;
+        }).delay(10, TimeUnit.MILLISECONDS);
     }
 
     public Observable<List<OrdersItem>> getAllVacantOrders() {
@@ -53,7 +49,7 @@ public class OrdersRepository {
 
         return Observable.concatArrayEager(getAllVacantOrdersFromDb(), getVacantOrdersFromRemote(authKey, appId))
                 .materialize()
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .map(listNotification -> {
                     if (listNotification.getError() != null) {
                         Log.e(TAG, "vacantOrders Exeception: " + listNotification.getError().toString());
@@ -87,12 +83,7 @@ public class OrdersRepository {
     }
 
     public Observable<List<OrdersItem>> getAllVacantOrdersFromDb() {
-        return vacantOrdersDao.getAllVacantOrders().filter(new Predicate<List<OrdersItem>>() {
-            @Override
-            public boolean test(List<OrdersItem> ordersItemList) throws Exception {
-                return ordersItemList.size() != 0;
-            }
-        }).toObservable();
+        return vacantOrdersDao.getAllVacantOrders().filter(ordersItemList -> ordersItemList.size() != 0).toObservable();
     }
 
     public Observable<OrdersResponse> getVacantOrders(String authKey, String appId) {

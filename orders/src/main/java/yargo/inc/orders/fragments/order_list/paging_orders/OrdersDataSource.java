@@ -27,12 +27,7 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
         compositeDisposable.add(ordersRepository.getAllVacantOrders()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<OrdersItem>>() {
-                    @Override
-                    public void accept(List<OrdersItem> ordersItems) throws Exception {
-                        OrdersDataSource.this.setTotalCount(ordersItems.size());
-                    }
-                }, throwable -> throwable.printStackTrace()));
+                .subscribe(ordersItems -> OrdersDataSource.this.setTotalCount(ordersItems.size()), throwable -> throwable.printStackTrace()));
     }
 
     @Override
@@ -41,11 +36,9 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
         compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.requestedLoadSize, params.requestedStartPosition)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<OrdersItem>>() {
-                    @Override
-                    public void accept(List<OrdersItem> ordersItems) throws Exception {
-                        callback.onResult(ordersItems, params.requestedStartPosition, getTotalCount());
-                    }
+                .subscribe(ordersItems -> {
+                    callback.onResult(ordersItems, params.requestedStartPosition, OrdersDataSource.this.getTotalCount());
+                    isLoading.postValue(false);
                 }, throwable -> throwable.printStackTrace()));
     }
 
@@ -54,7 +47,7 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
         isLoading.postValue(true);
         compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.loadSize, params.startPosition).
                 observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(ordersItemList -> {
                     callback.onResult(ordersItemList);
                     isLoading.postValue(false);
