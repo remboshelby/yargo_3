@@ -19,9 +19,13 @@ public interface VacantOrdersDao {
     @Delete
     void remove(OrdersItem ordersItem);
 
+    @Query("Delete from vacant_orders")
+    void removeAll();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<OrdersItem> ordersItemList);
 
     @Query("Select *from vacant_orders")
     Flowable<List<OrdersItem>> getAllVacantOrders();
+
 }

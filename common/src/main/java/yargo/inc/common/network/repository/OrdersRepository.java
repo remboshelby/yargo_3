@@ -71,7 +71,12 @@ public class OrdersRepository {
     };
 
     public Observable<List<OrdersItem>> getVacantOrdersFromRemote(String authKey, String appId) {
-        return orderApiService.getVacantOrders(authKey, appId).map(ordersResponse -> ordersResponse.getResponse().getOrders())
+        return orderApiService.getVacantOrders(authKey, appId).map(new Function<OrdersResponse, List<OrdersItem>>() {
+            @Override
+            public List<OrdersItem> apply(OrdersResponse ordersResponse) throws Exception {
+                return ordersResponse.getResponse().getOrders();
+            }
+        })
                 .doOnNext(ordersItems -> {
                     safeVacantOrderInBd(ordersItems);
                 });
@@ -79,6 +84,7 @@ public class OrdersRepository {
 
     public void safeVacantOrderInBd(final List<OrdersItem> vacantOrderList) {
         Observable.fromCallable(() -> {
+            vacantOrdersDao.removeAll();
             vacantOrdersDao.insertAll(vacantOrderList);
             return vacantOrderList;
         }).subscribeOn(Schedulers.io())

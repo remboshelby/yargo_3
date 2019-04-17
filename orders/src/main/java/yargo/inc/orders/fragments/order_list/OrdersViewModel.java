@@ -16,6 +16,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import yargo.inc.common.utils.DateTimeTransformer;
 import yargo.inc.orders.R;
 import yargo.inc.orders.fragments.order_list.paging_orders.OrderDataSourceFactory;
 import yargo.inc.orders.fragments.order_list.paging_orders.OrdersDataSource;
@@ -24,6 +25,8 @@ public class OrdersViewModel extends BaseViewModel {
     private OrdersRepository ordersRepository;
     private LiveData<PagedList<OrdersItem>> orders;
     private LiveData<Boolean> isLoading;
+
+    public DateTimeTransformer dateTimeTransformer = new DateTimeTransformer();
 
     private MutableLiveData<List<OrdersItem>> dataVacanListOrders = new MutableLiveData<>();
 

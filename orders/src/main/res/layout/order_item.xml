@@ -8,12 +8,12 @@
 
     <ImageView
         android:id="@+id/imgOrderType"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_weight="1"
@@ -35,16 +35,17 @@
         app:layout_constraintEnd_toStartOf="@+id/tvOrderPrice"
         app:layout_constraintStart_toEndOf="@+id/imgOrderType"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvOrderData"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_weight="1"
         android:maxLines="1"
         android:textColor="#2b2a29"
@@ -73,13 +74,15 @@
 
     <ImageView
         android:id="@+id/imgPayType"
-        android:layout_width="37dp"
-        android:layout_height="22dp"
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvOrderAbout" />
 
     <ProgressBar
         android:id="@+id/pbItemIsLoading"

@@ -5,17 +5,20 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -32,12 +35,13 @@ import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.OrdersViewModel;
+import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
 
 public class VacantOrderList extends BaseFragment {
 
 
-    @BindView(R2.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R2.id.customVacantToolbar)
+    CustomToolbarVacantOrders customVacantToolbar;
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
     @BindView(R2.id.progressBarLoadOrders)
@@ -65,9 +69,9 @@ public class VacantOrderList extends BaseFragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
 
-        getRoot().setSupportActionBar(toolbar);
+//        getRoot().setSupportActionBar(toolbar);
 
-        toolbar.setTitle(getString(R.string.vacant_orders));
+        customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
         ordersItemAdapter = new OrdersItemAdapter();
 
@@ -81,9 +85,9 @@ public class VacantOrderList extends BaseFragment {
         ordersViewModel.onViewCreated();
     }
 
-    public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, OrdersItemViewHolder>{
-
-
+    public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, OrdersItemViewHolder> implements Filterable {
+        private List<OrdersItem> orderList;
+        private List<OrdersItem> orderListFiltred;
 
         protected OrdersItemAdapter() {
             super(DIFF_CALLBACK);
@@ -96,32 +100,51 @@ public class VacantOrderList extends BaseFragment {
         @Override
         public OrdersItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             OrderListsFragment.getOrdersComponent().inject(this);
-            return new OrdersItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent,false));
+            return new OrdersItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent, false));
         }
 
         @Override
         public void onBindViewHolder(@NonNull OrdersItemViewHolder holder, int position) {
             OrdersItem ordersItem = getItem(position);
 
-            if(ordersItem!=null) {
+            if (ordersItem != null) {
                 holder.tvOrderAbout.setVisibility(View.VISIBLE);
                 holder.pbItemIsLoading.setVisibility(View.GONE);
 
                 holder.tvOrderAbout.setText(ordersItem.getAddress());
                 holder.imgOrderType.setImageResource(ordersViewModel.getIconByOrderType(ordersItem.getIdSpecialization()));
                 holder.tvOrderAbout.setText(ordersItem.getDescription());
-                holder.tvOrderData.setText(ordersItem.getDeadline());
-                holder.tvOrderPrice.setText(String.valueOf(ordersItem.getPrice())+ Html.fromHtml(" &#x20bd"));
-                holder.imgPayType.setImageResource(ordersItem.getIdPaymentMethod()==1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
-            }
-            else {
+                holder.tvOrderData.setText(ordersViewModel.dateTimeTransformer.dateCreator(ordersItem.getStartworking()) + " - " + ordersViewModel.dateTimeTransformer.dateCreator(ordersItem.getDeadline()));
+                holder.tvOrderPrice.setText(String.valueOf(ordersItem.getPrice()) + Html.fromHtml(" &#x20bd"));
+                holder.imgPayType.setImageResource(ordersItem.getIdPaymentMethod() == 1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
+                holder.setOrdersItem(ordersItem);
+            } else {
                 holder.tvOrderAbout.setVisibility(View.GONE);
                 holder.pbItemIsLoading.setVisibility(View.VISIBLE);
             }
         }
+
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    String charString = constraint.toString();
+                    if (charString.isEmpty()){
+
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    notifyDataSetChanged();
+                }
+            };
+        }
     }
 
-    protected static class OrdersItemViewHolder extends BaseViewHolder<OrdersItem>{
+    protected static class OrdersItemViewHolder extends BaseViewHolder<OrdersItem> {
         @BindView(R2.id.imgOrderType)
         ImageView imgOrderType;
         @BindView(R2.id.tvOrderAbout)
@@ -135,17 +158,32 @@ public class VacantOrderList extends BaseFragment {
         @BindView(R2.id.pbItemIsLoading)
         ProgressBar pbItemIsLoading;
 
-        public OrdersItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
+        OrdersItem ordersItem;
+
+        public void setOrdersItem(OrdersItem ordersItem) {
+            this.ordersItem = ordersItem;
         }
 
 
         @Override
+        public void setOnClickListener(View.OnClickListener listener) {
+            super.setOnClickListener(listener);
+        }
+
+
+        public OrdersItemViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(v -> {
+
+            });
+        }
+
+        @Override
         public void bind(OrdersItem item) {
-//            tvOrderAbout.setText(item.getAddress());
         }
     }
+
     public static final DiffUtil.ItemCallback<OrdersItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<OrdersItem>() {
         @Override
         public boolean areItemsTheSame(@NonNull OrdersItem oldItem, @NonNull OrdersItem newItem) {
@@ -157,11 +195,12 @@ public class VacantOrderList extends BaseFragment {
             return oldItem.getID() == newItem.getID();
         }
     };
-    public void setLoadingState(boolean isLoading){
-        if (isLoading){
-            recyclerOrders.setVisibility(ordersItemAdapter.getItemCount()>0 ? View.VISIBLE : View.GONE);
-            progressBarLoadOrders.setVisibility(ordersItemAdapter.getItemCount()>0 ? View.GONE : View.VISIBLE);
-        }else {
+
+    public void setLoadingState(boolean isLoading) {
+        if (isLoading) {
+            recyclerOrders.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.VISIBLE : View.GONE);
+            progressBarLoadOrders.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
+        } else {
             recyclerOrders.setVisibility(View.VISIBLE);
             progressBarLoadOrders.setVisibility(View.GONE);
         }

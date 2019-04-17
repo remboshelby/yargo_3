@@ -18,4 +18,6 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     public void bind(T item, int position){
         bind(item);
     }
+
+
 }

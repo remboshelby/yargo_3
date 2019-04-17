@@ -14,11 +14,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders
+            android:id="@+id/customVacantToolbar"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/colorPrimary" />
+            android:layout_height="wrap_content" />
+        <!--<androidx.appcompat.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?android:attr/actionBarSize"-->
+            <!--android:background="@color/colorPrimary" >-->
+            <!---->
+        <!--</androidx.appcompat.widget.Toolbar>-->
 
     </com.google.android.material.appbar.AppBarLayout>
 
