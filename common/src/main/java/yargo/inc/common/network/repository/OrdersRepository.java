@@ -2,6 +2,9 @@ package yargo.inc.common.network.repository;
 
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
+import androidx.room.util.StringUtil;
 import io.reactivex.functions.Function;
 import yargo.inc.common.database.VacantOrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
@@ -34,8 +37,8 @@ public class OrdersRepository {
         this.commonSharedPreferences = commonSharedPreferences;
     }
 
-    public Observable<List<OrdersItem>> getAllVacantOrdersFotView(int size, int startPos){
-        return getAllVacantOrders().map(ordersItems -> {
+    public Observable<List<OrdersItem>> getAllVacantOrdersFotView(int size, int startPos, String orderDescription){
+        return getAllVacantOrders(orderDescription).map(ordersItems -> {
             int outputSize = size+startPos;
             if (outputSize>ordersItems.size())
                 outputSize = ordersItems.size();
@@ -47,7 +50,7 @@ public class OrdersRepository {
         }).delay(10, TimeUnit.MILLISECONDS);
     }
 
-    public Observable<List<OrdersItem>> getAllVacantOrders() {
+    public Observable<List<OrdersItem>> getAllVacantOrders(String orderDescription) {
         String appId = UUID.randomUUID().toString();
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
@@ -67,6 +70,17 @@ public class OrdersRepository {
                     }
                 })
                 .dematerialize(listNotification -> listNotification)
+                .map(new Function<List<OrdersItem>, List<OrdersItem>>() {
+                    @Override
+                    public List<OrdersItem> apply(List<OrdersItem> ordersItems) throws Exception {
+                        List<OrdersItem> fileredOrdersItem = new ArrayList<>();
+                        for (OrdersItem ordersItem: ordersItems){
+                            if (StringUtils.containsIgnoreCase(ordersItem.getDescription(), orderDescription))
+                                fileredOrdersItem.add(ordersItem);
+                        }
+                        return fileredOrdersItem;
+                    }
+                })
                 .debounce(400, TimeUnit.MILLISECONDS);
     };
 

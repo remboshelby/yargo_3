@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -70,6 +71,12 @@ public class VacantOrderList extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
 
 //        getRoot().setSupportActionBar(toolbar);
+        ordersViewModel.observSearchText(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+               replaceSubscription(s);
+            }
+        });
 
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
@@ -80,9 +87,16 @@ public class VacantOrderList extends BaseFragment {
         recyclerOrders.setLayoutManager(layoutManager);
         recyclerOrders.setAdapter(ordersItemAdapter);
 
+        startListening();
+        ordersViewModel.onViewCreated();
+    }
+    private void startListening(){
         ordersViewModel.getOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
         ordersViewModel.getIsLoading().observe(this, this::setLoadingState);
-        ordersViewModel.onViewCreated();
+    }
+    public void replaceSubscription(String orderDescription){
+        ordersViewModel.replaceSubscription(this);
+        startListening();
     }
 
     public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, OrdersItemViewHolder> implements Filterable {

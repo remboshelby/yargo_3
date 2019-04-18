@@ -1,6 +1,7 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders.custom_view;
 
 import android.content.Context;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -11,15 +12,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.OrdersViewModel;
+import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
 public class CustomToolbarVacantOrders extends ConstraintLayout {
 
+    @Inject
+    protected OrdersViewModel ordersViewModel;
 
     @BindView(R2.id.tvSearch)
     AutoCompleteTextView tvSearch;
@@ -49,6 +58,7 @@ public class CustomToolbarVacantOrders extends ConstraintLayout {
     private void init(Context context){
         LayoutInflater.from(context).inflate(R.layout.custom_vacant_toolbar, this);
         ButterKnife.bind(this);
+        OrderListsFragment.getOrdersComponent().inject(this);
 
         ImageSpan imageSpan = new ImageSpan(context, R.drawable.ic_search_24dp);
         SpannableString spannableString = new SpannableString(" "+ getResources().getString(R.string.cutom_toolbar_search));
@@ -77,6 +87,12 @@ public class CustomToolbarVacantOrders extends ConstraintLayout {
             imgBtnSearch.setVisibility(VISIBLE);
             tvToolBarTitle.setVisibility(VISIBLE);
             customSearch.setVisibility(GONE);
+            tvSearch.setText("");
+
         }
+    }
+    @OnTextChanged(R2.id.tvSearch)
+    public void onSearchTextChanged(){
+        ordersViewModel.setOrderDescription(tvSearch.getText().toString());
     }
 }

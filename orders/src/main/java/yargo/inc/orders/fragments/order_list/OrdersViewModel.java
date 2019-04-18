@@ -2,6 +2,7 @@ package yargo.inc.orders.fragments.order_list;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
@@ -13,7 +14,6 @@ import java.util.List;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.utils.DateTimeTransformer;
@@ -26,30 +26,38 @@ public class OrdersViewModel extends BaseViewModel {
     private LiveData<PagedList<OrdersItem>> orders;
     private LiveData<Boolean> isLoading;
 
+
+    private MutableLiveData<String> orderDescription = new MutableLiveData<>();
+
     public DateTimeTransformer dateTimeTransformer = new DateTimeTransformer();
 
     private MutableLiveData<List<OrdersItem>> dataVacanListOrders = new MutableLiveData<>();
 
     public OrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
-
-        OrderDataSourceFactory orderDataSourceFactory = new OrderDataSourceFactory(ordersRepository, getCompositeDisposable());
-
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setEnablePlaceholders(true)
-                .setPageSize(ordersRepository.getPageSize())
+        orders = createFiltredOrders(orderDescription.getValue());
+    }
+    public void observSearchText(LifecycleOwner owner, Observer<String> searchString){
+        orderDescription.observe(owner, searchString);
+    }
+    private LiveData<PagedList<OrdersItem>> createFiltredOrders(String orderDescription) {
+        if (orderDescription==null)
+            orderDescription="";
+        OrderDataSourceFactory orderDataSourceFactory = new OrderDataSourceFactory(ordersRepository, getCompositeDisposable(), orderDescription);
+        isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
+        return new LivePagedListBuilder<>(orderDataSourceFactory,
+                new PagedList.Config.Builder()
+                        .setEnablePlaceholders(true)
+                        .setPageSize(ordersRepository.getPageSize())
+                        .build()).setInitialLoadKey(0)
                 .build();
 
-        orders = new LivePagedListBuilder<>(orderDataSourceFactory, config).build();
-
-        isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), new Function<OrdersDataSource, LiveData<Boolean>>() {
-            @Override
-            public LiveData<Boolean> apply(OrdersDataSource input) {
-                return input.getIsLoading();
-            }
-        });
     }
-//    public void fecthVacantOrders() {
+    public void replaceSubscription(LifecycleOwner owner){
+        orders.removeObservers(owner);
+        orders = createFiltredOrders(orderDescription.getValue());
+    }
+    //    public void fecthVacantOrders() {
 //        addDisposible(ordersRepository.getAllVacantOrders()
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
@@ -115,5 +123,9 @@ public class OrdersViewModel extends BaseViewModel {
 
     public LiveData<PagedList<OrdersItem>> getOrders() {
         return orders;
+    }
+
+    public void setOrderDescription(String orderDescription) {
+        this.orderDescription.postValue(orderDescription);
     }
 }

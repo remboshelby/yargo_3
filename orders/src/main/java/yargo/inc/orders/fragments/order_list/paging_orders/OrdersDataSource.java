@@ -16,15 +16,17 @@ import io.reactivex.schedulers.Schedulers;
 public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
     private OrdersRepository ordersRepository;
     private CompositeDisposable compositeDisposable;
+    private String orderDescription;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private int totalCount;
 
-    public OrdersDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable) {
+    public OrdersDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable, String orderDescription) {
         this.ordersRepository = ordersRepository;
         this.compositeDisposable = compositeDisposable;
+        this.orderDescription = orderDescription;
 
-        compositeDisposable.add(ordersRepository.getAllVacantOrders()
+        compositeDisposable.add(ordersRepository.getAllVacantOrders(orderDescription)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<OrdersItem>>() {
@@ -38,7 +40,7 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<OrdersItem> callback) {
         isLoading.postValue(true);
-        compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.requestedLoadSize, params.requestedStartPosition)
+        compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.requestedLoadSize, params.requestedStartPosition, orderDescription)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(ordersItems -> {
@@ -50,7 +52,7 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<OrdersItem> callback) {
         isLoading.postValue(true);
-        compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.loadSize, params.startPosition).
+        compositeDisposable.add(ordersRepository.getAllVacantOrdersFotView(params.loadSize, params.startPosition, orderDescription).
                 observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(ordersItemList -> {

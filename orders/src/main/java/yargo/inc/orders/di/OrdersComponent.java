@@ -6,6 +6,7 @@ import yargo.inc.common.di.CommonComponent;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
 
 @OrdersScope
 @Component(dependencies = CommonComponent.class, modules = {OrdersModule.class})
@@ -14,6 +15,7 @@ public interface OrdersComponent {
     void inject(OrderListsFragment orderListsFragment);
     void inject(VacantOrderList vacantOrderList);
     void inject(VacantOrderList.OrdersItemAdapter ordersItemAdapter);
+    void inject(CustomToolbarVacantOrders customToolbarVacantOrders);
 
     @Component.Builder
     interface Builder{
