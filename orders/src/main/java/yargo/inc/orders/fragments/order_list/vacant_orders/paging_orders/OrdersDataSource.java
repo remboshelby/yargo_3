@@ -1,4 +1,4 @@
-package yargo.inc.orders.fragments.order_list.paging_orders;
+package yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import yargo.inc.common.network.repository.OrdersRepository;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PositionalDataSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 

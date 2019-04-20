@@ -71,12 +71,7 @@ public class VacantOrderList extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
 
 //        getRoot().setSupportActionBar(toolbar);
-        ordersViewModel.observSearchText(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-               replaceSubscription(s);
-            }
-        });
+        ordersViewModel.observSearchText(this, s -> replaceSubscription());
 
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
@@ -94,7 +89,7 @@ public class VacantOrderList extends BaseFragment {
         ordersViewModel.getOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
         ordersViewModel.getIsLoading().observe(this, this::setLoadingState);
     }
-    public void replaceSubscription(String orderDescription){
+    public void replaceSubscription(){
         ordersViewModel.replaceSubscription(this);
         startListening();
     }

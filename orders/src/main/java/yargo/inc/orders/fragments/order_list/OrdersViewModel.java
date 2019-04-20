@@ -1,6 +1,5 @@
 package yargo.inc.orders.fragments.order_list;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
@@ -14,12 +13,10 @@ import java.util.List;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+
 import yargo.inc.common.utils.DateTimeTransformer;
 import yargo.inc.orders.R;
-import yargo.inc.orders.fragments.order_list.paging_orders.OrderDataSourceFactory;
-import yargo.inc.orders.fragments.order_list.paging_orders.OrdersDataSource;
+import yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders.OrderDataSourceFactory;
 
 public class OrdersViewModel extends BaseViewModel {
     private OrdersRepository ordersRepository;

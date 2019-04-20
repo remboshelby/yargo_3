@@ -1,4 +1,4 @@
-package yargo.inc.orders.fragments.order_list.paging_orders;
+package yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders;
 
 import yargo.inc.common.network.models.order.OrdersItem;
 import yargo.inc.common.network.repository.OrdersRepository;
