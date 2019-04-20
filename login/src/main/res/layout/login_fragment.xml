@@ -70,7 +70,6 @@
             style="@style/buttonMargins"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_with_round_conners"
             android:enabled="false"
             android:text="@string/action_sign_in_account"
             app:layout_constraintEnd_toEndOf="parent"

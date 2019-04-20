@@ -34,7 +34,12 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
                     public void accept(List<OrdersItem> ordersItems) throws Exception {
                         OrdersDataSource.this.setTotalCount(ordersItems.size());
                     }
-                }, throwable -> throwable.printStackTrace()));
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }));
     }
 
     @Override
@@ -46,7 +51,12 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
                 .subscribe(ordersItems -> {
                     callback.onResult(ordersItems, params.requestedStartPosition, OrdersDataSource.this.getTotalCount());
                     isLoading.postValue(false);
-                }, throwable -> throwable.printStackTrace()));
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }));
     }
 
     @Override
@@ -58,6 +68,11 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
                 .subscribe(ordersItemList -> {
                     callback.onResult(ordersItemList);
                     isLoading.postValue(false);
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
                 }));
     }
 
@@ -72,4 +87,5 @@ public class OrdersDataSource extends PositionalDataSource<OrdersItem> {
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
+
 }

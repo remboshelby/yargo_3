@@ -13,6 +13,8 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
+import org.w3c.dom.Text;
+
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ import yargo.inc.login.R;
 import yargo.inc.login.R2;
 import yargo.inc.login.fragments.LoginFragment;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrConfirmMobile;
+import yargo.inc.login.fragments.registration.registration_pages.RegistrEnd;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrMobilePhone;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonalData;
 import yargo.inc.login.utils_view.LockableViewPager;
@@ -44,22 +47,23 @@ public class RegistrationFragment extends BaseFragment {
     TabLayout tabLayout;
     @BindView(R2.id.imgBtnBackPress)
     ImageButton imgBtnBackPress;
-    @BindView(R2.id.tvToobarName_registration)
-    TextView tvToobarName_registration;
+
+    @BindView(R2.id.tvToobarNameRegistration)
+    TextView tvToobarNameRegistration;
+
     @BindView(R2.id.btnRegistNext)
     Button btnRegistNext;
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
-    @BindView(R2.id.registration_container)
-    LockableViewPager registration_container;
-
+    @BindView(R2.id.registrationContainer)
+    LockableViewPager registrationСontainer;
     private static final int REGISTR_PAGE_COUNT = 3;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
     protected int containerResId() {
-        return R.id.registration_container;
+        return R.id.registrationContainer;
     }
 
     @Override
@@ -81,9 +85,9 @@ public class RegistrationFragment extends BaseFragment {
                 btnRegistNext.setVisibility(View.GONE);
             }
         });
-        registration_container.setSwipeable(false);
-        registration_container.setAdapter(sectionsPagerAdapter);
-        registration_container.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        registrationСontainer.setSwipeable(false);
+        registrationСontainer.setAdapter(sectionsPagerAdapter);
+        registrationСontainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -91,6 +95,7 @@ public class RegistrationFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
+                setTvToobarNameRegistration(registrationViewModel.getTitle(position));
                 registrationViewModel.getBtnStatus(position);
             }
 
@@ -99,8 +104,8 @@ public class RegistrationFragment extends BaseFragment {
 
             }
         });
-        registration_container.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(registration_container));
+        registrationСontainer.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(registrationСontainer));
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -118,7 +123,8 @@ public class RegistrationFragment extends BaseFragment {
                 case 1:
                     return new RegistrMobilePhone();
                 case 2:
-                    return new RegistrConfirmMobile();
+                    return new RegistrEnd();
+//                    return new RegistrConfirmMobile();
                 default:
                     return null;
             }
@@ -128,18 +134,22 @@ public class RegistrationFragment extends BaseFragment {
         public int getCount() {
             return REGISTR_PAGE_COUNT;
         }
+
     }
     @OnClick(R2.id.btnRegistNext)
     public void onBtnRegistNextClick(){
-        if(registration_container.getCurrentItem()!=2){
-            registration_container.setCurrentItem(registration_container.getCurrentItem()+1);
+        if(registrationСontainer.getCurrentItem()!=2){
+            registrationСontainer.setCurrentItem(registrationСontainer.getCurrentItem()+1);
         }
     }
     @OnClick(R2.id.imgBtnBackPress)
     public void onBtnBackPressClick(){
-        if (registration_container.getCurrentItem()>0) {
-            registration_container.setCurrentItem(registration_container.getCurrentItem()-1);
+        if (registrationСontainer.getCurrentItem()>0) {
+            registrationСontainer.setCurrentItem(registrationСontainer.getCurrentItem()-1);
         }
         else getRoot().onBackPressed();
+    }
+    public void setTvToobarNameRegistration(String label) {
+        this.tvToobarNameRegistration.setText(label);
     }
 }

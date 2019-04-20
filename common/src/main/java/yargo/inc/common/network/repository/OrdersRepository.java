@@ -47,7 +47,7 @@ public class OrdersRepository {
             for (int i = startPos; i< outputSize; i++)
             {ordersItems1.add(ordersItems.get(i)); }
             return ordersItems1;
-        }).delay(10, TimeUnit.MILLISECONDS);
+        }).delay(20, TimeUnit.MILLISECONDS);
     }
 
     public Observable<List<OrdersItem>> getAllVacantOrders(String orderDescription) {

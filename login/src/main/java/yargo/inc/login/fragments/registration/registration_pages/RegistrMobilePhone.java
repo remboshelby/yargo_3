@@ -3,6 +3,7 @@ package yargo.inc.login.fragments.registration.registration_pages;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,13 @@ public class RegistrMobilePhone extends BaseFragment {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
-//        ((RegistrationFragment)getParentFragment()).onBtnRegistNextClick();
+        Runnable progressRunnable = () -> {
+            progressDialog.cancel();
+            ((RegistrationFragment)getParentFragment()).onBtnRegistNextClick();
+        };
+
+        Handler pdCanceller = new Handler();
+        pdCanceller.postDelayed(progressRunnable, 5000);
     }
 
 

@@ -6,6 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--<data>-->
+    <!--</data>-->
+    <!---->
     <ImageView
         android:id="@+id/imgOrderType"
         android:layout_width="60dp"

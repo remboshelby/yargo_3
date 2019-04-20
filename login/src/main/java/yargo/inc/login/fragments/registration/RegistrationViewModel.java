@@ -1,18 +1,18 @@
 package yargo.inc.login.fragments.registration;
 
-import android.view.View;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-import butterknife.OnItemSelected;
-import dagger.Provides;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.user_info.PersonData;
+import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
 import yargo.inc.common.network.repository.RegistrRepository;
 
 import androidx.lifecycle.MutableLiveData;
@@ -31,6 +31,8 @@ public class RegistrationViewModel extends BaseViewModel {
     private MutableLiveData<PersonData> personData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isBtnNextOn = new MutableLiveData<>();
 
+    private MutableLiveData<String> passwordConfirmation = new MutableLiveData<>();
+
     public RegistrationViewModel(RegistrRepository registrRepository, CommonSharedPreferences commonSharedPreferences) {
         this.registrRepository = registrRepository;
         this.commonSharedPreferences = commonSharedPreferences;
@@ -38,21 +40,20 @@ public class RegistrationViewModel extends BaseViewModel {
         isBtnNextOn.setValue(false);
     }
 
-    public void getBtnStatus(int position) {
-        switch (position) {
-            case 0:
-                isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
-                break;
-            case 1:
-                isBtnNextOn.setValue(false);
-                break;
-            case 2:
-                break;
-        }
-    }
-
     public void observeBtnStatus(LifecycleOwner owner, Observer<Boolean> observer) {
         isBtnNextOn.observe(owner, observer);
+    }
+
+    public void makeRegistr(PersonData personData){
+        addDisposible(registrRepository.makeRegistr(personData)
+                .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<RegistrResponse>() {
+            @Override
+            public void accept(RegistrResponse registResponse) throws Exception {
+
+            }
+        }));
     }
 
     public void setSurname(String textSurname) {
@@ -100,9 +101,6 @@ public class RegistrationViewModel extends BaseViewModel {
         }
     }
 
-    public void click(){
-
-    }
 
     public void setSex(String sex) {
         personData.getValue().setSex(sex);
@@ -130,7 +128,6 @@ public class RegistrationViewModel extends BaseViewModel {
             isBtnNextOn.setValue(false);
         }
     }
-
     public void setPhoneConfirm(boolean isConfirmd) {
 //        personData.getValue().setTelephoneConfirmed(isConfirmd);
 //        if (isConfirmd) {
@@ -139,11 +136,51 @@ public class RegistrationViewModel extends BaseViewModel {
 //            isBtnNextOn.setValue(false);
 //        }
     }
+    public void setPassword(String password){
+        personData.getValue().setPassword(password);
+        if (!password.isEmpty() && password.length()>PASSWORD_LENTH){
+            isBtnNextOn.setValue(true);
+        }
+        else {
+            isBtnNextOn.setValue(false);
+        }
+    }
+
+    public boolean isPasswodCorrect(String passwordConf){
+        return passwordConf == personData.getValue().getPassword();
+    }
 
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    public void getBtnStatus(int position) {
+        switch (position) {
+            case 0:
+                isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
+                break;
+            case 1:
+                isBtnNextOn.setValue(false);
+                break;
+            case 2:
+                isBtnNextOn.setValue(false);
+                break;
+        }
+    }
+
+    public String getTitle(int position) {
+        switch (position) {
+            case 0:
+                return "О Вас";
+            case 1:
+                return "Мобильный телефон";
+            case 2:
+                return "Завершение";
+            default:
+                return "Регистрация";
+        }
     }
 }

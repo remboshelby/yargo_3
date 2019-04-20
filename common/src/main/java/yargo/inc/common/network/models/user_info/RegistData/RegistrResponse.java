@@ -1,29 +1,29 @@
-package yargo.inc.common.network.models.login;
+package yargo.inc.common.network.models.user_info.RegistData;
 
 import javax.annotation.Generated;
 
 import com.google.gson.annotations.SerializedName;
 
 @Generated("com.robohorse.robopojogenerator")
-public class Response {
+public class RegistrResponse {
+
+    @SerializedName("registrResponse")
+    private RegistrResponse registrResponse;
 
     @SerializedName("birthday")
     private int birthday;
 
     @SerializedName("id_city")
-    private int idCity;
+    private String idCity;
+
+    @SerializedName("is_email_sended")
+    private int isEmailSended;
 
     @SerializedName("surname")
     private String surname;
 
     @SerializedName("sex")
-    private int sex;
-
-    @SerializedName("fcm_token")
-    private int fcmToken;
-
-    @SerializedName("kassa")
-    private int kassa;
+    private String sex;
 
     @SerializedName("auth_key")
     private String authKey;
@@ -34,14 +34,19 @@ public class Response {
     @SerializedName("user")
     private User user;
 
-    @SerializedName("version")
-    private String version;
-
     @SerializedName("username")
     private String username;
 
     @SerializedName("message")
-    private String message;
+    private Message message;
+
+    public void setRegistrResponse(RegistrResponse registrResponse) {
+        this.registrResponse = registrResponse;
+    }
+
+    public RegistrResponse getRegistrResponse() {
+        return registrResponse;
+    }
 
     public void setBirthday(int birthday) {
         this.birthday = birthday;
@@ -51,12 +56,20 @@ public class Response {
         return birthday;
     }
 
-    public void setIdCity(int idCity) {
+    public void setIdCity(String idCity) {
         this.idCity = idCity;
     }
 
-    public int getIdCity() {
+    public String getIdCity() {
         return idCity;
+    }
+
+    public void setIsEmailSended(int isEmailSended) {
+        this.isEmailSended = isEmailSended;
+    }
+
+    public int getIsEmailSended() {
+        return isEmailSended;
     }
 
     public void setSurname(String surname) {
@@ -67,28 +80,12 @@ public class Response {
         return surname;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
-    public int getSex() {
+    public String getSex() {
         return sex;
-    }
-
-    public void setFcmToken(int fcmToken) {
-        this.fcmToken = fcmToken;
-    }
-
-    public int getFcmToken() {
-        return fcmToken;
-    }
-
-    public void setKassa(int kassa) {
-        this.kassa = kassa;
-    }
-
-    public int getKassa() {
-        return kassa;
     }
 
     public void setAuthKey(String authKey) {
@@ -115,14 +112,6 @@ public class Response {
         return user;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -131,29 +120,27 @@ public class Response {
         return username;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
+    public void setMessage(Message message) {
         this.message = message;
     }
 
+    public Message getMessage() {
+        return message;
+    }
 
     @Override
     public String toString() {
         return
-                "Response_{" +
-                        "birthday = '" + birthday + '\'' +
+                "RegistrResponse{" +
+                        "registrResponse = '" + registrResponse + '\'' +
+                        ",birthday = '" + birthday + '\'' +
                         ",id_city = '" + idCity + '\'' +
+                        ",is_email_sended = '" + isEmailSended + '\'' +
                         ",surname = '" + surname + '\'' +
                         ",sex = '" + sex + '\'' +
-                        ",fcm_token = '" + fcmToken + '\'' +
-                        ",kassa = '" + kassa + '\'' +
                         ",auth_key = '" + authKey + '\'' +
                         ",type = '" + type + '\'' +
                         ",user = '" + user + '\'' +
-                        ",version = '" + version + '\'' +
                         ",username = '" + username + '\'' +
                         ",message = '" + message + '\'' +
                         "}";

@@ -34,6 +34,7 @@ import yargo.inc.common.network.models.order.OrdersItem;
 import yargo.inc.common.utils.AutoResizeTextView;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderItemView;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.OrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
@@ -91,15 +92,20 @@ public class VacantOrderList extends BaseFragment {
         ordersViewModel.onViewCreated();
     }
     private void startListening(){
+        ordersViewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                VacantOrderList.this.setLoadingState(isLoading);
+            }
+        });
         ordersViewModel.getOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
-        ordersViewModel.getIsLoading().observe(this, this::setLoadingState);
     }
     public void replaceSubscription(String orderDescription){
         ordersViewModel.replaceSubscription(this);
         startListening();
     }
 
-    public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, OrdersItemViewHolder> implements Filterable {
+    public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, BaseViewHolder<OrdersItem>>  {
         private List<OrdersItem> orderList;
         private List<OrdersItem> orderListFiltred;
 
@@ -112,90 +118,23 @@ public class VacantOrderList extends BaseFragment {
 
         @NonNull
         @Override
-        public OrdersItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public BaseViewHolder<OrdersItem> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             OrderListsFragment.getOrdersComponent().inject(this);
-            return new OrdersItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent, false));
-        }
 
-        @Override
-        public void onBindViewHolder(@NonNull OrdersItemViewHolder holder, int position) {
-            OrdersItem ordersItem = getItem(position);
-
-            if (ordersItem != null) {
-                holder.tvOrderAbout.setVisibility(View.VISIBLE);
-                holder.pbItemIsLoading.setVisibility(View.GONE);
-
-                holder.tvOrderAbout.setText(ordersItem.getAddress());
-                holder.imgOrderType.setImageResource(ordersViewModel.getIconByOrderType(ordersItem.getIdSpecialization()));
-                holder.tvOrderAbout.setText(ordersItem.getDescription());
-                holder.tvOrderData.setText(ordersViewModel.dateTimeTransformer.dateCreator(ordersItem.getStartworking()) + " - " + ordersViewModel.dateTimeTransformer.dateCreator(ordersItem.getDeadline()));
-                holder.tvOrderPrice.setText(String.valueOf(ordersItem.getPrice()) + Html.fromHtml(" &#x20bd"));
-                holder.imgPayType.setImageResource(ordersItem.getIdPaymentMethod() == 1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
-                holder.setOrdersItem(ordersItem);
-            } else {
-                holder.tvOrderAbout.setVisibility(View.GONE);
-                holder.pbItemIsLoading.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public Filter getFilter() {
-            return new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    String charString = constraint.toString();
-                    if (charString.isEmpty()){
-
-                    }
-                    return null;
-                }
+//            return new OrdersItemViewHolder();
+            return new BaseViewHolder<OrdersItem>(new OrderItemView(parent.getContext())) {
 
                 @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    notifyDataSetChanged();
+                public void bind(OrdersItem item) {
+
                 }
             };
         }
-    }
-
-    protected static class OrdersItemViewHolder extends BaseViewHolder<OrdersItem> {
-        @BindView(R2.id.imgOrderType)
-        ImageView imgOrderType;
-        @BindView(R2.id.tvOrderAbout)
-        TextView tvOrderAbout;
-        @BindView(R2.id.tvOrderData)
-        TextView tvOrderData;
-        @BindView(R2.id.tvOrderPrice)
-        AutoResizeTextView tvOrderPrice;
-        @BindView(R2.id.imgPayType)
-        ImageView imgPayType;
-        @BindView(R2.id.pbItemIsLoading)
-        ProgressBar pbItemIsLoading;
-
-        OrdersItem ordersItem;
-
-        public void setOrdersItem(OrdersItem ordersItem) {
-            this.ordersItem = ordersItem;
-        }
-
 
         @Override
-        public void setOnClickListener(View.OnClickListener listener) {
-            super.setOnClickListener(listener);
+        public void onBindViewHolder(@NonNull BaseViewHolder<OrdersItem> holder, int position) {
         }
 
-
-        public OrdersItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(v -> {
-
-            });
-        }
-
-        @Override
-        public void bind(OrdersItem item) {
-        }
     }
 
     public static final DiffUtil.ItemCallback<OrdersItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<OrdersItem>() {
