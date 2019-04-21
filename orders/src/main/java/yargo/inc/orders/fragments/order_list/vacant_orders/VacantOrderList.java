@@ -1,25 +1,17 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -31,7 +23,6 @@ import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.base.BaseViewHolder;
 import yargo.inc.common.network.models.order.OrdersItem;
-import yargo.inc.common.utils.AutoResizeTextView;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderItemView;
@@ -42,12 +33,12 @@ import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToo
 public class VacantOrderList extends BaseFragment {
 
 
+    @BindView(R2.id.imageView2)
+    ImageView imageView2;
     @BindView(R2.id.customVacantToolbar)
     CustomToolbarVacantOrders customVacantToolbar;
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
-    @BindView(R2.id.progressBarLoadOrders)
-    ProgressBar progressBarLoadOrders;
     @BindView(R2.id.recyclerOrders)
     RecyclerView recyclerOrders;
     @BindView(R2.id.swipeRefreshLayout)
@@ -72,12 +63,8 @@ public class VacantOrderList extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
 
 //        getRoot().setSupportActionBar(toolbar);
-        ordersViewModel.observSearchText(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-               replaceSubscription(s);
-            }
-        });
+        recyclerOrders.setNestedScrollingEnabled(true);
+        ordersViewModel.observSearchText(this, this::replaceSubscription);
 
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
@@ -92,12 +79,7 @@ public class VacantOrderList extends BaseFragment {
         ordersViewModel.onViewCreated();
     }
     private void startListening(){
-        ordersViewModel.getIsLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isLoading) {
-                VacantOrderList.this.setLoadingState(isLoading);
-            }
-        });
+        ordersViewModel.getIsLoading().observe(this, VacantOrderList.this::setLoadingState);
         ordersViewModel.getOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
     }
     public void replaceSubscription(String orderDescription){
@@ -106,9 +88,6 @@ public class VacantOrderList extends BaseFragment {
     }
 
     public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, BaseViewHolder<OrdersItem>>  {
-        private List<OrdersItem> orderList;
-        private List<OrdersItem> orderListFiltred;
-
         protected OrdersItemAdapter() {
             super(DIFF_CALLBACK);
         }
@@ -120,19 +99,17 @@ public class VacantOrderList extends BaseFragment {
         @Override
         public BaseViewHolder<OrdersItem> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             OrderListsFragment.getOrdersComponent().inject(this);
-
-//            return new OrdersItemViewHolder();
             return new BaseViewHolder<OrdersItem>(new OrderItemView(parent.getContext())) {
-
                 @Override
                 public void bind(OrdersItem item) {
-
+                    ((OrderItemView)itemView).bind(item);
                 }
             };
         }
 
         @Override
         public void onBindViewHolder(@NonNull BaseViewHolder<OrdersItem> holder, int position) {
+                holder.bind(getItem(position));
         }
 
     }
@@ -152,10 +129,10 @@ public class VacantOrderList extends BaseFragment {
     public void setLoadingState(boolean isLoading) {
         if (isLoading) {
             recyclerOrders.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.VISIBLE : View.GONE);
-            progressBarLoadOrders.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
+            imageView2.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
         } else {
             recyclerOrders.setVisibility(View.VISIBLE);
-            progressBarLoadOrders.setVisibility(View.GONE);
+            imageView2.setVisibility(View.GONE);
         }
     }
 }

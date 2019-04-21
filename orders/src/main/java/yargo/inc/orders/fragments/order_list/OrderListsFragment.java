@@ -1,42 +1,47 @@
 package yargo.inc.orders.fragments.order_list;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
-import androidx.appcompat.app.AlertDialog;
-import yargo.inc.common.di.ApplicationNavigator;
-import yargo.inc.orders.R;
-import yargo.inc.orders.R2;
-import yargo.inc.orders.di.DaggerOrdersComponent;
-import yargo.inc.orders.di.OrdersComponent;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
-
-import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.di.CommonApplication;
-import yargo.inc.common.dto.CommonSharedPreferences;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import yargo.inc.common.base.BaseFragment;
+import yargo.inc.common.di.ApplicationNavigator;
+import yargo.inc.common.di.CommonApplication;
+import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.orders.R;
+import yargo.inc.orders.R2;
+import yargo.inc.orders.di.DaggerOrdersComponent;
+import yargo.inc.orders.di.OrdersComponent;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
 public class OrderListsFragment extends BaseFragment {
 
 
+    @BindView(R2.id.imgBtnMap)
+    ImageButton imgBtnMap;
+    @BindView(R2.id.imgBtnFilter)
+    ImageButton imgBtnFilter;
     @BindView(R2.id.toolbar_main)
     Toolbar toolbar_main;
     @BindView(R2.id.appbarLayout)
@@ -134,5 +139,13 @@ public class OrderListsFragment extends BaseFragment {
         accoutExitDialog.setTitle(getResources()
                 .getString(R.string.menu_exit))
                 .show();
+    }
+    @OnClick(R2.id.imgBtnMap)
+    void onBtnMapClick(){
+
+    }
+    @OnClick(R2.id.imgBtnFilter)
+    void onImgBtnFilter(){
+
     }
 }
