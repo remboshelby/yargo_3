@@ -43,42 +43,38 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/imageView"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_build_black_24dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_build_black_24dp" />
 
                     <ImageButton
-                        android:id="@+id/imgBtnFilter"
-                        style="ToolbarImageButton"
+                        android:id="@+id/imgBtnMap"
+                        style="@style/imgToolBarBtn"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="8dp"
-                        android:contentDescription="searchBtn"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_map_24dp" />
+                        app:srcCompat="@drawable/ic_map_black_24dp" />
 
                     <ImageButton
-                        android:id="@+id/imgBtnMap"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:id="@+id/imgBtnFilter"
+                        style="@style/imgToolBarBtn"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="searchBtn"
-                        android:scaleType="fitCenter"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/imgBtnFilter"
+                        app:layout_constraintEnd_toStartOf="@+id/imgBtnMap"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_tune_24dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -104,6 +100,8 @@
         android:layout_gravity="start"
         android:minWidth="240dp"
         app:headerLayout="@layout/header_layout"
-        app:menu="@menu/menu" />
+        app:menu="@menu/menu" >
+
+    </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
 

@@ -8,6 +8,7 @@
     <string name="action_sign_in_short">Вход</string>
     <string name="prompt_email">Логин (электронная почта):</string>
     <string name="prompt_password">Пароль</string>
+    <string name="password_confirm">Подтверждение пароля</string>
 
 
 
@@ -34,6 +35,7 @@
     <string name="enter_phone_number">Введите номер телефона</string>
     <string name="confirmation_text">Я ознакомлен/а с <a href="http://api.yargo.pro/site/oferta">правилами</a> и <a href="http://api.yargo.pro/pdn">политикой конфиденциальности</a> и принимаю их условия</string>
     <string name="getRegistrationCode">Получить код</string>
+    <string name="OK">ОК</string>
 
 
     <string-array name="citiesName">

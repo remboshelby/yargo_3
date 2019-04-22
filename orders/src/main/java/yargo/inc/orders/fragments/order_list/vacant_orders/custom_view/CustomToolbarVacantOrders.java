@@ -50,10 +50,6 @@ public class CustomToolbarVacantOrders extends ConstraintLayout {
     public CustomToolbarVacantOrders(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        setLayoutParams(params);
-
     }
     private void init(Context context){
         LayoutInflater.from(context).inflate(R.layout.custom_vacant_toolbar, this);

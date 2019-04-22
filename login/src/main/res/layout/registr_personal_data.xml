@@ -21,43 +21,21 @@
 
         <AutoCompleteTextView
             android:id="@+id/editSurname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
+            style="@style/RegistrInputTextStyle"
             android:hint="@string/your_surname"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:inputType="textEmailAddress" />
 
         <AutoCompleteTextView
             android:id="@+id/editName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+            style="@style/RegistrInputTextStyle"
             android:hint="@string/your_name"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@android:color/black" />
+            android:inputType="textEmailAddress" />
 
         <AutoCompleteTextView
-
             android:id="@+id/editEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
+            style="@style/RegistrInputTextStyle"
             android:hint="@string/prompt_email"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:inputType="textEmailAddress" />
 
         <TextView
             android:id="@+id/cityId"
@@ -125,19 +103,12 @@
 
         <AutoCompleteTextView
             android:id="@+id/editBdate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"
+            style="@style/RegistrInputTextStyle"
             android:clickable="true"
             android:focusable="false"
             android:hint="@string/your_birthday"
 
             android:longClickable="false"
-            android:maxLines="1"
-            android:textColor="@android:color/black"
             android:textSize="18sp" />
     </LinearLayout>
 

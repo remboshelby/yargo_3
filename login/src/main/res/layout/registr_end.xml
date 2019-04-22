@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@color/registBackgroundCollor"
+    android:focusable="true"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+        <AutoCompleteTextView
+            android:id="@+id/passwordTv"
+            style="@style/RegistrInputTextStyle"
+            android:hint="@string/prompt_password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
 
+        <AutoCompleteTextView
+            android:id="@+id/passConfirmation"
+            style="@style/RegistrInputTextStyle"
+            android:hint="@string/password_confirm"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <CheckBox
+            android:id="@+id/chkShowPswd"
+            style="@style/RegistrInputTextStyle"
+            android:text="Отображать пароль" />
+
+        <Button
+            android:id="@+id/endRegistration"
+            style="@style/buttonMargins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/OK" />
+
+        <TextView
+            android:id="@+id/passNotMach"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Пароли не совпадают"
+            style="@style/RegistrInputTextStyle"
+            android:visibility="gone"
+            android:textColor="@android:color/holo_red_dark"/>
+    </LinearLayout>
 </LinearLayout>
