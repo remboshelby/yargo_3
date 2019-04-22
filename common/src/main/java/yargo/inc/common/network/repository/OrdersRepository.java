@@ -41,7 +41,7 @@ public class OrdersRepository {
         this.commonSharedPreferences = commonSharedPreferences;
     }
 
-    public Observable<List<VacantOrderItem>> getAllVacantOrdersFotView(int size, int startPos, String orderDescription){
+    public Observable<List<VacantOrderItem>> getAllVacantOrdersForView(int size, int startPos, String orderDescription){
         return getAllVacantOrders(orderDescription).map(ordersItems -> {
             int outputSize = size+startPos;
             if (outputSize>ordersItems.size())
@@ -52,6 +52,23 @@ public class OrdersRepository {
             {
                 vacantOrderItems1.add(ordersItems.get(i)); }
             return vacantOrderItems1;
+        }).delay(20, TimeUnit.MILLISECONDS);
+    }
+
+    public Observable<List<UserOrdersItem>> getAllUserOrdersForView(int size, int startPos, String categoryOrderId){
+        return getAllUserOrders(categoryOrderId).map(new Function<List<UserOrdersItem>, List<UserOrdersItem>>() {
+            @Override
+            public List<UserOrdersItem> apply(List<UserOrdersItem> ordersItems) throws Exception {
+                int outputSize = size + startPos;
+                if (outputSize > ordersItems.size())
+                    outputSize = ordersItems.size();
+
+                List<UserOrdersItem> userOrderItems1 = new ArrayList<>();
+                for (int i = startPos; i < outputSize; i++) {
+                    userOrderItems1.add(ordersItems.get(i));
+                }
+                return userOrderItems1;
+            }
         }).delay(20, TimeUnit.MILLISECONDS);
     }
 
@@ -96,7 +113,7 @@ public class OrdersRepository {
                 .debounce(400, TimeUnit.MILLISECONDS);
     };
 
-    public Observable<List<UserOrdersItem>> getAllUserOrders(){
+    public Observable<List<UserOrdersItem>> getAllUserOrders(String categoryOrderId){
         String appId = UUID.randomUUID().toString();
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
@@ -141,7 +158,7 @@ public class OrdersRepository {
         return orderApiService.getUsersOrders(authKey, appId).map(new Function<UserOrderResponse, List<UserOrdersItem>>() {
             @Override
             public List<UserOrdersItem> apply(UserOrderResponse userOrderResponse) throws Exception {
-                return userOrderResponse.getOrders();
+                return userOrderResponse.getResponse().getOrders();
             }
         })
         .doOnNext(userOrdersItems -> safeUserOrderInBd(userOrdersItems));
@@ -171,7 +188,12 @@ public class OrdersRepository {
         return vacantOrdersDao.getAllVacantOrders().filter(ordersItemList -> ordersItemList.size() != 0).toObservable();
     }
     public Observable<List<UserOrdersItem>> getAllUserOrdersFromDb() {
-        return userOrdersDao.getAllUserOrders().filter(ordersItemList -> ordersItemList.size() != 0).toObservable();
+        return userOrdersDao.getAllUserOrders().filter(new Predicate<List<UserOrdersItem>>() {
+            @Override
+            public boolean test(List<UserOrdersItem> ordersItemList) throws Exception {
+                return ordersItemList.size() != 0;
+            }
+        }).toObservable();
     }
 
 //    public Observable<OrdersResponse> getVacantOrders(String authKey, String appId) {
