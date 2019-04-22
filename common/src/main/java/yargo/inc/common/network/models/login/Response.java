@@ -143,7 +143,7 @@ public class Response {
     @Override
     public String toString() {
         return
-                "Response_{" +
+                "UserOrderResponse{" +
                         "birthday = '" + birthday + '\'' +
                         ",id_city = '" + idCity + '\'' +
                         ",surname = '" + surname + '\'' +

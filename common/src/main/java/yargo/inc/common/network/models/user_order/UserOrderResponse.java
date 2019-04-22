@@ -8,14 +8,14 @@ import java.util.List;
 @Generated("com.robohorse.robopojogenerator")
 public class UserOrderResponse {
 
-	@SerializedName("userOrderResponse")
-	private UserOrderResponse userOrderResponse;
+	@SerializedName("response")
+	private UserOrderResponse response;
 
 	@SerializedName("count")
 	private int count;
 
 	@SerializedName("orders")
-	private List<UserOrdersItem> orders;
+	public List<UserOrdersItem> orders;
 
 	@SerializedName("auth_key")
 	private String authKey;
@@ -23,12 +23,12 @@ public class UserOrderResponse {
 	@SerializedName("type")
 	private String type;
 
-	public void setUserOrderResponse(UserOrderResponse userOrderResponse){
-		this.userOrderResponse = userOrderResponse;
+	public void setResponse(UserOrderResponse response){
+		this.response = response;
 	}
 
-	public UserOrderResponse getUserOrderResponse(){
-		return userOrderResponse;
+	public UserOrderResponse getResponse(){
+		return response;
 	}
 
 	public void setCount(int count){
@@ -67,7 +67,7 @@ public class UserOrderResponse {
  	public String toString(){
 		return 
 			"UserOrderResponse{" +
-			"userOrderResponse = '" + userOrderResponse + '\'' +
+			"response = '" + response + '\'' + 
 			",count = '" + count + '\'' + 
 			",orders = '" + orders + '\'' + 
 			",auth_key = '" + authKey + '\'' + 

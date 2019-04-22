@@ -4,9 +4,9 @@ import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
 
-import io.reactivex.Scheduler;
-import io.reactivex.functions.Consumer;
+import io.reactivex.Notification;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import yargo.inc.common.database.UserOrdersDao;
 import yargo.inc.common.database.VacantOrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
@@ -21,9 +21,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Notification;
 import io.reactivex.Observable;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 public class OrdersRepository {
@@ -65,14 +63,27 @@ public class OrdersRepository {
         return Observable.concatArrayEager(getAllVacantOrdersFromDb(), getVacantOrdersFromRemote(authKey, appId))
                 .materialize()
                 .observeOn(Schedulers.io())
-                .map(listNotification -> {
-                    if (listNotification.getError() != null) {
-                        Log.e(TAG, "vacantOrders Exeception: " + listNotification.getError().toString());
+                .map(new Function<Notification<List<VacantOrderItem>>, Notification<List<VacantOrderItem>>>() {
+                    @Override
+                    public Notification<List<VacantOrderItem>> apply(Notification<List<VacantOrderItem>> listNotification) throws Exception {
+                        if (listNotification.getError() != null) {
+                            Log.e(TAG, "vacantOrders Exeception: " + listNotification.getError().toString());
+                        }
+                        return listNotification;
                     }
-                    return listNotification;
                 })
-                .filter(listNotification -> !listNotification.isOnError())
-                .dematerialize(listNotification -> listNotification)
+                .filter(new Predicate<Notification<List<VacantOrderItem>>>() {
+                    @Override
+                    public boolean test(Notification<List<VacantOrderItem>> listNotification) throws Exception {
+                        return !listNotification.isOnError();
+                    }
+                })
+                .dematerialize(new Function<Notification<List<VacantOrderItem>>, Notification<List<VacantOrderItem>>>() {
+                    @Override
+                    public Notification<List<VacantOrderItem>> apply(Notification<List<VacantOrderItem>> listNotification) throws Exception {
+                        return listNotification;
+                    }
+                })
                 .map(vacantOrderItems -> {
                     List<VacantOrderItem> fileredVacantOrderItem = new ArrayList<>();
                     for (VacantOrderItem vacantOrderItem : vacantOrderItems){
@@ -92,13 +103,26 @@ public class OrdersRepository {
         return Observable.concatArrayEager(getAllUserOrdersFromDb(), getUserOrdersFromRemote(authKey,appId))
                 .materialize()
                 .observeOn(Schedulers.io())
-                .map(listNotification -> {
-                    if (listNotification.getError() != null) {
-                        Log.e(TAG, "vacantOrders Exeception: " + listNotification.getError().toString());
+                .map(new Function<Notification<List<UserOrdersItem>>, Notification<List<UserOrdersItem>>>() {
+                    @Override
+                    public Notification<List<UserOrdersItem>> apply(Notification<List<UserOrdersItem>> listNotification) throws Exception {
+                        if (listNotification.getError() != null) {
+                            Log.e(TAG, "vacantOrders Exeception: " + listNotification.getError().toString());
+                        }
+                        return listNotification;
                     }
-                    return listNotification;
-                }).filter(listNotification -> !listNotification.isOnError())
-                .dematerialize(listNotification -> listNotification)
+                })
+                .filter(new Predicate<Notification<List<UserOrdersItem>>>() {
+                    @Override
+                    public boolean test(Notification<List<UserOrdersItem>> listNotification) throws Exception {
+                        return !listNotification.isOnError();
+                    }
+                }).dematerialize(new Function<Notification<List<UserOrdersItem>>, Notification<List<UserOrdersItem>>>() {
+                    @Override
+                    public Notification<List<UserOrdersItem>> apply(Notification<List<UserOrdersItem>> listNotification) throws Exception {
+                        return listNotification;
+                    }
+                })
                 .debounce(400, TimeUnit.MILLISECONDS);
     }
 
@@ -117,9 +141,10 @@ public class OrdersRepository {
         return orderApiService.getUsersOrders(authKey, appId).map(new Function<UserOrderResponse, List<UserOrdersItem>>() {
             @Override
             public List<UserOrdersItem> apply(UserOrderResponse userOrderResponse) throws Exception {
-                return userOrderResponse.getUserOrderResponse().getOrders();
+                return userOrderResponse.getOrders();
             }
-        }).doOnNext(userOrdersItems -> safeUserOrderInBd(userOrdersItems));
+        })
+        .doOnNext(userOrdersItems -> safeUserOrderInBd(userOrdersItems));
     }
 
     public void safeVacantOrderInBd(final List<VacantOrderItem> vacantOrderList) {

@@ -53,7 +53,7 @@ public class Response{
 	@Override
  	public String toString(){
 		return 
-			"Response_{" +
+			"UserOrderResponse{" +
 			"count = '" + count + '\'' + 
 			",orders = '" + orders + '\'' + 
 			",auth_key = '" + authKey + '\'' + 

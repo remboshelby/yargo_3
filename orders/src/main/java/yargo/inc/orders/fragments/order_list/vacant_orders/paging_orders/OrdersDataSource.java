@@ -43,7 +43,7 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<UserOrdersItem>>() {
                     @Override
-                    public void accept(List<UserOrdersItem> ordersItems) throws Exception {
+                    public void accept(List<UserOrdersItem> userOrdersItem_s) throws Exception {
                         isLoading.postValue(false);
                     }
                 }, new Consumer<Throwable>() {

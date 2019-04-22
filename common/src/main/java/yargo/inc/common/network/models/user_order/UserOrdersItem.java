@@ -1,10 +1,10 @@
 package yargo.inc.common.network.models.user_order;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Generated("com.robohorse.robopojogenerator")
 @Entity(tableName = "user_orders")

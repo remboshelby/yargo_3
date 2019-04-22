@@ -1,7 +1,6 @@
 package yargo.inc.common.network.api;
 
 import yargo.inc.common.network.models.user_order.UserOrderResponse;
-import yargo.inc.common.network.models.user_order.UserOrdersItem;
 import yargo.inc.common.network.models.vacant_order.OrdersResponse;
 
 import io.reactivex.Observable;
