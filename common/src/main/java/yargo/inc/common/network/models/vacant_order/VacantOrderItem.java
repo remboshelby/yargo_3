@@ -1,4 +1,4 @@
-package yargo.inc.common.network.models.order;
+package yargo.inc.common.network.models.vacant_order;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 
 @Generated("com.robohorse.robopojogenerator")
 @Entity(tableName = "vacant_orders")
-public class OrdersItem{
+public class VacantOrderItem {
 
 	@Nullable
 	@SerializedName("latitude")
@@ -328,7 +328,7 @@ public class OrdersItem{
 	@Override
  	public String toString(){
 		return 
-			"OrdersItem{" + 
+			"VacantOrderItem{" +
 			"latitude = '" + latitude + '\'' + 
 			",description = '" + description + '\'' + 
 			",created_at = '" + createdAt + '\'' + 

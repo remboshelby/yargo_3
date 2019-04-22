@@ -20,7 +20,7 @@ import java.util.Locale;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import yargo.inc.common.network.models.order.OrdersItem;
+import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 import yargo.inc.common.utils.AutoResizeTextView;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
@@ -59,17 +59,17 @@ public class OrderItemView extends ConstraintLayout {
         ButterKnife.bind(this);
     }
 
-    public void bind(OrdersItem ordersItem) {
-        if (ordersItem != null) {
+    public void bind(VacantOrderItem vacantOrderItem) {
+        if (vacantOrderItem != null) {
             tvOrderAbout.setVisibility(View.VISIBLE);
             pbItemIsLoading.setVisibility(View.GONE);
 
-            tvOrderAbout.setText(ordersItem.getAddress());
-            imgOrderType.setImageResource(getIconByOrderType(ordersItem.getIdSpecialization()));
-            tvOrderAbout.setText(ordersItem.getDescription());
-            tvOrderData.setText(dateCreator(ordersItem.getStartworking()) + " - " + dateCreator(ordersItem.getDeadline()));
-            tvOrderPrice.setText(String.valueOf(ordersItem.getPrice()) + Html.fromHtml(" &#x20bd"));
-            imgPayType.setImageResource(ordersItem.getIdPaymentMethod() == 1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
+            tvOrderAbout.setText(vacantOrderItem.getAddress());
+            imgOrderType.setImageResource(getIconByOrderType(vacantOrderItem.getIdSpecialization()));
+            tvOrderAbout.setText(vacantOrderItem.getDescription());
+            tvOrderData.setText(dateCreator(vacantOrderItem.getStartworking()) + " - " + dateCreator(vacantOrderItem.getDeadline()));
+            tvOrderPrice.setText(String.valueOf(vacantOrderItem.getPrice()) + Html.fromHtml(" &#x20bd"));
+            imgPayType.setImageResource(vacantOrderItem.getIdPaymentMethod() == 1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
         } else {
             tvOrderAbout.setVisibility(View.GONE);
             pbItemIsLoading.setVisibility(View.VISIBLE);

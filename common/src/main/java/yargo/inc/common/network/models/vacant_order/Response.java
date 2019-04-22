@@ -1,4 +1,4 @@
-package yargo.inc.common.network.models.order;
+package yargo.inc.common.network.models.vacant_order;
 
 import java.util.List;
 import javax.annotation.Generated;
@@ -11,7 +11,7 @@ public class Response{
 	private int count;
 
 	@SerializedName("orders")
-	private List<OrdersItem> orders;
+	private List<VacantOrderItem> orders;
 
 	@SerializedName("auth_key")
 	private String authKey;
@@ -27,14 +27,13 @@ public class Response{
 		return count;
 	}
 
-	public void setOrders(List<OrdersItem> orders){
+	public void setOrders(List<VacantOrderItem> orders){
 		this.orders = orders;
 	}
 
-	public List<OrdersItem> getOrders(){
+	public List<VacantOrderItem> getOrders(){
 		return orders;
 	}
-
 	public void setAuthKey(String authKey){
 		this.authKey = authKey;
 	}

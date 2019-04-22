@@ -6,7 +6,7 @@ import yargo.inc.common.database.VacantOrdersDao;
 import yargo.inc.common.database.YargoDataBase;
 import yargo.inc.common.database.listofcitycoordinate.CityCoordinateDao;
 import yargo.inc.common.database.listofspeciality.SpecialityDao;
-import yargo.inc.common.database.userslistorders.UserOrdersDao;
+import yargo.inc.common.database.UserOrdersDao;
 
 import javax.inject.Singleton;
 

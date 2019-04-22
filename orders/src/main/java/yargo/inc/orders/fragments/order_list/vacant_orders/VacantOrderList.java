@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.base.BaseViewHolder;
-import yargo.inc.common.network.models.order.OrdersItem;
+import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderItemView;
@@ -33,7 +33,7 @@ import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToo
 public class VacantOrderList extends BaseFragment {
 
 
-    @BindView(R2.id.imageView2)
+    @BindView(R2.id.imgBanner)
     ImageView imageView2;
     @BindView(R2.id.customVacantToolbar)
     CustomToolbarVacantOrders customVacantToolbar;
@@ -80,14 +80,14 @@ public class VacantOrderList extends BaseFragment {
     }
     private void startListening(){
         ordersViewModel.getIsLoading().observe(this, VacantOrderList.this::setLoadingState);
-        ordersViewModel.getOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
+        ordersViewModel.getVacantOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
     }
     public void replaceSubscription(String orderDescription){
-        ordersViewModel.replaceSubscription(this);
+        ordersViewModel.replaceVacantSubscription(this);
         startListening();
     }
 
-    public static class OrdersItemAdapter extends PagedListAdapter<OrdersItem, BaseViewHolder<OrdersItem>>  {
+    public static class OrdersItemAdapter extends PagedListAdapter<VacantOrderItem, BaseViewHolder<VacantOrderItem>>  {
         protected OrdersItemAdapter() {
             super(DIFF_CALLBACK);
         }
@@ -97,31 +97,31 @@ public class VacantOrderList extends BaseFragment {
 
         @NonNull
         @Override
-        public BaseViewHolder<OrdersItem> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public BaseViewHolder<VacantOrderItem> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             OrderListsFragment.getOrdersComponent().inject(this);
-            return new BaseViewHolder<OrdersItem>(new OrderItemView(parent.getContext())) {
+            return new BaseViewHolder<VacantOrderItem>(new OrderItemView(parent.getContext())) {
                 @Override
-                public void bind(OrdersItem item) {
+                public void bind(VacantOrderItem item) {
                     ((OrderItemView)itemView).bind(item);
                 }
             };
         }
 
         @Override
-        public void onBindViewHolder(@NonNull BaseViewHolder<OrdersItem> holder, int position) {
+        public void onBindViewHolder(@NonNull BaseViewHolder<VacantOrderItem> holder, int position) {
                 holder.bind(getItem(position));
         }
 
     }
 
-    public static final DiffUtil.ItemCallback<OrdersItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<OrdersItem>() {
+    public static final DiffUtil.ItemCallback<VacantOrderItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<VacantOrderItem>() {
         @Override
-        public boolean areItemsTheSame(@NonNull OrdersItem oldItem, @NonNull OrdersItem newItem) {
+        public boolean areItemsTheSame(@NonNull VacantOrderItem oldItem, @NonNull VacantOrderItem newItem) {
             return oldItem.getID() == newItem.getID();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull OrdersItem oldItem, @NonNull OrdersItem newItem) {
+        public boolean areContentsTheSame(@NonNull VacantOrderItem oldItem, @NonNull VacantOrderItem newItem) {
             return oldItem.getID() == newItem.getID();
         }
     };

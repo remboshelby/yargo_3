@@ -1,6 +1,6 @@
 package yargo.inc.common.database;
 
-import yargo.inc.common.network.models.order.OrdersItem;
+import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 
 import java.util.List;
 
@@ -14,18 +14,18 @@ import io.reactivex.Flowable;
 @Dao
 public interface VacantOrdersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(OrdersItem ordersItem);
+    void insert(VacantOrderItem vacantOrderItem);
 
     @Delete
-    void remove(OrdersItem ordersItem);
+    void remove(VacantOrderItem vacantOrderItem);
 
     @Query("Delete from vacant_orders")
     void removeAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<OrdersItem> ordersItemList);
+    void insertAll(List<VacantOrderItem> vacantOrderItemList);
 
     @Query("Select *from vacant_orders")
-    Flowable<List<OrdersItem>> getAllVacantOrders();
+    Flowable<List<VacantOrderItem>> getAllVacantOrders();
 
 }

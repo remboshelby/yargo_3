@@ -1,4 +1,4 @@
-package yargo.inc.common.network.models.order;
+package yargo.inc.common.network.models.vacant_order;
 
 import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;

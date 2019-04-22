@@ -1,5 +1,6 @@
 package yargo.inc.common.di.modules;
 
+import yargo.inc.common.database.UserOrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.database.VacantOrdersDao;
 import yargo.inc.common.network.api.LoginApiService;
@@ -19,8 +20,8 @@ public class RepositoryModule {
         return new LoginRepository(loginApiService);
     }
     @Provides
-    OrdersRepository ordersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao, CommonSharedPreferences commonSharedPreferences){
-        return new OrdersRepository(orderApiService,vacantOrdersDao,commonSharedPreferences);
+    OrdersRepository ordersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao, UserOrdersDao userOrdersDao, CommonSharedPreferences commonSharedPreferences){
+        return new OrdersRepository(orderApiService,vacantOrdersDao,userOrdersDao,commonSharedPreferences);
     }
     @Provides
     RegistrRepository registrRepository(RegistrApiService registrApiService){
