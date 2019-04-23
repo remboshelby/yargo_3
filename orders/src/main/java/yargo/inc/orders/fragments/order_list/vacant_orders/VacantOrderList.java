@@ -92,13 +92,9 @@ public class VacantOrderList extends BaseFragment {
             super(DIFF_CALLBACK);
         }
 
-        @Inject
-        public OrdersViewModel ordersViewModel;
-
         @NonNull
         @Override
         public BaseViewHolder<VacantOrderItem> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            OrderListsFragment.getOrdersComponent().inject(this);
             return new BaseViewHolder<VacantOrderItem>(new OrderItemView(parent.getContext())) {
                 @Override
                 public void bind(VacantOrderItem item) {

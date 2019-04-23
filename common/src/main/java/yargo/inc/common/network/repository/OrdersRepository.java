@@ -55,7 +55,7 @@ public class OrdersRepository {
         }).delay(20, TimeUnit.MILLISECONDS);
     }
 
-    public Observable<List<UserOrdersItem>> getAllUserOrdersForView(int size, int startPos, String categoryOrderId){
+    public Observable<List<UserOrdersItem>> getAllUserOrdersForView(int size, int startPos, int categoryOrderId){
         return getAllUserOrders(categoryOrderId).map(new Function<List<UserOrdersItem>, List<UserOrdersItem>>() {
             @Override
             public List<UserOrdersItem> apply(List<UserOrdersItem> ordersItems) throws Exception {
@@ -113,7 +113,7 @@ public class OrdersRepository {
                 .debounce(400, TimeUnit.MILLISECONDS);
     };
 
-    public Observable<List<UserOrdersItem>> getAllUserOrders(String categoryOrderId){
+    public Observable<List<UserOrdersItem>> getAllUserOrders(int categoryOrderId){
         String appId = UUID.randomUUID().toString();
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
@@ -138,6 +138,16 @@ public class OrdersRepository {
                     @Override
                     public Notification<List<UserOrdersItem>> apply(Notification<List<UserOrdersItem>> listNotification) throws Exception {
                         return listNotification;
+                    }
+                }).map(new Function<List<UserOrdersItem>, List<UserOrdersItem>>() {
+                    @Override
+                    public List<UserOrdersItem> apply(List<UserOrdersItem> userOrdersItems) throws Exception {
+                        List<UserOrdersItem> filteredUserOrderItem = new ArrayList<>();
+                        for (UserOrdersItem userOrdersItem: userOrdersItems) {
+                            if (userOrdersItem.getIdOrderStatus()==categoryOrderId)
+                                filteredUserOrderItem.add(userOrdersItem);
+                        }
+                        return filteredUserOrderItem;
                     }
                 })
                 .debounce(400, TimeUnit.MILLISECONDS);

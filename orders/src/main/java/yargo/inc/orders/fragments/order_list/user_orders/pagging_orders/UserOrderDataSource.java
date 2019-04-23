@@ -14,12 +14,13 @@ import yargo.inc.common.network.repository.OrdersRepository;
 public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
     private OrdersRepository ordersRepository;
     private CompositeDisposable compositeDisposable;
-    private String categoryOrderId;
+    private int categoryOrderId;
+
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private int totalCount;
 
-    public UserOrderDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable, String categoryOrderId) {
+    public UserOrderDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable, int categoryOrderId) {
         this.ordersRepository = ordersRepository;
         this.compositeDisposable = compositeDisposable;
         this.categoryOrderId = categoryOrderId;
@@ -76,5 +77,9 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
                 }, throwable -> throwable.printStackTrace()));
 
 
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }

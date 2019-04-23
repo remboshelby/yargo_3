@@ -53,7 +53,7 @@
                 app:srcCompat="@drawable/noinet" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RecyclerUserOrders"
+            android:id="@+id/recyclerUserOrders"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusableInTouchMode="true"

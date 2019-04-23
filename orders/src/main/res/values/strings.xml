@@ -44,11 +44,11 @@
         <item>Отказ клиента</item>
     </string-array>
 
-    <string-array name="ordersCategoryId">
+    <integer-array name="ordersCategoryId">
         <item>0</item>
         <item>7</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
-    </string-array>
+    </integer-array>
 </resources>

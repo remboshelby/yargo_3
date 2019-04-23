@@ -20,6 +20,7 @@ import java.util.Locale;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import yargo.inc.common.network.models.user_order.UserOrdersItem;
 import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 import yargo.inc.common.utils.AutoResizeTextView;
 import yargo.inc.orders.R;
@@ -75,6 +76,23 @@ public class OrderItemView extends ConstraintLayout {
             pbItemIsLoading.setVisibility(View.VISIBLE);
         }
     }
+    public void bind(UserOrdersItem userOrdersItem) {
+        if (userOrdersItem != null) {
+            tvOrderAbout.setVisibility(View.VISIBLE);
+            pbItemIsLoading.setVisibility(View.GONE);
+
+            tvOrderAbout.setText(userOrdersItem.getAddress());
+            imgOrderType.setImageResource(getIconByOrderType(userOrdersItem.getIdSpecialization()));
+            tvOrderAbout.setText(userOrdersItem.getDescription());
+            tvOrderData.setText(dateCreator(userOrdersItem.getStartworking()) + " - " + dateCreator(userOrdersItem.getDeadline()));
+            tvOrderPrice.setText(String.valueOf(userOrdersItem.getPrice()) + Html.fromHtml(" &#x20bd"));
+            imgPayType.setImageResource(userOrdersItem.getIdPaymentMethod() == 1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
+        } else {
+            tvOrderAbout.setVisibility(View.GONE);
+            pbItemIsLoading.setVisibility(View.VISIBLE);
+        }
+    }
+
     public int getIconByOrderType(int orderType) {
         switch (orderType) {
             case 1:

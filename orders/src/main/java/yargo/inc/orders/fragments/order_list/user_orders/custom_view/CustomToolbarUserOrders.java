@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnItemSelected;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
@@ -46,6 +47,11 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
         spOrderCategory.setAdapter(new ArrayAdapter<String>(context, R.layout.spiner_item, getResources().getStringArray(R.array.ordersCategory)));
         tvToolBarTitle.setText(getResources().getString(R.string.my_orders));
 
-//        registrationViewModel.setCityId(RegistrPersonalData.this.getResources().getStringArray(R.array.citiesId)[position]);
+        ordersViewModel.setOrderCategoryId(getResources().getIntArray(R.array.ordersCategoryId)[spOrderCategory.getSelectedItemPosition()]);
     }
+    @OnItemSelected(R2.id.spOrderCategory)
+    void spinnerItemSelected(int position) {
+        ordersViewModel.setOrderCategoryId(getResources().getIntArray(R.array.ordersCategoryId)[position]);
+    }
+
 }
