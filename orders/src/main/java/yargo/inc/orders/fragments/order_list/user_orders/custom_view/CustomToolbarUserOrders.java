@@ -47,7 +47,8 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
         spOrderCategory.setAdapter(new ArrayAdapter<String>(context, R.layout.spiner_item, getResources().getStringArray(R.array.ordersCategory)));
         tvToolBarTitle.setText(getResources().getString(R.string.my_orders));
 
-        spOrderCategory.setSelection(ordersViewModel.getOrderCategoryId());
+        ordersViewModel.setOrderCategoryId(getResources().getIntArray(R.array.ordersCategoryId)[ordersViewModel.getStartPositon()]);
+        spOrderCategory.setSelection(ordersViewModel.getStartPositon());
     }
     @OnItemSelected(R2.id.spOrderCategory)
     void spinnerItemSelected(int position) {

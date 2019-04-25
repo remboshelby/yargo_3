@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.network.models.user_order.UserOrdersItem;
 import yargo.inc.common.network.repository.OrdersRepository;
+import yargo.inc.orders.R;
 import yargo.inc.orders.fragments.order_list.user_orders.pagging_orders.UserOrderDataSourceFactory;
 
 public class UserOrdersViewModel extends BaseViewModel {
@@ -20,18 +21,20 @@ public class UserOrdersViewModel extends BaseViewModel {
     private LiveData<PagedList<UserOrdersItem>> userOrders;
 
     private LiveData<Boolean> isLoading;
+    private LiveData<Integer> ordersCount;
 
     private CompositeDisposable compositeDisposable;
 
-    private MutableLiveData<Integer> orderCategoryId = new MutableLiveData<>();
-    private MutableLiveData<Integer> userOrdersCount = new MutableLiveData<>();
+    private int startPositon = 0;
 
+    private MutableLiveData<Integer> orderCategoryId = new MutableLiveData<>();
+
+    private MutableLiveData<Integer> userOrdersCount = new MutableLiveData<>();
     public UserOrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
         compositeDisposable = getCompositeDisposable();
-        orderCategoryId.setValue(2);
-        userOrders = createFiltredUsersOrders(orderCategoryId.getValue());
     }
+
     public void observUserOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
         userOrdersCount.observe(owner, userOrderCountValue);
     }
@@ -40,12 +43,14 @@ public class UserOrdersViewModel extends BaseViewModel {
     }
     public void replaceUserOrdersSubscription(LifecycleOwner owner){
         compositeDisposable.clear();
-        userOrders.removeObservers(owner);
+        if (userOrders!=null)  userOrders.removeObservers(owner);
         userOrders = createFiltredUsersOrders(orderCategoryId.getValue());
     }
     private LiveData<PagedList<UserOrdersItem>> createFiltredUsersOrders(int categoryOrderId) {
         UserOrderDataSourceFactory userOrderDataSourceFactory = new UserOrderDataSourceFactory(ordersRepository, compositeDisposable, categoryOrderId);
         isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
+        ordersCount = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getRecordCount());
+
         return new LivePagedListBuilder<>(userOrderDataSourceFactory,
                 new PagedList.Config.Builder()
                         .setEnablePlaceholders(true)
@@ -56,17 +61,16 @@ public class UserOrdersViewModel extends BaseViewModel {
     public LiveData<PagedList<UserOrdersItem>> getUserOrders() {
         return userOrders;
     }
-
     public void setOrderCategoryId(int valOrderCategoryId) {
         orderCategoryId.setValue(valOrderCategoryId);
-    }
-    public void setUserOrdersCount(int userOrdersCountValue) {
-        userOrdersCount.postValue(userOrdersCountValue);
     }
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
-    public int getOrderCategoryId() {
-        return orderCategoryId.getValue();
+    public LiveData<Integer> getRecordCount(){
+        return ordersCount;
+    }
+    public int getStartPositon() {
+        return startPositon;
     }
 }

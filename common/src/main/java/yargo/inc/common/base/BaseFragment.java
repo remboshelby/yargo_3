@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import butterknife.ButterKnife;
+
 public abstract class BaseFragment extends Fragment {
     public BaseActivity getRoot(){
         return ((BaseActivity) getActivity());
@@ -23,6 +25,12 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         inject();
         return inflate(inflater, container);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        ButterKnife.bind(this,view);
+        super.onViewCreated(view, savedInstanceState);
     }
 
     protected void inject(){};

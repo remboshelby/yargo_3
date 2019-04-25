@@ -11,20 +11,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!getSupportFragmentManager().popBackStackImmediate(fragment.getClass().getSimpleName(), 0)) {
             if (shoudlAddToBackStack)
                 getSupportFragmentManager().beginTransaction()
+                        .replace(containerResId(), fragment, fragment.getClass().getSimpleName())
                         .addToBackStack(fragment.getClass().getSimpleName())
-                        .replace(containerResId(), fragment)
                         .commit();
             else getSupportFragmentManager().beginTransaction()
-                    .replace(containerResId(), fragment)
+                    .replace(containerResId(), fragment, fragment.getClass().getSimpleName())
                     .commit();
         }
     }
+    public void addFragment(BaseFragment fragmentFirst, boolean shoudlAddToBackStack) {
+        if (!getSupportFragmentManager().popBackStackImmediate(fragmentFirst.getClass().getSimpleName(), 0)) {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            getSupportFragmentManager().beginTransaction()
+                        .hide(fragments.get(0))
+                        .add(containerResId(), fragmentFirst, fragmentFirst.getClass().getSimpleName())
+                        .addToBackStack(fragmentFirst.getClass().getSimpleName())
+                        .commit();
+        }
+    }
+
 
     protected int containerResId() {
         return 0;
-    }
-
-    ;
+    } ;
 
     public void removeFragment(BaseFragment fragment) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();

@@ -1,6 +1,8 @@
 package yargo.inc.orders.di;
 
+import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailView;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
+import yargo.inc.orders.fragments.order_list.user_orders.utils.UserOrdersItemAdapter;
 import yargo.inc.orders.fragments.order_list.user_orders.custom_view.CustomToolbarUserOrders;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
@@ -19,7 +21,8 @@ public interface OrdersComponent {
     void inject(CustomToolbarVacantOrders customToolbarVacantOrders);
     void inject(CustomToolbarUserOrders customToolbarUserOrders);
     void inject(UserOrderList userOrderList);
-
+    void inject(OrderDetailView orderDetailView);
+    void inject(UserOrdersItemAdapter userOrdersItemAdapter);
     @Component.Builder
     interface Builder{
         @BindsInstance

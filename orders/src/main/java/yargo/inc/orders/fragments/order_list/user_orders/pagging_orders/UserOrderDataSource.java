@@ -20,7 +20,7 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
-    private int totalCount;
+    private MutableLiveData<Integer> recordCount = new MutableLiveData<>();
 
     public UserOrderDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable, int categoryOrderId) {
         this.ordersRepository = ordersRepository;
@@ -35,11 +35,11 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
     }
 
     public int getTotalCount() {
-        return totalCount;
+        return recordCount.getValue();
     }
 
     public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
+        this.recordCount.postValue(totalCount);
         if (totalCount==0)
             isLoading.postValue(false);
     }
@@ -55,6 +55,7 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
             @Override
             public void accept(List<UserOrdersItem> userOrdersItems) throws Exception {
                 isLoading.postValue(false);
+
                 callback.onResult(userOrdersItems, params.requestedStartPosition, getTotalCount());
             }
         }, new Consumer<Throwable>() {
@@ -86,4 +87,9 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
     }
+
+    public MutableLiveData<Integer> getRecordCount() {
+        return recordCount;
+    }
+
 }

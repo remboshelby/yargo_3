@@ -4,9 +4,11 @@ import yargo.inc.common.database.UserOrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.database.VacantOrdersDao;
 import yargo.inc.common.network.api.LoginApiService;
+import yargo.inc.common.network.api.OrderActionApiService;
 import yargo.inc.common.network.api.OrderApiService;
 import yargo.inc.common.network.api.RegistrApiService;
 import yargo.inc.common.network.repository.LoginRepository;
+import yargo.inc.common.network.repository.OrderActionRepository;
 import yargo.inc.common.network.repository.OrdersRepository;
 import yargo.inc.common.network.repository.RegistrRepository;
 
@@ -26,5 +28,9 @@ public class RepositoryModule {
     @Provides
     RegistrRepository registrRepository(RegistrApiService registrApiService){
         return new RegistrRepository(registrApiService);
+    }
+    @Provides
+    OrderActionRepository orderActionRepository(OrderActionApiService orderActionApiService, CommonSharedPreferences commonSharedPreferences){
+        return new OrderActionRepository(orderActionApiService, commonSharedPreferences);
     }
 }

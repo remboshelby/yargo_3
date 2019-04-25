@@ -12,8 +12,6 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,15 +19,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.base.BaseViewHolder;
 import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.common.OrderItemView;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
+import yargo.inc.orders.fragments.order_list.vacant_orders.utils.VacantOrdersItemAdapter;
 
-public class VacantOrderList extends BaseFragment {
+public class VacantOrderList extends BaseFragment implements VacantOrdersItemAdapter.itemClickListener {
 
 
     @BindView(R2.id.imgBanner)
@@ -43,10 +41,13 @@ public class VacantOrderList extends BaseFragment {
     @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private OrdersItemAdapter ordersItemAdapter;
+    private VacantOrdersItemAdapter vacantOrdersItemAdapter;
 
     @Inject
     public VacantOrdersViewModel vacantOrdersViewModel;
+    @Inject
+    protected OrderDetailViewModel orderDetailViewModel;
+
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -57,8 +58,6 @@ public class VacantOrderList extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
 
 //        getRoot().setSupportActionBar(toolbar);
@@ -67,7 +66,7 @@ public class VacantOrderList extends BaseFragment {
 
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
-        ordersItemAdapter = new OrdersItemAdapter();
+        vacantOrdersItemAdapter = new VacantOrdersItemAdapter(this);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -79,65 +78,35 @@ public class VacantOrderList extends BaseFragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerOrders.getContext(), layoutManager.getOrientation());
         recyclerOrders.addItemDecoration(dividerItemDecoration);
         recyclerOrders.setLayoutManager(layoutManager);
-        recyclerOrders.setAdapter(ordersItemAdapter);
+        recyclerOrders.setAdapter(vacantOrdersItemAdapter);
 
         startListening();
         vacantOrdersViewModel.onViewCreated();
     }
     private void startListening(){
         vacantOrdersViewModel.getIsLoading().observe(this, VacantOrderList.this::setLoadingState);
-        vacantOrdersViewModel.getVacantOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
+        vacantOrdersViewModel.getVacantOrders().observe(this, ordersItems -> vacantOrdersItemAdapter.submitList(ordersItems));
     }
     public void replaceSubscription(){
         vacantOrdersViewModel.replaceVacantSubscription(this);
         startListening();
     }
 
-    public static class OrdersItemAdapter extends PagedListAdapter<VacantOrderItem, BaseViewHolder<VacantOrderItem>>  {
-        protected OrdersItemAdapter() {
-            super(DIFF_CALLBACK);
-        }
-
-        @NonNull
-        @Override
-        public BaseViewHolder<VacantOrderItem> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new BaseViewHolder<VacantOrderItem>(new OrderItemView(parent.getContext())) {
-                @Override
-                public void bind(VacantOrderItem item) {
-                    ((OrderItemView)itemView).bind(item);
-                }
-            };
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull BaseViewHolder<VacantOrderItem> holder, int position) {
-                holder.bind(getItem(position));
-        }
-
-    }
-
-    public static final DiffUtil.ItemCallback<VacantOrderItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<VacantOrderItem>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull VacantOrderItem oldItem, @NonNull VacantOrderItem newItem) {
-            return oldItem.getID() == newItem.getID();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull VacantOrderItem oldItem, @NonNull VacantOrderItem newItem) {
-            return oldItem.getID() == newItem.getID();
-        }
-    };
-
     public void setLoadingState(boolean isLoading) {
         if (isLoading) {
             swipeRefreshLayout.setRefreshing(true);
-            recyclerOrders.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.VISIBLE : View.GONE);
+            recyclerOrders.setVisibility(vacantOrdersItemAdapter.getItemCount() > 0 ? View.VISIBLE : View.GONE);
         } else {
             swipeRefreshLayout.setRefreshing(false);
             recyclerOrders.setVisibility(View.VISIBLE);
-            int t = ordersItemAdapter.getItemCount();
+            int t = vacantOrdersItemAdapter.getItemCount();
             imgBanner.setImageResource(R.drawable.noorder);
-            imgBanner.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
+            imgBanner.setVisibility(vacantOrdersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
         }
+    }
+
+    @Override
+    public void showItemDetails(VacantOrderItem vacantOrderItem) {
+
     }
 }

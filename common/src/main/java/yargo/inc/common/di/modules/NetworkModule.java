@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import yargo.inc.common.di.ServerUrl;
 import yargo.inc.common.network.api.LoginApiService;
+import yargo.inc.common.network.api.OrderActionApiService;
 import yargo.inc.common.network.api.OrderApiService;
 import yargo.inc.common.network.api.RegistrApiService;
 import yargo.inc.common.network.utils.ConnectivityInterceptor;
@@ -57,6 +58,11 @@ public class NetworkModule {
     @Singleton
     RegistrApiService provideRegistrApiService(Retrofit retrofit){
         return retrofit.create(RegistrApiService.class);
+    }
+    @Provides
+    @Singleton
+    OrderActionApiService provideOrderActionApiService(Retrofit retrofit){
+        return retrofit.create(OrderActionApiService.class);
     }
 
 }
