@@ -5,6 +5,8 @@ import android.util.Log;
 import org.apache.commons.lang3.StringUtils;
 
 import io.reactivex.Notification;
+import io.reactivex.Scheduler;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import yargo.inc.common.database.UserOrdersDao;
@@ -139,7 +141,8 @@ public class OrdersRepository {
                     public Notification<List<UserOrdersItem>> apply(Notification<List<UserOrdersItem>> listNotification) throws Exception {
                         return listNotification;
                     }
-                }).map(new Function<List<UserOrdersItem>, List<UserOrdersItem>>() {
+                })
+                .map(new Function<List<UserOrdersItem>, List<UserOrdersItem>>() {
                     @Override
                     public List<UserOrdersItem> apply(List<UserOrdersItem> userOrdersItems) throws Exception {
                         List<UserOrdersItem> filteredUserOrderItem = new ArrayList<>();
@@ -159,9 +162,8 @@ public class OrdersRepository {
             public List<VacantOrderItem> apply(OrdersResponse ordersResponse) throws Exception {
                 return ordersResponse.getResponse().getOrders();
             }
-        })
-                .doOnNext(ordersItems -> {
-                    safeVacantOrderInBd(ordersItems);
+        }).doOnNext(ordersItems -> {
+                 safeVacantOrderInBd(ordersItems);
                 });
     }
     public Observable<List<UserOrdersItem>> getUserOrdersFromRemote(String authKey, String appId) {
@@ -197,6 +199,24 @@ public class OrdersRepository {
     public Observable<List<VacantOrderItem>> getAllVacantOrdersFromDb() {
         return vacantOrdersDao.getAllVacantOrders().filter(ordersItemList -> ordersItemList.size() != 0).toObservable();
     }
+    //возращаем количество вакантных заказов из кэша
+    public Observable<Integer> getVacantFromDbCount(){
+        return vacantOrdersDao.getAllVacantOrders().map(new Function<List<VacantOrderItem>, Integer>() {
+            @Override
+            public Integer apply(List<VacantOrderItem> vacantOrderItems) throws Exception {
+                return vacantOrderItems.size();
+            }
+        }).toObservable();
+    }
+    //возращаем количество заказов пользователя из кэша
+    public Observable<Integer> getUsersOrdersFromDbCount(int categoryOrderId){
+        return userOrdersDao.getAllUserOrdersStatus(categoryOrderId).map(new Function<List<UserOrdersItem>, Integer>() {
+            @Override
+            public Integer apply(List<UserOrdersItem> UserOrdersItem) throws Exception {
+                return UserOrdersItem.size();
+            }
+        }).toObservable();
+    }
     public Observable<List<UserOrdersItem>> getAllUserOrdersFromDb() {
         return userOrdersDao.getAllUserOrders().filter(new Predicate<List<UserOrdersItem>>() {
             @Override
@@ -205,18 +225,6 @@ public class OrdersRepository {
             }
         }).toObservable();
     }
-
-//    public Observable<OrdersResponse> getVacantOrders(String authKey, String appId) {
-//        return orderApiService.getVacantOrders(authKey, appId);
-//    }
-//
-//    public Observable<OrdersResponse> getUsersOrders(String authKey, String appId) {
-//        return orderApiService.getUsersOrders(authKey, appId);
-//    }
-//
-//    public Observable<OrdersResponse> getOrderWatchedCount(String authKey, String appId, String idOrder) {
-//        return orderApiService.getOrderWatchedCount(authKey, appId, idOrder);
-//    }
 
     public static int getPageSize() {
         return PAGE_SIZE;

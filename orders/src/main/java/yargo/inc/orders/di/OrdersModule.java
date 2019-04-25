@@ -2,7 +2,8 @@ package yargo.inc.orders.di;
 
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.common.network.repository.OrdersRepository;
-import yargo.inc.orders.fragments.order_list.OrdersViewModel;
+import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
+import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 
 import javax.inject.Singleton;
 
@@ -17,15 +18,27 @@ import dagger.Provides;
 public class OrdersModule {
     @Provides
     @OrdersScope
-    public OrdersViewModel provideOrdersViewModel(OrderListsFragment host,
-                                                  final OrdersRepository ordersRepository){
+    public VacantOrdersViewModel provideOrdersViewModel(OrderListsFragment host,
+                                                        final OrdersRepository ordersRepository){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             @Singleton
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new OrdersViewModel(ordersRepository);
+                return (T) new VacantOrdersViewModel(ordersRepository);
             }
-        }).get(OrdersViewModel.class);
+        }).get(VacantOrdersViewModel.class);
+    }
+    @Provides
+    @OrdersScope
+    public UserOrdersViewModel provideUserOrdersViewModel(OrderListsFragment host,
+                                                          final OrdersRepository ordersRepository){
+        return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new UserOrdersViewModel(ordersRepository);
+            }
+        }).get(UserOrdersViewModel.class);
     }
 }

@@ -17,6 +17,10 @@ import io.fabric.sdk.android.Fabric;
 import java.util.UUID;
 
 public class App extends Application implements CommonApplication {
+    public static ApplicationComponent getApplicationComponent() {
+        return applicationComponent;
+    }
+
     private static ApplicationComponent applicationComponent;
 
     @Override

@@ -5,6 +5,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PositionalDataSource;
+
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -25,11 +27,11 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
         this.compositeDisposable = compositeDisposable;
         this.categoryOrderId = categoryOrderId;
 
-        compositeDisposable.add(ordersRepository.getAllUserOrders(categoryOrderId)
-        .observeOn(Schedulers.io())
-        .subscribeOn(Schedulers.io())
-        .subscribe(userOrdersItems -> setTotalCount(userOrdersItems.size())
-                , throwable -> throwable.printStackTrace()));
+        compositeDisposable.add(ordersRepository.getUsersOrdersFromDbCount(categoryOrderId)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::setTotalCount,
+                        Throwable::printStackTrace));
     }
 
     public int getTotalCount() {
@@ -38,6 +40,8 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
+        if (totalCount==0)
+            isLoading.postValue(false);
     }
 
     @Override

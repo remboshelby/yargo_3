@@ -56,6 +56,9 @@ public class LoginViewModel extends BaseViewModel {
                             if (throwable instanceof NoConnectivityException) {
                                 isNoInternetConnection.postValue(true);
                             }
+                            else {
+                                throwable.printStackTrace();
+                            }
                         }));
     }
 

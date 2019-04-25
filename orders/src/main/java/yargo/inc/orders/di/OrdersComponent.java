@@ -16,7 +16,6 @@ public interface OrdersComponent {
 
     void inject(OrderListsFragment orderListsFragment);
     void inject(VacantOrderList vacantOrderList);
-    void inject(VacantOrderList.OrdersItemAdapter ordersItemAdapter);
     void inject(CustomToolbarVacantOrders customToolbarVacantOrders);
     void inject(CustomToolbarUserOrders customToolbarUserOrders);
     void inject(UserOrderList userOrderList);

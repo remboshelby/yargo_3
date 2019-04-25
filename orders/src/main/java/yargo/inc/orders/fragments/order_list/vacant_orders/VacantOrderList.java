@@ -25,16 +25,15 @@ import yargo.inc.common.base.BaseViewHolder;
 import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderItemView;
+import yargo.inc.orders.fragments.order_list.common.OrderItemView;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
-import yargo.inc.orders.fragments.order_list.OrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
 
 public class VacantOrderList extends BaseFragment {
 
 
     @BindView(R2.id.imgBanner)
-    ImageView imageView2;
+    ImageView imgBanner;
     @BindView(R2.id.customVacantToolbar)
     CustomToolbarVacantOrders customVacantToolbar;
     @BindView(R2.id.appbarLayout)
@@ -47,7 +46,7 @@ public class VacantOrderList extends BaseFragment {
     private OrdersItemAdapter ordersItemAdapter;
 
     @Inject
-    public OrdersViewModel ordersViewModel;
+    public VacantOrdersViewModel vacantOrdersViewModel;
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -64,11 +63,18 @@ public class VacantOrderList extends BaseFragment {
 
 //        getRoot().setSupportActionBar(toolbar);
         recyclerOrders.setNestedScrollingEnabled(true);
-        ordersViewModel.observSearchText(this, this::replaceSubscription);
+        vacantOrdersViewModel.observSearchText(this, t -> replaceSubscription());
 
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
         ordersItemAdapter = new OrdersItemAdapter();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                replaceSubscription();
+            }
+        });
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerOrders.getContext(), layoutManager.getOrientation());
         recyclerOrders.addItemDecoration(dividerItemDecoration);
@@ -76,14 +82,14 @@ public class VacantOrderList extends BaseFragment {
         recyclerOrders.setAdapter(ordersItemAdapter);
 
         startListening();
-        ordersViewModel.onViewCreated();
+        vacantOrdersViewModel.onViewCreated();
     }
     private void startListening(){
-        ordersViewModel.getIsLoading().observe(this, VacantOrderList.this::setLoadingState);
-        ordersViewModel.getVacantOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
+        vacantOrdersViewModel.getIsLoading().observe(this, VacantOrderList.this::setLoadingState);
+        vacantOrdersViewModel.getVacantOrders().observe(this, ordersItems -> ordersItemAdapter.submitList(ordersItems));
     }
-    public void replaceSubscription(String orderDescription){
-        ordersViewModel.replaceVacantSubscription(this);
+    public void replaceSubscription(){
+        vacantOrdersViewModel.replaceVacantSubscription(this);
         startListening();
     }
 
@@ -124,11 +130,14 @@ public class VacantOrderList extends BaseFragment {
 
     public void setLoadingState(boolean isLoading) {
         if (isLoading) {
+            swipeRefreshLayout.setRefreshing(true);
             recyclerOrders.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.VISIBLE : View.GONE);
-            imageView2.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
         } else {
+            swipeRefreshLayout.setRefreshing(false);
             recyclerOrders.setVisibility(View.VISIBLE);
-            imageView2.setVisibility(View.GONE);
+            int t = ordersItemAdapter.getItemCount();
+            imgBanner.setImageResource(R.drawable.noorder);
+            imgBanner.setVisibility(ordersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
         }
     }
 }

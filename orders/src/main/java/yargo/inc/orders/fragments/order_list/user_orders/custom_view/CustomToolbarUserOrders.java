@@ -17,12 +17,12 @@ import butterknife.OnItemSelected;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
-import yargo.inc.orders.fragments.order_list.OrdersViewModel;
+import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 
 public class CustomToolbarUserOrders extends ConstraintLayout {
 
     @Inject
-    protected OrdersViewModel ordersViewModel;
+    protected UserOrdersViewModel ordersViewModel;
 
     @BindView(R2.id.tvToolBarTitle)
     TextView tvToolBarTitle;
@@ -47,7 +47,7 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
         spOrderCategory.setAdapter(new ArrayAdapter<String>(context, R.layout.spiner_item, getResources().getStringArray(R.array.ordersCategory)));
         tvToolBarTitle.setText(getResources().getString(R.string.my_orders));
 
-        ordersViewModel.setOrderCategoryId(getResources().getIntArray(R.array.ordersCategoryId)[spOrderCategory.getSelectedItemPosition()]);
+        spOrderCategory.setSelection(ordersViewModel.getOrderCategoryId());
     }
     @OnItemSelected(R2.id.spOrderCategory)
     void spinnerItemSelected(int position) {

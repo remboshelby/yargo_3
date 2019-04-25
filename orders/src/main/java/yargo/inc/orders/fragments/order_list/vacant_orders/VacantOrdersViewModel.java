@@ -1,10 +1,12 @@
-package yargo.inc.orders.fragments.order_list;
+package yargo.inc.orders.fragments.order_list.vacant_orders;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
+
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.network.models.user_order.UserOrdersItem;
@@ -16,34 +18,29 @@ import yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders.OrderDa
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
-public class OrdersViewModel extends BaseViewModel {
+public class VacantOrdersViewModel extends BaseViewModel {
     private OrdersRepository ordersRepository;
 
     private LiveData<PagedList<VacantOrderItem>> vacantOrders;
 
-    private LiveData<PagedList<UserOrdersItem>> userOrders;
 
     private LiveData<Boolean> isLoading;
 
     private CompositeDisposable compositeDisposable;
 
     private MutableLiveData<String> orderDescription = new MutableLiveData<>();
+    private MutableLiveData<Integer> vacantOrdersCount = new MutableLiveData<>();
 
-    private MutableLiveData<Integer> orderCategoryId = new MutableLiveData<>();
 
-    public OrdersViewModel(OrdersRepository ordersRepository) {
+    public VacantOrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
         compositeDisposable = getCompositeDisposable();
         vacantOrders = createFiltredVacantOrders(orderDescription.getValue());
-        orderCategoryId.setValue(3);
-        userOrders = createFiltredUsersOrders(orderCategoryId.getValue());
+
     }
 
     public void observSearchText(LifecycleOwner owner, Observer<String> searchString){
         orderDescription.observe(owner, searchString);
-    }
-    public void observOrderCategoryId(LifecycleOwner owner, Observer<Integer> valOrderCategoryId){
-        orderCategoryId.observe(owner, valOrderCategoryId);
     }
     private LiveData<PagedList<VacantOrderItem>> createFiltredVacantOrders(String orderDescription) {
         if (orderDescription==null)
@@ -58,25 +55,10 @@ public class OrdersViewModel extends BaseViewModel {
                 .build();
 
     }
-    private LiveData<PagedList<UserOrdersItem>> createFiltredUsersOrders(int categoryOrderId) {
-        UserOrderDataSourceFactory userOrderDataSourceFactory = new UserOrderDataSourceFactory(ordersRepository, compositeDisposable, categoryOrderId);
-        isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
-        return new LivePagedListBuilder<>(userOrderDataSourceFactory,
-                new PagedList.Config.Builder()
-                        .setEnablePlaceholders(true)
-                        .setPageSize(ordersRepository.getPageSize())
-                        .build()).setInitialLoadKey(0)
-                .build();
-    }
     public void replaceVacantSubscription(LifecycleOwner owner){
         compositeDisposable.clear();
         vacantOrders.removeObservers(owner);
         vacantOrders = createFiltredVacantOrders(orderDescription.getValue());
-    }
-    public void replaceUserOrdersSubscription(LifecycleOwner owner){
-        compositeDisposable.clear();
-        userOrders.removeObservers(owner);
-        userOrders = createFiltredUsersOrders(orderCategoryId.getValue());
     }
 
     public LiveData<Boolean> getIsLoading() {
@@ -97,11 +79,8 @@ public class OrdersViewModel extends BaseViewModel {
         this.orderDescription.postValue(orderDescription);
     }
 
-    public LiveData<PagedList<UserOrdersItem>> getUserOrders() {
-        return userOrders;
-    }
 
-    public void setOrderCategoryId(int valOrderCategoryId) {
-        orderCategoryId.setValue(valOrderCategoryId);
+    public void setVacantOrdersCount(int vacantOrdersCountValue) {
+        vacantOrdersCount.postValue(vacantOrdersCountValue);
     }
 }

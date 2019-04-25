@@ -1,13 +1,11 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders.custom_view;
 
 import android.content.Context;
-import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -22,13 +20,12 @@ import butterknife.OnTextChanged;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
-import yargo.inc.orders.fragments.order_list.OrdersViewModel;
-import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
+import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 
 public class CustomToolbarVacantOrders extends ConstraintLayout {
 
     @Inject
-    protected OrdersViewModel ordersViewModel;
+    protected VacantOrdersViewModel vacantOrdersViewModel;
 
     @BindView(R2.id.tvSearch)
     AutoCompleteTextView tvSearch;
@@ -89,6 +86,6 @@ public class CustomToolbarVacantOrders extends ConstraintLayout {
     }
     @OnTextChanged(R2.id.tvSearch)
     public void onSearchTextChanged(){
-        ordersViewModel.setOrderDescription(tvSearch.getText().toString());
+        vacantOrdersViewModel.setOrderDescription(tvSearch.getText().toString());
     }
 }

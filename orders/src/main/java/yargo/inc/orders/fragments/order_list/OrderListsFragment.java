@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -33,6 +31,7 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.di.DaggerOrdersComponent;
 import yargo.inc.orders.di.OrdersComponent;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
+import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
 public class OrderListsFragment extends BaseFragment {
@@ -55,7 +54,7 @@ public class OrderListsFragment extends BaseFragment {
     protected static OrdersComponent ordersComponent;
 
     @Inject
-    protected OrdersViewModel ordersViewModel;
+    protected VacantOrdersViewModel vacantOrdersViewModel;
     @Inject
     protected CommonSharedPreferences preferences;
     private ApplicationNavigator navigator;

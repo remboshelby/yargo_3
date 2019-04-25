@@ -109,9 +109,9 @@ public class LoginFragment extends BaseFragment {
             preferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, loginResponse.getResponse());
 
             if (loginResponse.getResponse().getType().equals("OK")) {
-                Answers.getInstance().logLogin(new LoginEvent()
-                        .putMethod("vasya")
-                        .putSuccess(true));
+//                Answers.getInstance().logLogin(new LoginEvent()
+//                        .putMethod("vasya")
+//                        .putSuccess(true));
 
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, loginResponse.getResponse().getAuthKey());
 

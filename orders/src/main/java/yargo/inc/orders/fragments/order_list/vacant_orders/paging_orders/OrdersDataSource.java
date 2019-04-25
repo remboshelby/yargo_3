@@ -1,5 +1,6 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders;
 
+import io.reactivex.functions.Consumer;
 import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 import yargo.inc.common.network.repository.OrdersRepository;
 
@@ -23,34 +24,47 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
         this.compositeDisposable = compositeDisposable;
         this.orderDescription = orderDescription;
 
-        compositeDisposable.add(ordersRepository.getAllVacantOrders(orderDescription)
-                .observeOn(Schedulers.io())
-                .subscribeOn(Schedulers.io())
-                .subscribe(ordersItems -> OrdersDataSource.this.setTotalCount(ordersItems.size()),
-                        throwable -> throwable.printStackTrace()));
+        compositeDisposable.add(ordersRepository.getVacantFromDbCount()
+        .observeOn(Schedulers.io())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+                setTotalCount(integer);
+            }
+        }, throwable -> throwable.printStackTrace()));
+//        compositeDisposable.add(ordersRepository.getAllVacantOrders(orderDescription)
+//                .observeOn(Schedulers.io())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Consumer<List<VacantOrderItem>>() {
+//                               @Override
+//                               public void accept(List<VacantOrderItem> ordersItems) throws Exception {
+//                                   OrdersDataSource.this.setTotalCount(ordersItems.size());
+//                               }
+//                           },
+//                        new Consumer<Throwable>() {
+//                            @Override
+//                            public void accept(Throwable throwable) throws Exception {
+//                                throwable.printStackTrace();
+//                            }
+//                        }));
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<VacantOrderItem> callback) {
         isLoading.postValue(true);
-
-//        compositeDisposable.add(ordersRepository.getAllUserOrders()
-//                .observeOn(Schedulers.io())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Consumer<List<UserOrdersItem>>() {
-//                    @Override
-//                    public void accept(List<UserOrdersItem> userOrdersItem_s) throws Exception {
-//                        isLoading.postValue(false);
-//                    }
-//                }, throwable -> throwable.printStackTrace()));
-
         compositeDisposable.add(ordersRepository.getAllVacantOrdersForView(params.requestedLoadSize, params.requestedStartPosition, orderDescription)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(ordersItems -> {
                     callback.onResult(ordersItems, params.requestedStartPosition, OrdersDataSource.this.getTotalCount());
                     isLoading.postValue(false);
-                }, throwable -> throwable.printStackTrace()));
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }));
     }
 
     @Override
@@ -62,7 +76,12 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
                 .subscribe(ordersItemList -> {
                     callback.onResult(ordersItemList);
                     isLoading.postValue(false);
-                }, throwable -> throwable.printStackTrace()));
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }));
     }
 
     public MutableLiveData<Boolean> getIsLoading() {
@@ -75,6 +94,8 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
+        if (totalCount==0)
+            isLoading.postValue(false);
     }
 
 }

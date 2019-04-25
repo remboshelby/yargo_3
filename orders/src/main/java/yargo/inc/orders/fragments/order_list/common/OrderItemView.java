@@ -1,4 +1,4 @@
-package yargo.inc.orders.fragments.order_list;
+package yargo.inc.orders.fragments.order_list.common;
 
 import android.content.Context;
 import android.text.Html;
