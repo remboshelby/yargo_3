@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(OrderDetailView.class.getSimpleName());
         if (fragmentByTag!=null) {
-            removeFragment(fragmentByTag);
+            getSupportFragmentManager().popBackStack();
         }else {
             onBackPressed();
         }

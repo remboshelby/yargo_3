@@ -30,14 +30,15 @@ public class UserOrdersViewModel extends BaseViewModel {
     private MutableLiveData<Integer> orderCategoryId = new MutableLiveData<>();
 
     private MutableLiveData<Integer> userOrdersCount = new MutableLiveData<>();
+
     public UserOrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
         compositeDisposable = getCompositeDisposable();
     }
-
     public void observUserOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
         userOrdersCount.observe(owner, userOrderCountValue);
     }
+
     public void observOrderCategoryId(LifecycleOwner owner, Observer<Integer> valOrderCategoryId){
         orderCategoryId.observe(owner, valOrderCategoryId);
     }
@@ -72,5 +73,8 @@ public class UserOrdersViewModel extends BaseViewModel {
     }
     public int getStartPositon() {
         return startPositon;
+    }
+    public void setStartPositon(int startPositon) {
+        this.startPositon = startPositon;
     }
 }

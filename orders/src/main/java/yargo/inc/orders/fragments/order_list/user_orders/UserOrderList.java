@@ -119,7 +119,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     @Override
     public void showItemDetails(UserOrdersItem userOrdersItem) {
         orderDetailViewModel.setOrderId(userOrdersItem.getID());
-        getRoot().addFragment(new OrderDetailView(), true);
+        getRoot().pushFragment(new OrderDetailView(), true);
     }
 
     public void setLoadingState(boolean isLoading) {

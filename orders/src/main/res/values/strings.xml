@@ -35,6 +35,9 @@
     <!--Registration Fragments-->
     <string name="registration">Регистрация</string>
     <string name="next">Далее</string>
+    <string name="order_description">Описание</string>
+    <string name="order_comment">Комментарий</string>
+    <string name="client">Заказчик</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

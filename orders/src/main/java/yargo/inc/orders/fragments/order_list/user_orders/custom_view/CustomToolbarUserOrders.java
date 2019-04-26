@@ -53,6 +53,7 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
     @OnItemSelected(R2.id.spOrderCategory)
     void spinnerItemSelected(int position) {
         ordersViewModel.setOrderCategoryId(getResources().getIntArray(R.array.ordersCategoryId)[position]);
+        ordersViewModel.setStartPositon(position);
     }
 
 }

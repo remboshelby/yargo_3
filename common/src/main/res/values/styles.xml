@@ -6,4 +6,10 @@
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <declare-styleable name="CircleImageView">
+        <attr name="strokeColor" format="color"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="highlightEnable" format="boolean"/>
+        <attr name="highlightColor" format="color"/>
+    </declare-styleable>
 </resources>

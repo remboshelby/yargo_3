@@ -1,6 +1,8 @@
 package yargo.inc.orders.fragments.order_list;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,12 +32,15 @@ import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.di.DaggerOrdersComponent;
 import yargo.inc.orders.di.OrdersComponent;
+import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
+import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
 public class OrderListsFragment extends BaseFragment {
 
+    private static final String TAG  = OrderListsFragment.class.getName();
 
     @BindView(R2.id.imgBtnMap)
     ImageButton imgBtnMap;
@@ -54,20 +59,23 @@ public class OrderListsFragment extends BaseFragment {
     protected static OrdersComponent ordersComponent;
 
     @Inject
+    protected OrderDetailViewModel orderDetailViewModel;
+    @Inject
     protected VacantOrdersViewModel vacantOrdersViewModel;
     @Inject
     protected CommonSharedPreferences preferences;
     private ApplicationNavigator navigator;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
     @Override
     protected int containerResId() {
         return R.id.list_container;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -77,6 +85,7 @@ public class OrderListsFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         init();
     }
@@ -95,18 +104,24 @@ public class OrderListsFragment extends BaseFragment {
     }
 
     private void init() {
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getRoot(), drawerLayout, toolbar_main, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        pushFragmentIntoFragment(new VacantOrderList());
+        int orderId = orderDetailViewModel.getOrderId();
+        if (orderDetailViewModel.getOrderId()==-1 || orderDetailViewModel.getOrderId()==1){
+            pushFragmentIntoFragment(new VacantOrderList());
+        }
+        else {
+            pushFragmentIntoFragment(new UserOrderList());
+        }
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             if (menuItem.getItemId() == R.id.menu_orders) {
                 pushFragmentIntoFragment(new VacantOrderList());
             } else if (menuItem.getItemId() == R.id.menu_my_orders) {
-
                 pushFragmentIntoFragment(new UserOrderList());
             } else if (menuItem.getItemId() == R.id.menu_call) {
 
@@ -143,6 +158,83 @@ public class OrderListsFragment extends BaseFragment {
     }
     @OnClick(R2.id.imgBtnFilter)
     void onImgBtnFilter(){
+        Bundle bundle = new Bundle();
+        bundle.putString("val", "fdsfsd");
+        onSaveInstanceState(bundle);
+    }
 
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString("var", "fsdfs");
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated");
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        Log.d(TAG, "onViewStateRestored");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach");
     }
 }

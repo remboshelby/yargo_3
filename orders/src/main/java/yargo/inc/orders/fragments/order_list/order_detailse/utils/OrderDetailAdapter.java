@@ -1,77 +1,35 @@
-//package yargo.inc.orders.fragments.order_list.order_detailse.utils;
-//
-//import android.view.View;
-//import android.view.ViewGroup;
-//
-//import androidx.annotation.NonNull;
-//import androidx.recyclerview.widget.RecyclerView;
-//
-//import yargo.inc.common.base.BaseViewHolder;
-//
-//public class OrderDetailAdapter extends RecyclerView.Adapter<BaseViewHolder> {
-////    class ViewHolder0 extends BaseViewHolder{
-////
-////        public ViewHolder0(@NonNull View itemView) {
-////            super(itemView);
-////        }
-////
-////        @Override
-////        public void bind(Object item) {
-////
-////        }
-////    }
-////    class ViewHolder1 extends BaseViewHolder{
-////
-////        public ViewHolder1(@NonNull View itemView) {
-////            super(itemView);
-////        }
-////
-////        @Override
-////        public void bind(Object item) {
-////
-////        }
-////    }
-////    class ViewHolder2 extends BaseViewHolder{
-////
-////        public ViewHolder2(@NonNull View itemView) {
-////            super(itemView);
-////        }
-////
-////        @Override
-////        public void bind(Object item) {
-////
-////        }
-////    }
-////    class ViewHolder3 extends BaseViewHolder{
-////
-////        public ViewHolder3(@NonNull View itemView) {
-////            super(itemView);
-////        }
-////
-////        @Override
-////        public void bind(Object item) {
-////
-////        }
-////    }
-////    @NonNull
-////    @Override
-////    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-////        switch (viewType){
-////            case 0: return new ViewHolder0();
-////            case 1: return new ViewHolder1();
-////            case 2: return new ViewHolder2();
-////            case 3: return new ViewHolder3();
-////            default: return new ViewHolder0();
-////        }
-////    }
-////
-////    @Override
-////    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-////
-////    }
-////
-////    @Override
-////    public int getItemCount() {
-////        return 0;
-//    }
-//}
+package yargo.inc.orders.fragments.order_list.order_detailse.utils;
+
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import yargo.inc.common.base.BaseViewHolder;
+
+public class OrderDetailAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+
+    @NonNull
+    @Override
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        switch (viewType){
+//            case 0: return new ViewHolder0();
+//            case 1: return new ViewHolder1();
+//            case 2: return new ViewHolder2();
+//            case 3: return new ViewHolder3();
+//            default: return new ViewHolder0();
+//        }
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
+    }
+}

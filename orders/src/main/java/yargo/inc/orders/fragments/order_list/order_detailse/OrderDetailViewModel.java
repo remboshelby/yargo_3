@@ -17,6 +17,7 @@ public class OrderDetailViewModel extends BaseViewModel {
 
     public OrderDetailViewModel(OrderActionRepository orderActionRepository) {
         this.orderActionRepository = orderActionRepository;
+        orderId.setValue(-1);
     }
 
     public void getOrderDetail(int orderId) {
@@ -30,6 +31,7 @@ public class OrderDetailViewModel extends BaseViewModel {
                     }
                 }));
     }
+
     public void startToDoOrder() {
 
     }
@@ -57,8 +59,6 @@ public class OrderDetailViewModel extends BaseViewModel {
     public int getOrderId() {
         return orderId.getValue();
     }
-
-
 
 
 }
