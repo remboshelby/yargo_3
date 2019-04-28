@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import yargo.inc.common.base.BaseViewHolder;
 
 public class OrderDetailAdapter extends RecyclerView.Adapter<BaseViewHolder> {
@@ -18,6 +21,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 //            case 1: return new ViewHolder1();
 //            case 2: return new ViewHolder2();
 //            case 3: return new ViewHolder3();
+//
 //            default: return new ViewHolder0();
 //        }
         return null;
@@ -26,6 +30,11 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
 
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     @Override

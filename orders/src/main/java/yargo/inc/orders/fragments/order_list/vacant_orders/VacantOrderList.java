@@ -60,7 +60,6 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
         super.onViewCreated(view, savedInstanceState);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
 
-//        getRoot().setSupportActionBar(toolbar);
         recyclerOrders.setNestedScrollingEnabled(true);
         vacantOrdersViewModel.observSearchText(this, t -> replaceSubscription());
 
@@ -81,6 +80,7 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
         recyclerOrders.setAdapter(vacantOrdersItemAdapter);
 
         startListening();
+
         vacantOrdersViewModel.onViewCreated();
     }
     private void startListening(){
@@ -95,11 +95,9 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
     public void setLoadingState(boolean isLoading) {
         if (isLoading) {
             swipeRefreshLayout.setRefreshing(true);
-            recyclerOrders.setVisibility(vacantOrdersItemAdapter.getItemCount() > 0 ? View.VISIBLE : View.GONE);
-        } else {
+         } else {
             swipeRefreshLayout.setRefreshing(false);
-            recyclerOrders.setVisibility(View.VISIBLE);
-            int t = vacantOrdersItemAdapter.getItemCount();
+
             imgBanner.setImageResource(R.drawable.noorder);
             imgBanner.setVisibility(vacantOrdersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
         }

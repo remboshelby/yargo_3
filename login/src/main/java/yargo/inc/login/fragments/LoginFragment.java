@@ -48,8 +48,6 @@ public class LoginFragment extends BaseFragment {
     TextInputLayout textInputLayoutEmail;
     @BindView(R2.id.textInputLayoutPassword)
     TextInputLayout textInputLayoutPassword;
-    @BindView(R2.id.imageView3)
-    ImageView imageView3;
     @BindView(R2.id.email)
     AutoCompleteTextView email;
     @BindView(R2.id.password)
@@ -109,20 +107,15 @@ public class LoginFragment extends BaseFragment {
             preferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, loginResponse.getResponse());
 
             if (loginResponse.getResponse().getType().equals("OK")) {
-//                Answers.getInstance().logLogin(new LoginEvent()
-//                        .putMethod("vasya")
-//                        .putSuccess(true));
-
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, loginResponse.getResponse().getAuthKey());
-
                 navigator.openFragment(getRoot(), "Orders");
             } else {
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, "");
                 textInputLayoutEmail.setErrorEnabled(true);
                 textInputLayoutPassword.setErrorEnabled(true);
 
-                LoginFragment.this.showErrorDialog("Неправильный логин или пароль");
-                LoginFragment.this.viewComponentVisibility(View.VISIBLE, false);
+                showErrorDialog("Неправильный логин или пароль");
+                viewComponentVisibility(View.VISIBLE, false);
             }
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
@@ -132,7 +125,7 @@ public class LoginFragment extends BaseFragment {
             if (!aBoolean) email_sign_in_button.setEnabled(false);
             else email_sign_in_button.setEnabled(true);
         });
-        makeLogin();
+//        makeLogin();
     }
 
     private void viewComponentVisibility(int viewVisibility, boolean showProgress) {

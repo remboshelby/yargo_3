@@ -1,7 +1,6 @@
 package yargo.inc.login.fragments.registration;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
-
-import org.w3c.dom.Text;
 
 import javax.inject.Inject;
 
@@ -22,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +26,6 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.login.R;
 import yargo.inc.login.R2;
 import yargo.inc.login.fragments.LoginFragment;
-import yargo.inc.login.fragments.registration.registration_pages.RegistrConfirmMobile;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrEnd;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrMobilePhone;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonalData;

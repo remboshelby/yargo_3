@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 
 public abstract class BaseFragment extends Fragment {
@@ -48,8 +50,8 @@ public abstract class BaseFragment extends Fragment {
     public void pushFragmentIntoFragment(BaseFragment fragment){
         if (!getChildFragmentManager().popBackStackImmediate(fragment.getClass().getSimpleName(), 0)) {
             getChildFragmentManager().beginTransaction()
-                    .addToBackStack(fragment.getClass().getSimpleName())
                     .replace(containerResId(), fragment)
+                    .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }
     }

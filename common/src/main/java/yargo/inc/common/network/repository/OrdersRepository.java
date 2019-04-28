@@ -134,7 +134,7 @@ public class OrdersRepository {
                 .filter(new Predicate<Notification<List<UserOrdersItem>>>() {
                     @Override
                     public boolean test(Notification<List<UserOrdersItem>> listNotification) throws Exception {
-                        return !listNotification.isOnError();
+                         return !listNotification.isOnError();
                     }
                 }).dematerialize(new Function<Notification<List<UserOrdersItem>>, Notification<List<UserOrdersItem>>>() {
                     @Override
@@ -160,6 +160,7 @@ public class OrdersRepository {
         return orderApiService.getVacantOrders(authKey, appId).map(new Function<OrdersResponse, List<VacantOrderItem>>() {
             @Override
             public List<VacantOrderItem> apply(OrdersResponse ordersResponse) throws Exception {
+                pushAuthToken(ordersResponse.getResponse().getAuthKey());
                 return ordersResponse.getResponse().getOrders();
             }
         }).doOnNext(ordersItems -> {
@@ -170,6 +171,7 @@ public class OrdersRepository {
         return orderApiService.getUsersOrders(authKey, appId).map(new Function<UserOrderResponse, List<UserOrdersItem>>() {
             @Override
             public List<UserOrdersItem> apply(UserOrderResponse userOrderResponse) throws Exception {
+                pushAuthToken(userOrderResponse.getResponse().getAuthKey());
                 return userOrderResponse.getResponse().getOrders();
             }
         })
@@ -228,5 +230,9 @@ public class OrdersRepository {
 
     public static int getPageSize() {
         return PAGE_SIZE;
+    }
+
+    public void pushAuthToken(String authKey){
+        commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
     }
 }

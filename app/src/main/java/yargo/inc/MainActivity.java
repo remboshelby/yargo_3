@@ -1,28 +1,25 @@
 package yargo.inc;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseActivity;
-import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.dto.CommonSharedPreferences;
-import yargo.inc.common.network.repository.LoginRepository;
-import yargo.inc.common.network.utils.NoConnectivityException;
 import yargo.inc.login.fragments.LoginFragment;
+import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailView;
 
-import static yargo.inc.app.App.getApplicationComponent;
+import static yargo.inc.common.dto.CommonSharedPreferences.AUTH_KEY;
+import static yargo.inc.common.dto.CommonSharedPreferences.SHARED_PREFERENCES;
 
 
 public class MainActivity extends BaseActivity {
+
+    private SharedPreferences preferences;
 
     @Override
     protected int containerResId() {
@@ -31,13 +28,19 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
 
-        pushFragment(new LoginFragment(),false);
+        preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        if (preferences.getString(AUTH_KEY, null)==null){
+            pushFragment(new LoginFragment(),false);
+        }
+        else {
+            pushFragment(new OrderListsFragment(),false);
+        }
     }
     @Override
     public void onBackPressed() {
-
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(OrderDetailView.class.getSimpleName());
         if (fragmentByTag!=null) {

@@ -70,4 +70,8 @@ public class RegistrEnd extends BaseFragment {
             passNotMach.setVisibility(View.VISIBLE);
         }
     }
+    @OnClick(R2.id.endRegistration)
+    void clickRegistrationBtn(){
+        registrationViewModel.makeRegistr();
+    }
 }

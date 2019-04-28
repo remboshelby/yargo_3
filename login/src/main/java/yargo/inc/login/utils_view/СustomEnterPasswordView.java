@@ -12,17 +12,18 @@ import android.widget.ToggleButton;
 import yargo.inc.login.LoginViewModel;
 import yargo.inc.login.R;
 import yargo.inc.login.R2;
-import yargo.inc.login.fragments.LoginFragment;
 
 import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
+import yargo.inc.login.fragments.LoginFragment;
 
 public class СustomEnterPasswordView extends ConstraintLayout {
 
@@ -39,15 +40,16 @@ public class СustomEnterPasswordView extends ConstraintLayout {
     public СustomEnterPasswordView(Context context) {
         super(context);
         init(context);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        setLayoutParams(params);
     }
 
     private void init(Context context) {
         LoginFragment.getLoginComponent().inject(this);
         LayoutInflater.from(context).inflate(R.layout.enter_password_view, this);
         ButterKnife.bind(this);
+
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        setLayoutParams(params);
     }
 
     public СustomEnterPasswordView(Context context, @Nullable AttributeSet attrs) {

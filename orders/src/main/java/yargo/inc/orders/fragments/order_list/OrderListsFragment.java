@@ -110,7 +110,8 @@ public class OrderListsFragment extends BaseFragment {
                 R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        int orderId = orderDetailViewModel.getOrderId();
+
+
         if (orderDetailViewModel.getOrderId()==-1 || orderDetailViewModel.getOrderId()==1){
             pushFragmentIntoFragment(new VacantOrderList());
         }

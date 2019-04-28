@@ -25,7 +25,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     Gson provideGson() {
-        return new GsonBuilder().create();
+        return new GsonBuilder().setLenient().create();
     }
     @Provides
     @Singleton

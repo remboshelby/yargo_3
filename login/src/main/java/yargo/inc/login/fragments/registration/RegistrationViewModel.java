@@ -1,5 +1,8 @@
 package yargo.inc.login.fragments.registration;
 
+import android.net.Uri;
+
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +12,7 @@ import androidx.lifecycle.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.user_info.PersonData;
@@ -16,6 +20,12 @@ import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
 import yargo.inc.common.network.repository.RegistrRepository;
 
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RegistrationViewModel extends BaseViewModel {
     private RegistrRepository registrRepository;
@@ -44,14 +54,33 @@ public class RegistrationViewModel extends BaseViewModel {
         isBtnNextOn.observe(owner, observer);
     }
 
-    public void makeRegistr(PersonData personData){
-        addDisposible(registrRepository.makeRegistr(personData)
+    public void makeRegistr(){
+        Gson gson = new Gson();
+        JSONObject jsonObject = new JSONObject();
+
+
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("SignupForm[username]", personData.getValue().getName());
+        body.put("SignupForm[sex]", personData.getValue().getSex());
+        body.put("SignupForm[email]", personData.getValue().getEmail());
+        body.put("SignupForm[phone]", personData.getValue().getTelephonNumber());
+        body.put("SignupForm[birthday]", personData.getValue().getBirthday());
+        body.put("SignupForm[password]", personData.getValue().getPassword());
+        body.put("SignupForm[id_city]", personData.getValue().getCityId());
+        gson.toJson(personData.getValue());
+        addDisposible(registrRepository.makeRegistr(body)
                 .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Consumer<RegistrResponse>() {
             @Override
             public void accept(RegistrResponse registResponse) throws Exception {
-
+                String authKey = registResponse.getAuthKey();
+                String authKey1 = registResponse.getAuthKey();
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throwable.printStackTrace();
             }
         }));
     }

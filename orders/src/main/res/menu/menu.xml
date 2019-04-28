@@ -8,7 +8,7 @@
             android:title="@string/menu_all_orders" />
         <item
             android:id="@+id/menu_my_orders"
-            android:icon="@drawable/ic_folder_special_black_24dp"
+            android:icon="@drawable/ic_folder_black_24dp"
             android:title="@string/menu_my_orders" />
         <item
             android:id="@+id/menu_call"
