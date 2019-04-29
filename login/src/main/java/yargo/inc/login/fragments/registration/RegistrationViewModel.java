@@ -61,7 +61,8 @@ public class RegistrationViewModel extends BaseViewModel {
 
         HashMap<String, Object> body = new HashMap<>();
         body.put("SignupForm[username]", personData.getValue().getName());
-        body.put("SignupForm[sex]", personData.getValue().getSex());
+//        body.put("SignupForm[sex]", personData.getValue().getSex());
+        body.put("SignupForm[sex]", "1");
         body.put("SignupForm[email]", personData.getValue().getEmail());
         body.put("SignupForm[phone]", personData.getValue().getTelephonNumber());
         body.put("SignupForm[birthday]", personData.getValue().getBirthday());

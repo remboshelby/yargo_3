@@ -47,13 +47,14 @@ public class CircleImageView_ extends ImageView {
 
         int strokeColor = Color.TRANSPARENT;
         float strokeWidth = 0;
+
         boolean highlightEnable = true;
         int highlightColor = DEF_PRESS_HIGHLIGHT_COLOR;
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, 0, 0);
 
-            strokeColor = a.getColor(R.styleable.CircleImageView_strokeColor, Color.RED);
+            strokeColor = a.getColor(R.styleable.CircleImageView_strokeColor, getResources().getColor(R.color.colorPrimary));
             strokeWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_strokeWidth, 5);
             highlightEnable = a.getBoolean(R.styleable.CircleImageView_highlightEnable, false);
             highlightColor = a.getColor(R.styleable.CircleImageView_highlightColor, DEF_PRESS_HIGHLIGHT_COLOR);
