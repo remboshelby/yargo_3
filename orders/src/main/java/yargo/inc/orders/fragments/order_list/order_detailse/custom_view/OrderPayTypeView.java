@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.order_detailse.utils.OrderDetailItem;
 
 public class OrderPayTypeView extends ConstraintLayout {
 
@@ -27,5 +28,8 @@ public class OrderPayTypeView extends ConstraintLayout {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.order_pay_info, this);
         ButterKnife.bind(this);
+    }
+
+    public void bind(OrderDetailItem item) {
     }
 }

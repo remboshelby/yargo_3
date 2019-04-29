@@ -4,23 +4,35 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
+import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_detailse.custom_view.CustomToolbarOrderDetail;
+import yargo.inc.orders.fragments.order_list.order_detailse.utils.OrderDetailAdapter;
+import yargo.inc.orders.fragments.order_list.order_detailse.utils.OrderDetailItem;
+
+import static android.os.Build.VERSION_CODES.O;
 
 public class OrderDetailView extends BaseFragment implements CustomToolbarOrderDetail.onCustomToolbarClick {
 
@@ -44,7 +56,30 @@ public class OrderDetailView extends BaseFragment implements CustomToolbarOrderD
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init(view);
         super.onViewCreated(view, savedInstanceState);
-//        int orderId = orderDetailViewModel.getOrderId();
+        orderDetailViewModel.getOrderDetail();
+        swipeRefreshLayout.setRefreshing(true);
+        orderDetailViewModel.observOrderDetailData(this, orderDetailResponse -> {
+            orderDetailResponse.getAuthKey();
+            swipeRefreshLayout.setRefreshing(false);
+            customToolbar.setToolbarTitle("Заявка №"+orderDetailResponse.getResponse().getOrders().get(0).getID());
+
+            ArrayList<OrderDetailItem> list = new ArrayList<>();
+            list.add(new OrderDetailItem(OrderDetailItem.HEADER_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.MAP_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.DISCRIPTION_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.PAY_TYPE_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW, orderDetailResponse));
+
+            OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(list);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
+
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(deatilRecyclerView.getContext(), layoutManager.getOrientation());
+            deatilRecyclerView.addItemDecoration(dividerItemDecoration);
+            deatilRecyclerView.setLayoutManager(layoutManager);
+            deatilRecyclerView.setAdapter(orderDetailAdapter);
+
+        });
+
 
     }
 

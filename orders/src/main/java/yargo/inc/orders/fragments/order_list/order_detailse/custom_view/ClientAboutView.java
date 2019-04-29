@@ -12,8 +12,10 @@ import butterknife.ButterKnife;
 import yargo.inc.common.utils.CircleImageView_;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.order_detailse.utils.OrderDetailItem;
 
 public class ClientAboutView extends ConstraintLayout {
+
 
     @BindView(R2.id.titleClient)
     TextView titleClient;
@@ -30,5 +32,8 @@ public class ClientAboutView extends ConstraintLayout {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.client_order, this);
         ButterKnife.bind(this);
+    }
+
+    public void bind(OrderDetailItem item) {
     }
 }

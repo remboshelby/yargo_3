@@ -50,4 +50,7 @@ public class CustomToolbarOrderDetail extends ConstraintLayout {
     void onBtnBackPress(){
         onCustomToolbarClick.doSomething();
     }
+    public void setToolbarTitle (String toolbarTitle){
+        tvToolBarTitle.setText(toolbarTitle);
+    }
 }

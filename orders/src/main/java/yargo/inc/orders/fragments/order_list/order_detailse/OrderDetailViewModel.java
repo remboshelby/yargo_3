@@ -1,6 +1,8 @@
 package yargo.inc.orders.fragments.order_list.order_detailse;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import io.reactivex.Scheduler;
 import io.reactivex.functions.Consumer;
@@ -12,6 +14,7 @@ import yargo.inc.common.network.repository.OrderActionRepository;
 public class OrderDetailViewModel extends BaseViewModel {
 
     private MutableLiveData<Integer> orderId = new MutableLiveData<>();
+    private MutableLiveData<OrderDetailResponse> orderDetailData = new MutableLiveData<>();
 
     private OrderActionRepository orderActionRepository;
 
@@ -19,17 +22,17 @@ public class OrderDetailViewModel extends BaseViewModel {
         this.orderActionRepository = orderActionRepository;
         orderId.setValue(-1);
     }
+    public void observOrderDetailData (LifecycleOwner owner, Observer<OrderDetailResponse> observer){
+        orderDetailData.observe(owner, observer);
+    }
 
-    public void getOrderDetail(int orderId) {
-        addDisposible(orderActionRepository.getOrderDetail(orderId)
+    public void getOrderDetail() {
+        int orderIdValue = orderId.getValue();
+        addDisposible(orderActionRepository.getOrderDetail(orderIdValue)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(new Consumer<OrderDetailResponse>() {
-                    @Override
-                    public void accept(OrderDetailResponse orderDetailResponse) throws Exception {
-                        //TODO добавить Binding во вью
-                    }
-                }));
+                .subscribe(orderDetailData::postValue,
+                        throwable -> throwable.printStackTrace()));
     }
 
     public void startToDoOrder() {
