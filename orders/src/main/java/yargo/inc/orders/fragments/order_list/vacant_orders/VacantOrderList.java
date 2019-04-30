@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailView;
 import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
 import yargo.inc.orders.fragments.order_list.vacant_orders.utils.VacantOrdersItemAdapter;
@@ -63,16 +65,13 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
         recyclerOrders.setNestedScrollingEnabled(true);
         vacantOrdersViewModel.observSearchText(this, t -> replaceSubscription());
 
+        vacantOrdersViewModel.observVacantOrderCount(this, count -> imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE));
+
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
         vacantOrdersItemAdapter = new VacantOrdersItemAdapter(this);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                replaceSubscription();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> replaceSubscription());
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerOrders.getContext(), layoutManager.getOrientation());
         recyclerOrders.addItemDecoration(dividerItemDecoration);
@@ -97,14 +96,12 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
             swipeRefreshLayout.setRefreshing(true);
          } else {
             swipeRefreshLayout.setRefreshing(false);
-
-            imgBanner.setImageResource(R.drawable.noorder);
-            imgBanner.setVisibility(vacantOrdersItemAdapter.getItemCount() > 0 ? View.GONE : View.VISIBLE);
         }
     }
 
     @Override
     public void showItemDetails(VacantOrderItem vacantOrderItem) {
-
+        orderDetailViewModel.setOrderId(vacantOrderItem.getID());
+        getRoot().pushFragment(new OrderDetailView(), true);
     }
 }

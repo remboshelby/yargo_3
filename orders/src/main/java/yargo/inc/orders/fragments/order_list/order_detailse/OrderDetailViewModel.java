@@ -4,11 +4,14 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import java.util.List;
+
 import io.reactivex.Scheduler;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
+import yargo.inc.common.network.models.order_detail.OrdersItem;
 import yargo.inc.common.network.repository.OrderActionRepository;
 
 public class OrderDetailViewModel extends BaseViewModel {
@@ -20,20 +23,29 @@ public class OrderDetailViewModel extends BaseViewModel {
 
     public OrderDetailViewModel(OrderActionRepository orderActionRepository) {
         this.orderActionRepository = orderActionRepository;
-        orderId.setValue(-1);
     }
+
     public void observOrderDetailData (LifecycleOwner owner, Observer<OrderDetailResponse> observer){
         orderDetailData.observe(owner, observer);
     }
 
     public void getOrderDetail() {
-        int orderIdValue = orderId.getValue();
-        addDisposible(orderActionRepository.getOrderDetail(orderIdValue)
+        addDisposible(orderActionRepository.getOrderDetail(orderId.getValue())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(orderDetailData::postValue,
+                .subscribe(new Consumer<OrderDetailResponse>() {
+                               @Override
+                               public void accept(OrderDetailResponse value) throws Exception {
+                                   orderDetailData.postValue(value);
+                               }
+                           },
                         throwable -> throwable.printStackTrace()));
     }
+
+    public int getOrderStatus() {
+        return orderDetailData.getValue()==null ? -1 : orderDetailData.getValue().getResponse().getOrders().get(0).getIdOrderStatus();
+    }
+
 
     public void startToDoOrder() {
 
@@ -59,9 +71,6 @@ public class OrderDetailViewModel extends BaseViewModel {
         orderId.postValue(orderIdValue);
     }
 
-    public int getOrderId() {
-        return orderId.getValue();
-    }
 
 
 }

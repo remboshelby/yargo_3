@@ -79,8 +79,10 @@ public class MapItemView extends ConstraintLayout implements OnMapReadyCallback 
     }
 
     private void setMapLocation() {
-        LatLng latLng = new LatLng(Double.valueOf(ordersItem.getLatitude()), Double.valueOf(ordersItem.getLongitude()));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f));
-        map.addMarker(new MarkerOptions().position(latLng));
+        if (!ordersItem.getLatitude().isEmpty()) {
+            LatLng latLng = new LatLng(Double.valueOf(ordersItem.getLatitude()), Double.valueOf(ordersItem.getLongitude()));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f));
+            map.addMarker(new MarkerOptions().position(latLng));
+        }
     }
 }

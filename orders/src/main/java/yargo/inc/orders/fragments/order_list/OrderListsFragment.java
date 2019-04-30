@@ -111,8 +111,7 @@ public class OrderListsFragment extends BaseFragment {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-
-        if (orderDetailViewModel.getOrderId()==-1 || orderDetailViewModel.getOrderId()==1){
+        if (orderDetailViewModel.getOrderStatus()==-1 || orderDetailViewModel.getOrderStatus()==1){
             pushFragmentIntoFragment(new VacantOrderList());
         }
         else {

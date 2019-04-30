@@ -25,6 +25,7 @@ public class VacantOrdersViewModel extends BaseViewModel {
 
 
     private LiveData<Boolean> isLoading;
+    private LiveData<Integer> ordersCount;
 
     private CompositeDisposable compositeDisposable;
 
@@ -42,11 +43,15 @@ public class VacantOrdersViewModel extends BaseViewModel {
     public void observSearchText(LifecycleOwner owner, Observer<String> searchString){
         orderDescription.observe(owner, searchString);
     }
+    public void observVacantOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
+        vacantOrdersCount.observe(owner, userOrderCountValue);
+    }
     private LiveData<PagedList<VacantOrderItem>> createFiltredVacantOrders(String orderDescription) {
         if (orderDescription==null)
             orderDescription="";
         OrderDataSourceFactory orderDataSourceFactory = new OrderDataSourceFactory(ordersRepository, compositeDisposable, orderDescription);
         isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
+        ordersCount = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> input.getRecordCount());
         return new LivePagedListBuilder<>(orderDataSourceFactory,
                 new PagedList.Config.Builder()
                         .setEnablePlaceholders(true)

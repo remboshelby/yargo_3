@@ -1,14 +1,15 @@
 package yargo.inc.orders.fragments.order_list.order_detailse;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +36,8 @@ import yargo.inc.orders.fragments.order_list.order_detailse.utils.OrderDetailIte
 public class OrderDetailView extends BaseFragment implements CustomToolbarOrderDetail.onCustomToolbarClick {
 
 
+    @BindView(R2.id.toolbar)
+    Toolbar toolbar;
     @BindView(R2.id.progressBar)
     ProgressBar progressBar;
     @BindView(R2.id.bottomNav)
@@ -49,6 +52,12 @@ public class OrderDetailView extends BaseFragment implements CustomToolbarOrderD
     RecyclerView deatilRecyclerView;
     @Inject
     protected OrderDetailViewModel orderDetailViewModel;
+
+    private ArrayList<OrderDetailItem> list = new ArrayList<>();
+    private OrderDetailAdapter orderDetailAdapter;
+
+    private static final String TAG = OrderDetailView.class.getSimpleName();
+
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.order_details, container, false);
@@ -58,31 +67,41 @@ public class OrderDetailView extends BaseFragment implements CustomToolbarOrderD
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init(view);
         super.onViewCreated(view, savedInstanceState);
+
+        progressBar.setVisibility(View.VISIBLE);
+        bottomNav.setVisibility(View.GONE);
+
         orderDetailViewModel.getOrderDetail();
 
+        customToolbar.setToolbarTitle("Загрузка...");
+
+
+
+        if (orderDetailAdapter!=null) orderDetailAdapter.notifyItemRangeRemoved(0, list.size());
+
         orderDetailViewModel.observOrderDetailData(this, orderDetailResponse -> {
-            orderDetailResponse.getAuthKey();
-            progressBar.setVisibility(View.VISIBLE);
             OrdersItem ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
             customToolbar.setToolbarTitle("Заявка №"+ ordersItem.getID());
 
+            Log.d(TAG, "observOrderDetailData");
 
-            ArrayList<OrderDetailItem> list = new ArrayList<>();
             list.add(new OrderDetailItem(OrderDetailItem.HEADER_ITEM_VIEW, orderDetailResponse));
             list.add(new OrderDetailItem(OrderDetailItem.MAP_ITEM_VIEW, orderDetailResponse));
             list.add(new OrderDetailItem(OrderDetailItem.DISCRIPTION_ITEM_VIEW, orderDetailResponse));
             list.add(new OrderDetailItem(OrderDetailItem.PAY_TYPE_ITEM_VIEW, orderDetailResponse));
             list.add(new OrderDetailItem(OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW, orderDetailResponse));
 
-            OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(list);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
+            orderDetailAdapter = new OrderDetailAdapter(list);
 
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(deatilRecyclerView.getContext(), layoutManager.getOrientation());
             deatilRecyclerView.addItemDecoration(dividerItemDecoration);
             deatilRecyclerView.setLayoutManager(layoutManager);
             deatilRecyclerView.setAdapter(orderDetailAdapter);
 
+
             progressBar.setVisibility(View.GONE);
+            bottomNav.setVisibility(View.VISIBLE);
         });
 
 
@@ -94,6 +113,11 @@ public class OrderDetailView extends BaseFragment implements CustomToolbarOrderD
         customToolbar.setOnCustomToolbarClick(this);
     }
 
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+    }
 
     @Override
     public void doSomething() {

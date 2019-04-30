@@ -78,6 +78,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                imgBanner.setVisibility(View.GONE);
                 UserOrderList.this.replaceSubscription();
             }
         });

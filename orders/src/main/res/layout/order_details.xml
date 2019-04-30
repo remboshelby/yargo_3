@@ -7,58 +7,39 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarLayout"
-        style="@style/Widget.Design.AppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <androidx.appcompat.widget.Toolbar
+            <yargo.inc.orders.fragments.order_list.order_detailse.custom_view.CustomToolbarOrderDetail
+                android:id="@+id/customToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:minHeight="?actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-                <yargo.inc.orders.fragments.order_list.order_detailse.custom_view.CustomToolbarOrderDetail
-                    android:id="@+id/customToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                android:layout_height="match_parent" />
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottomNav"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/deatilRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:paddingBottom="?attr/actionBarSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,20 +48,26 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="gone" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
-        android:gravity="bottom">
+        android:background="@color/colorPrimary">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNav"
-            android:background="@color/colorPrimary"
+        <Button
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:foregroundGravity="bottom">
-
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@android:color/transparent"
+            android:text="ВЗЯТЬ ЗАКАЗ" />
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

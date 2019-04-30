@@ -16,6 +16,7 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
     private CompositeDisposable compositeDisposable;
     private String orderDescription;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private MutableLiveData<Integer> recordCount = new MutableLiveData<>();
 
     private int totalCount;
 
@@ -25,31 +26,11 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
         this.orderDescription = orderDescription;
 
         compositeDisposable.add(ordersRepository.getVacantFromDbCount()
-        .observeOn(Schedulers.io())
-        .subscribeOn(Schedulers.io())
-        .subscribe(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer integer) throws Exception {
-                setTotalCount(integer);
-            }
-        }, throwable -> throwable.printStackTrace()));
-//        compositeDisposable.add(ordersRepository.getAllVacantOrders(orderDescription)
-//                .observeOn(Schedulers.io())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Consumer<List<VacantOrderItem>>() {
-//                               @Override
-//                               public void accept(List<VacantOrderItem> ordersItems) throws Exception {
-//                                   OrdersDataSource.this.setTotalCount(ordersItems.size());
-//                               }
-//                           },
-//                        new Consumer<Throwable>() {
-//                            @Override
-//                            public void accept(Throwable throwable) throws Exception {
-//                                throwable.printStackTrace();
-//                            }
-//                        }));
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(integer -> setTotalCount(integer),
+                        throwable -> throwable.printStackTrace()));
     }
-
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<VacantOrderItem> callback) {
         isLoading.postValue(true);
@@ -59,12 +40,7 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
                 .subscribe(ordersItems -> {
                     callback.onResult(ordersItems, params.requestedStartPosition, OrdersDataSource.this.getTotalCount());
                     isLoading.postValue(false);
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                    }
-                }));
+                }, throwable -> throwable.printStackTrace()));
     }
 
     @Override
@@ -87,6 +63,9 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
     }
+    public MutableLiveData<Integer> getRecordCount() {
+        return recordCount;
+    }
 
     public int getTotalCount() {
         return totalCount;
@@ -97,5 +76,4 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
         if (totalCount==0)
             isLoading.postValue(false);
     }
-
 }
