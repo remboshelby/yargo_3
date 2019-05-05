@@ -1,5 +1,8 @@
 package yargo.inc.orders.di;
 
+import yargo.inc.orders.fragments.order_list.filters.FiltersView;
+import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterCategory;
+import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterSettings;
 import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailView;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.utils.UserOrdersItemAdapter;
@@ -23,6 +26,12 @@ public interface OrdersComponent {
     void inject(UserOrderList userOrderList);
     void inject(OrderDetailView orderDetailView);
     void inject(UserOrdersItemAdapter userOrdersItemAdapter);
+    void inject(FiltersView filtersView);
+
+    void inject(FilterSettings filterSettings);
+
+    void inject(FilterCategory filterCategory);
+
     @Component.Builder
     interface Builder{
         @BindsInstance

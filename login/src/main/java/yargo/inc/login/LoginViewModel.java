@@ -3,6 +3,7 @@ package yargo.inc.login;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.login.LoginResponse;
+import yargo.inc.common.network.models.login.User;
 import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.common.network.utils.NoConnectivityException;
 import yargo.inc.login.data.LoginData;
@@ -50,6 +51,8 @@ public class LoginViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(loginResponse -> {
                             data.postValue(loginResponse);
+                            pushAuthToken(loginResponse.getResponse().getAuthKey());
+                            pushUser(loginResponse.getResponse().getUser());
                             isNoInternetConnection.postValue(false);
                         },
                         throwable -> {
@@ -68,6 +71,8 @@ public class LoginViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(loginResponse -> {
                             data.postValue(loginResponse);
+                            pushAuthToken(loginResponse.getResponse().getAuthKey());
+                            pushUser(loginResponse.getResponse().getUser());
                             isNoInternetConnection.postValue(false);
                         },
                         throwable -> {
@@ -108,5 +113,11 @@ public class LoginViewModel extends BaseViewModel {
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
         String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         loginInfo.setValue(new LoginData(authKey, appId, "", ""));
+    }
+    public void pushAuthToken(String authKey){
+        commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
+    }
+    public void pushUser(User user){
+        commonSharedPreferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, user);
     }
 }

@@ -72,24 +72,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<BaseViewHolder<Orde
     public void onBindViewHolder(@NonNull BaseViewHolder<OrderDetailItem> holder, int position) {
         OrderDetailItem orderDetailItem = dataSet.get(position);
         if (orderDetailItem !=null){
-//            switch (orderDetailItem.type){
                 (holder).bind(orderDetailItem);
-//                case OrderDetailItem.HEADER_ITEM_VIEW:
-//                    (holder).bind(orderDetailItem);
-//                    break;
-//                case OrderDetailItem.MAP_ITEM_VIEW:
-//                    (holder).bind(orderDetailItem);
-//                    break;
-//                case OrderDetailItem.DISCRIPTION_ITEM_VIEW:
-//                    (holder).bind(orderDetailItem);
-//                    break;
-//                case OrderDetailItem.PAY_TYPE_ITEM_VIEW:
-//                    (holder).bind(orderDetailItem);
-//                    break;
-//                case OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW:
-//                    (holder).bind(orderDetailItem);
-//                    break;
-//            }
         }
     }
 
@@ -114,60 +97,5 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<BaseViewHolder<Orde
     @Override
     public int getItemCount() {
         return dataSet.size();
-    }
-
-    public static class HeaderViewHolder extends BaseViewHolder{
-
-        public HeaderViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        @Override
-        public void bind(Object item) {
-
-        }
-    }
-    public static class MapItemViewHolder extends BaseViewHolder{
-
-        public MapItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        @Override
-        public void bind(Object item) {
-
-        }
-    }
-    public static class DiscriptionItemViewHolder extends BaseViewHolder{
-
-        public DiscriptionItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        @Override
-        public void bind(Object item) {
-
-        }
-    }
-    public static class PayTypeItemViewHolder extends BaseViewHolder{
-
-        public PayTypeItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        @Override
-        public void bind(Object item) {
-
-        }
-    }
-    public static class ClientAboutItemViewHolder extends BaseViewHolder {
-        public ClientAboutItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        @Override
-        public void bind(Object item) {
-
-        }
     }
 }

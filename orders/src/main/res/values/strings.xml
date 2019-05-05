@@ -38,6 +38,11 @@
     <string name="order_description">Описание</string>
     <string name="order_comment">Комментарий</string>
     <string name="client">Заказчик</string>
+    <!--Fragment filtration-->
+    <string name="filters_toolbar_title">Фильтры</string>
+    <string name="filters_button_accept_lable">принять</string>
+    <string name="accept">Применить</string>
+    <string name="all_category">Все категории</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

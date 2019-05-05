@@ -5,6 +5,7 @@
     <color name="colorButtonEnabled">#B9AAAAAA</color>
     <color name="colorPrimaryDark">#FAD900</color>
     <color name="colorAccent">#000000</color>
+    <color name="colorAccept">#4ACF45</color>
 
     <color name="registBackgroundCollor">#d6d5d2</color>
 

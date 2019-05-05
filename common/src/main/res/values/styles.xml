@@ -12,4 +12,7 @@
         <attr name="highlightEnable" format="boolean"/>
         <attr name="highlightColor" format="color"/>
     </declare-styleable>
+    <style name="CustomToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+    </style>
 </resources>

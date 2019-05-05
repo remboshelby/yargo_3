@@ -32,6 +32,7 @@ import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.di.DaggerOrdersComponent;
 import yargo.inc.orders.di.OrdersComponent;
+import yargo.inc.orders.fragments.order_list.filters.FiltersView;
 import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
@@ -90,19 +91,6 @@ public class OrderListsFragment extends BaseFragment {
         init();
     }
 
-    @Override
-    protected void inject() {
-        CommonApplication commonApplication = (CommonApplication) getRoot().getApplication();
-        navigator = commonApplication.component().navigator();
-        ordersComponent = DaggerOrdersComponent
-                .builder()
-                .commonComponent(commonApplication.component())
-                .root(this)
-                .build();
-
-        ordersComponent.inject(this);
-    }
-
     private void init() {
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -152,89 +140,26 @@ public class OrderListsFragment extends BaseFragment {
                 .getString(R.string.menu_exit))
                 .show();
     }
+
     @OnClick(R2.id.imgBtnMap)
     void onBtnMapClick(){
 
     }
     @OnClick(R2.id.imgBtnFilter)
     void onImgBtnFilter(){
-        Bundle bundle = new Bundle();
-        bundle.putString("val", "fdsfsd");
-        onSaveInstanceState(bundle);
-    }
-
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString("var", "fsdfs");
-        super.onSaveInstanceState(outState);
-        Log.d(TAG, "onSaveInstanceState");
+        getRoot().pushFragment(new FiltersView(), true);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated");
-    }
+    protected void inject() {
+        CommonApplication commonApplication = (CommonApplication) getRoot().getApplication();
+        navigator = commonApplication.component().navigator();
+        ordersComponent = DaggerOrdersComponent
+                .builder()
+                .commonComponent(commonApplication.component())
+                .root(this)
+                .build();
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        Log.d(TAG, "onViewStateRestored");
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView");
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach");
+        ordersComponent.inject(this);
     }
 }

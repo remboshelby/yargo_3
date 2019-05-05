@@ -104,8 +104,6 @@ public class LoginFragment extends BaseFragment {
             }
         });
         viewModel.observeData(this, loginResponse -> {
-            preferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, loginResponse.getResponse());
-
             if (loginResponse.getResponse().getType().equals("OK")) {
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, loginResponse.getResponse().getAuthKey());
                 navigator.openFragment(getRoot(), "Orders");

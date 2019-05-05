@@ -75,10 +75,6 @@ public class OrderDetailView extends BaseFragment implements CustomToolbarOrderD
 
         customToolbar.setToolbarTitle("Загрузка...");
 
-
-
-        if (orderDetailAdapter!=null) orderDetailAdapter.notifyItemRangeRemoved(0, list.size());
-
         orderDetailViewModel.observOrderDetailData(this, orderDetailResponse -> {
             OrdersItem ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
             customToolbar.setToolbarTitle("Заявка №"+ ordersItem.getID());
@@ -91,12 +87,13 @@ public class OrderDetailView extends BaseFragment implements CustomToolbarOrderD
             list.add(new OrderDetailItem(OrderDetailItem.PAY_TYPE_ITEM_VIEW, orderDetailResponse));
             list.add(new OrderDetailItem(OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW, orderDetailResponse));
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
             orderDetailAdapter = new OrderDetailAdapter(list);
 
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(deatilRecyclerView.getContext(), layoutManager.getOrientation());
             deatilRecyclerView.addItemDecoration(dividerItemDecoration);
             deatilRecyclerView.setLayoutManager(layoutManager);
+
             deatilRecyclerView.setAdapter(orderDetailAdapter);
 
 

@@ -11,6 +11,7 @@ import java.util.List;
 import yargo.inc.common.base.BaseActivity;
 import yargo.inc.login.fragments.LoginFragment;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.filters.FiltersView;
 import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailView;
 
 import static yargo.inc.common.dto.CommonSharedPreferences.AUTH_KEY;
@@ -41,11 +42,13 @@ public class MainActivity extends BaseActivity {
     }
     @Override
     public void onBackPressed() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(OrderDetailView.class.getSimpleName());
-        if (fragmentByTag!=null) {
+        if ( getSupportFragmentManager().findFragmentByTag(OrderDetailView.class.getSimpleName())!=null) {
             getSupportFragmentManager().popBackStack();
-        }else {
+        }
+        else if ( getSupportFragmentManager().findFragmentByTag(FiltersView.class.getSimpleName())!=null){
+            getSupportFragmentManager().popBackStack();
+        }
+        else {
             onBackPressed();
         }
 
