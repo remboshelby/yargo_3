@@ -1,14 +1,22 @@
 package yargo.inc.orders.fragments.order_list.filters;
 
-import java.util.ArrayList;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import java.util.ArrayList;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.orders.R;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CategoryModel;
+import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CityModel;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.models.SettingModel;
 
 public class FiltersViewModel extends BaseViewModel {
+
+    MutableLiveData <Boolean> isAllCategoryChecked = new MutableLiveData<>();
+
+
     int iconsCategory[] = {
             R.drawable.icon_santech,
             R.drawable.icon_electro,
@@ -29,6 +37,7 @@ public class FiltersViewModel extends BaseViewModel {
             R.drawable.icon_clean,
             R.drawable.icon_bit,
     };
+
     String categoryNames[] = {
             "Сантехнические работы",
             "Электромонтажные работы",
@@ -49,7 +58,7 @@ public class FiltersViewModel extends BaseViewModel {
             "Клининг",
             "Ремонт бытовой техники",
     };
-    String item_name[] = {"caterogy_item_all",
+    String item_name[] = {
             "caterogy_item_0",
             "caterogy_item_1",
             "caterogy_item_2",
@@ -68,13 +77,15 @@ public class FiltersViewModel extends BaseViewModel {
             "caterogy_item_15",
             "caterogy_item_16",
             "caterogy_item_17"};
-
     private CommonSharedPreferences commonSharedPreferences;
 
     public FiltersViewModel(CommonSharedPreferences commonSharedPreferences) {
         this.commonSharedPreferences = commonSharedPreferences;
     }
 
+    public void observeIsAllCategoryChecked(LifecycleOwner lifecycleOwner, Observer observer){
+        isAllCategoryChecked.observe(lifecycleOwner, observer);
+    }
     public ArrayList<SettingModel> createSettingsArray() {
         ArrayList<SettingModel> settingsList = new ArrayList<>();
         int categoryCount = (int) commonSharedPreferences.getIntObject("category_count", int.class);
@@ -89,14 +100,33 @@ public class FiltersViewModel extends BaseViewModel {
 
     public ArrayList<CategoryModel> createCategoryArray() {
         ArrayList<CategoryModel> categoryList = new ArrayList<>();
+        boolean checkedAll = true;
         for (int i =0; i<iconsCategory.length; i++){
+            boolean test = (boolean)commonSharedPreferences.getBooleanObject(item_name[i], boolean.class);
+            checkedAll = checkedAll&test;
             categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i,(boolean)commonSharedPreferences.getBooleanObject( item_name[i], boolean.class)));
+        }
+        isAllCategoryChecked.setValue(checkedAll);
+        return categoryList;
+    }
+
+    public ArrayList<CategoryModel> dropChecked(){
+        ArrayList<CategoryModel> categoryList = new ArrayList<>();
+        for (int i =0; i<iconsCategory.length; i++){
+            commonSharedPreferences.putObject(item_name[i], "false");
+            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i,false));
         }
         return categoryList;
     }
-    public void dropChecked(){
+    public ArrayList<CategoryModel> setCheckedAll(){
+        ArrayList<CategoryModel> categoryList = new ArrayList<>();
         for (int i =0; i<iconsCategory.length; i++){
             commonSharedPreferences.putObject(item_name[i], "true");
+            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i,true));
         }
+        return categoryList;
+    }
+    public void setCheck(int position, boolean checked){
+        commonSharedPreferences.putObject(item_name[position], checked);
     }
 }

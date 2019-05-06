@@ -28,19 +28,18 @@
         android:id="@+id/filterViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomFilterNav"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_gravity="bottom"
-        android:background="@color/colorAccept">
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView-->
+        <!--android:id="@+id/bottomFilterNav"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?android:attr/actionBarSize"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:background="@color/colorAccept">-->
 
-        <yargo.inc.orders.fragments.order_list.filters.custom_view.utils.CustomBottomNavigation
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <!--<yargo.inc.orders.fragments.order_list.filters.custom_view.utils.CustomBottomNavigation-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+    <!--</com.google.android.material.bottomnavigation.BottomNavigationView>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

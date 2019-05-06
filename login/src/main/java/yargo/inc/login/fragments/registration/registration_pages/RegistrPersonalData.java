@@ -67,6 +67,7 @@ public class RegistrPersonalData extends BaseFragment {
     }
 
     private void init() {
+        registrationViewModel.makeRegistr();
         spinCity.setOnTouchListener((v, event) -> {
             if (event.getAction()==MotionEvent.ACTION_UP)
             {

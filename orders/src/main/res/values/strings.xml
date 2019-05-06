@@ -43,6 +43,8 @@
     <string name="filters_button_accept_lable">принять</string>
     <string name="accept">Применить</string>
     <string name="all_category">Все категории</string>
+    <string name="category">Категории</string>
+    <string name="cities">Города</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

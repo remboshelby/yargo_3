@@ -50,7 +50,7 @@ public abstract class BaseFragment extends Fragment {
     public void pushFragmentIntoFragment(BaseFragment fragment){
         if (!getChildFragmentManager().popBackStackImmediate(fragment.getClass().getSimpleName(), 0)) {
             getChildFragmentManager().beginTransaction()
-                    .replace(containerResId(), fragment)
+                    .replace(containerResId(), fragment, fragment.getClass().getSimpleName())
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }

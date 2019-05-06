@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,8 +38,8 @@ public class FiltersView extends BaseFragment implements CustomFilterToolbar.onC
     AppBarLayout appbarFilter;
     @BindView(R2.id.filterViewContainer)
     NestedScrollView filterViewContainer;
-    @BindView(R2.id.bottomFilterNav)
-    BottomNavigationView bottomFilterNav;
+//    @BindView(R2.id.bottomFilterNav)
+//    BottomNavigationView bottomFilterNav;
 
 
     @Override
@@ -63,6 +64,7 @@ public class FiltersView extends BaseFragment implements CustomFilterToolbar.onC
         ButterKnife.bind(this, view);
         getRoot().setSupportActionBar(toolbarFilter);
         customFilterToolbar.setOnCustomFilterToolbarClick(this);
+        setTitle(getString(R.string.filters_toolbar_title));
     }
     public void pushCityFragment(){
         pushFragmentIntoFragment(new FilterCity());
@@ -72,9 +74,18 @@ public class FiltersView extends BaseFragment implements CustomFilterToolbar.onC
     }
     @Override
     public void btnBackClick() {
-        getRoot().onBackPressed();
+        if (getChildFragmentManager().findFragmentByTag(FilterCategory.class.getSimpleName())!=null || getChildFragmentManager().findFragmentByTag(FilterCity.class.getSimpleName())!=null ){
+            getChildFragmentManager().popBackStack();
+            setTitle(getString(R.string.filters_toolbar_title));
+        }
+        else {
+            getRoot().onBackPressed();
+        }
     }
-    @OnClick(R2.id.bottomFilterNav)
-    void onBtnBottomBarClick(){
+    public void setTitle(String title){
+        customFilterToolbar.setTitle(title);
     }
+//    @OnClick(R2.id.bottomFilterNav)
+//    void onBtnBottomBarClick(){
+//    }
 }

@@ -37,11 +37,14 @@ public class NetworkModule {
     @Provides
     @Singleton
     Retrofit provideRetrofit(@ServerUrl String baseUrl, OkHttpClient okHttpClient){
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
     @Provides

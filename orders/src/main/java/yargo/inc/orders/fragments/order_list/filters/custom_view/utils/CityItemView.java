@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import javax.inject.Inject;
@@ -19,27 +18,25 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.R;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.filters.FiltersViewModel;
-import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CategoryModel;
+import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CityModel;
 
-public class CategoryItemView extends ConstraintLayout {
+public class CityItemView extends ConstraintLayout {
 
-    CategoryModel item;
+    private CityModel item;
     @Inject
     protected FiltersViewModel filtersViewModel;
 
-    @BindView(R2.id.categoryImg)
-    AppCompatImageView categoryImg;
-    @BindView(R2.id.categoryTitle)
-    TextView categoryTitle;
-    @BindView(R2.id.categoryChecked)
-    CheckBox categoryChecked;
+    @BindView(R2.id.cityTitle)
+    TextView cityTitle;
+    @BindView(R2.id.chckCity)
+    CheckBox chckCity;
 
-    public CategoryItemView(Context context) {
+    public CityItemView(Context context) {
         super(context);
         init(context);
     }
 
-    public CategoryItemView(Context context, AttributeSet attrs) {
+    public CityItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -49,18 +46,13 @@ public class CategoryItemView extends ConstraintLayout {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         setLayoutParams(params);
-        LayoutInflater.from(context).inflate(R.layout.category_item_layout, this);
+        LayoutInflater.from(context).inflate(R.layout.city_item_layout, this);
         ButterKnife.bind(this);
     }
 
-    public void bind(CategoryModel item) {
+    public void bind(CityModel item) {
         this.item = item;
-        categoryImg.setImageDrawable(getResources().getDrawable(item.getCategoryImg()));
-        categoryTitle.setText(item.getTitleCategory());
-        categoryChecked.setChecked(item.isChecked());
-    }
-    @OnCheckedChanged(R2.id.categoryChecked)
-    void onCaterogyChange(boolean checked){
-        filtersViewModel.setCheck(item.getId(), checked);
+        cityTitle.setText(item.getCityName());
+        chckCity.setChecked(item.isChecked());
     }
 }

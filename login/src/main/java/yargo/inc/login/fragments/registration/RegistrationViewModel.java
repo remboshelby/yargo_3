@@ -17,6 +17,7 @@ import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.user_info.PersonData;
 import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
+import yargo.inc.common.network.models.user_info.ResponseTest;
 import yargo.inc.common.network.repository.RegistrRepository;
 
 import androidx.lifecycle.MutableLiveData;
@@ -57,24 +58,21 @@ public class RegistrationViewModel extends BaseViewModel {
     public void makeRegistr(){
         Gson gson = new Gson();
         JSONObject jsonObject = new JSONObject();
-
-
         HashMap<String, Object> body = new HashMap<>();
-        body.put("SignupForm[username]", personData.getValue().getName());
-//        body.put("SignupForm[sex]", personData.getValue().getSex());
-        body.put("SignupForm[sex]", "1");
-        body.put("SignupForm[email]", personData.getValue().getEmail());
-        body.put("SignupForm[phone]", personData.getValue().getTelephonNumber());
-        body.put("SignupForm[birthday]", personData.getValue().getBirthday());
-        body.put("SignupForm[password]", personData.getValue().getPassword());
-        body.put("SignupForm[id_city]", personData.getValue().getCityId());
+
         gson.toJson(personData.getValue());
-        addDisposible(registrRepository.makeRegistr(body)
+        addDisposible(registrRepository.makeRegistrGet("hophop35",
+                "1",
+                "hophop45@hophop",
+                "89103050404",
+                "19.04.1992",
+                "1234567",
+                "40127")
                 .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<RegistrResponse>() {
+        .subscribe(new Consumer<ResponseTest>() {
             @Override
-            public void accept(RegistrResponse registResponse) throws Exception {
+            public void accept(ResponseTest registResponse) throws Exception {
                 String authKey = registResponse.getAuthKey();
                 String authKey1 = registResponse.getAuthKey();
             }
@@ -157,14 +155,6 @@ public class RegistrationViewModel extends BaseViewModel {
         } else {
             isBtnNextOn.setValue(false);
         }
-    }
-    public void setPhoneConfirm(boolean isConfirmd) {
-//        personData.getValue().setTelephoneConfirmed(isConfirmd);
-//        if (isConfirmd) {
-//            isBtnNextOn.setValue(personData.getValue().isPhoneConfirm());
-//        } else {
-//            isBtnNextOn.setValue(false);
-//        }
     }
     public void setPassword(String password){
         personData.getValue().setPassword(password);

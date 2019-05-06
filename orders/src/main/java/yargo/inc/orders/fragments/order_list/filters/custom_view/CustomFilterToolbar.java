@@ -21,8 +21,8 @@ public class CustomFilterToolbar extends ConstraintLayout {
     ImageButton imageButton;
     @BindView(R2.id.tvToobarName)
     TextView tvToobarName;
-    @BindView(R2.id.BtnConfirmFilter)
-    Button BtnConfirmFilter;
+//    @BindView(R2.id.BtnConfirmFilter)
+//    Button BtnConfirmFilter;
 
     public void setOnCustomFilterToolbarClick(onCustomFilterToolbarClick onCustomFilterToolbarClick) {
         this.onCustomFilterToolbarClick = onCustomFilterToolbarClick;
@@ -44,7 +44,9 @@ public class CustomFilterToolbar extends ConstraintLayout {
         super(context, attrs);
         init(context);
     }
-
+    public void setTitle(String title){
+        tvToobarName.setText(title);
+    }
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.custom_filter_toolbar, this);
         ButterKnife.bind(this);

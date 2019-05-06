@@ -42,14 +42,14 @@ public class MainActivity extends BaseActivity {
     }
     @Override
     public void onBackPressed() {
-        if ( getSupportFragmentManager().findFragmentByTag(OrderDetailView.class.getSimpleName())!=null) {
-            getSupportFragmentManager().popBackStack();
+        if ( getSupportFragmentManager().findFragmentByTag(LoginFragment.class.getSimpleName())!=null) {
+            super.onBackPressed();
         }
-        else if ( getSupportFragmentManager().findFragmentByTag(FiltersView.class.getSimpleName())!=null){
-            getSupportFragmentManager().popBackStack();
+        else if ( getSupportFragmentManager().findFragmentByTag(OrderListsFragment.class.getSimpleName())!=null){
+            super.onBackPressed();
         }
         else {
-            onBackPressed();
+            getSupportFragmentManager().popBackStack();
         }
 
     }
