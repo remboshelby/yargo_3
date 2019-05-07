@@ -9,8 +9,16 @@ public class Message{
 	@SerializedName("email")
 	private String email;
 
-	public void setEmail(String email){
+	@SerializedName("phone")
+	private String phone;
+
+	public void setEmail(String email, String phone){
 		this.email = email;
+		this.phone = phone;
+	}
+
+	public String getPhone() {
+		return phone;
 	}
 
 	public String getEmail(){
@@ -22,6 +30,7 @@ public class Message{
 		return 
 			"Message{" + 
 			"email = '" + email + '\'' + 
+			",phone = '" + phone + '\'' +
 			"}";
 		}
 }

@@ -44,7 +44,7 @@ public class RegistrMobilePhone extends BaseFragment {
     CheckBox cBSogl;
     @BindView(R2.id.tvOfferstPolitic)
     TextView tvOfferstPolitic;
-    @Inject
+
     protected RegistrationViewModel registrationViewModel;
     private ProgressDialog progressDialog;
 
@@ -57,6 +57,8 @@ public class RegistrMobilePhone extends BaseFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        registrationViewModel = RegistrationFragment.getRegistrationViewModel();
+
         ButterKnife.bind(this, view);
         phoneCode.setText("+7");
 
@@ -86,6 +88,10 @@ public class RegistrMobilePhone extends BaseFragment {
         Handler pdCanceller = new Handler();
         pdCanceller.postDelayed(progressRunnable, 5000);
     }
-
+    @Override
+    public void onDestroyView() {
+        registrationViewModel = null;
+        super.onDestroyView();
+    }
 
 }

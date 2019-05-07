@@ -1,8 +1,5 @@
 package yargo.inc.login.fragments.registration;
 
-import android.net.Uri;
-
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,21 +9,13 @@ import androidx.lifecycle.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.RequestBody;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.user_info.PersonData;
 import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
-import yargo.inc.common.network.models.user_info.ResponseTest;
 import yargo.inc.common.network.repository.RegistrRepository;
 
 import androidx.lifecycle.MutableLiveData;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class RegistrationViewModel extends BaseViewModel {
     private RegistrRepository registrRepository;
@@ -39,49 +28,62 @@ public class RegistrationViewModel extends BaseViewModel {
     private static final int PASSWORD_LENTH = 5;
     private static final int PHONE_LENTH = 7;
 
+    public static final int REGISTR_SUCCESS = 0;
+    public static final int ERROR_PHONE = 1;
+    public static final int ERROR_EMAIL = 2;
+    public static final int ERROR_EMAIL_AND_PHONE = 3;
+    public static final int UNKNOWN_ERROR = 4;
+
     private MutableLiveData<PersonData> personData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isBtnNextOn = new MutableLiveData<>();
 
     private MutableLiveData<String> passwordConfirmation = new MutableLiveData<>();
 
+    private MutableLiveData<Integer> registrationStatus = new MutableLiveData<>();
+
+
     public RegistrationViewModel(RegistrRepository registrRepository, CommonSharedPreferences commonSharedPreferences) {
         this.registrRepository = registrRepository;
         this.commonSharedPreferences = commonSharedPreferences;
-        personData.setValue(new PersonData("", "", "", "", "", false, false, "", "male", ""));
+        personData.setValue(new PersonData("", "", "", "", "", false, false, "", "1", ""));
         isBtnNextOn.setValue(false);
     }
 
     public void observeBtnStatus(LifecycleOwner owner, Observer<Boolean> observer) {
         isBtnNextOn.observe(owner, observer);
     }
+    public void observeRegistrationStatus(LifecycleOwner owner, Observer<Integer> observer){
+        registrationStatus.observe(owner, observer);
+    }
 
-    public void makeRegistr(){
-        Gson gson = new Gson();
-        JSONObject jsonObject = new JSONObject();
-        HashMap<String, Object> body = new HashMap<>();
-
-        gson.toJson(personData.getValue());
-        addDisposible(registrRepository.makeRegistrGet("hophop35",
-                "1",
-                "hophop45@hophop",
-                "89103050404",
-                "19.04.1992",
-                "1234567",
-                "40127")
+    public void makeRegistr() {
+        addDisposible(registrRepository.makeRegistrGet(personData.getValue().getName(),personData.getValue().getSurname(),personData.getValue().getSex(),personData.getValue().getEmail(),
+                personData.getValue().getTelephonNumber(),personData.getValue().getBirthday(),personData.getValue().getPassword(),personData.getValue().getCityId())
                 .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<ResponseTest>() {
-            @Override
-            public void accept(ResponseTest registResponse) throws Exception {
-                String authKey = registResponse.getAuthKey();
-                String authKey1 = registResponse.getAuthKey();
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        }));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<RegistrResponse>() {
+                    @Override
+                    public void accept(RegistrResponse registResponse) throws Exception {
+                        if (registResponse.getRegistrResponse().getType().equals("OK")) {
+                            String authKey = registResponse.getAuthKey();
+                            registrationStatus.postValue(REGISTR_SUCCESS);
+                        } else if (registResponse.getRegistrResponse().getType().equals("error")) {
+                            if (registResponse.getRegistrResponse().getMessage().getPhone()!=null && registResponse.getRegistrResponse().getMessage().getEmail()==null)  {
+                                registrationStatus.postValue(ERROR_PHONE);
+                            } else if (registResponse.getRegistrResponse().getMessage().getEmail()!=null && registResponse.getRegistrResponse().getMessage().getPhone()==null) {
+                                registrationStatus.postValue(ERROR_EMAIL);
+                            }else if (!registResponse.getRegistrResponse().getMessage().getEmail().isEmpty() && !registResponse.getRegistrResponse().getMessage().getEmail().isEmpty()) {
+                                registrationStatus.postValue(ERROR_EMAIL_AND_PHONE);
+                            }
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        registrationStatus.setValue(UNKNOWN_ERROR);
+                        throwable.printStackTrace();
+                    }
+                }));
     }
 
     public void setSurname(String textSurname) {
@@ -156,17 +158,17 @@ public class RegistrationViewModel extends BaseViewModel {
             isBtnNextOn.setValue(false);
         }
     }
-    public void setPassword(String password){
+
+    public void setPassword(String password) {
         personData.getValue().setPassword(password);
-        if (!password.isEmpty() && password.length()>PASSWORD_LENTH){
+        if (!password.isEmpty() && password.length() > PASSWORD_LENTH) {
             isBtnNextOn.setValue(true);
-        }
-        else {
+        } else {
             isBtnNextOn.setValue(false);
         }
     }
 
-    public boolean isPasswodCorrect(String passwordConf){
+    public boolean isPasswodCorrect(String passwordConf) {
         return passwordConf == personData.getValue().getPassword();
     }
 
@@ -202,5 +204,13 @@ public class RegistrationViewModel extends BaseViewModel {
             default:
                 return "Регистрация";
         }
+    }
+
+    public void setRegistrationStatus() {
+        this.registrationStatus.postValue(REGISTR_SUCCESS);
+    }
+    public void replaceVacantSubscription(LifecycleOwner owner){
+        onCleared();
+        registrationStatus.removeObservers(owner);
     }
 }

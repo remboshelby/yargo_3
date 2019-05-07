@@ -7,17 +7,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.Calendar;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,11 +29,14 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.login.R;
 import yargo.inc.login.R2;
 import yargo.inc.login.fragments.LoginFragment;
+import yargo.inc.login.fragments.registration.RegistrationFragment;
 import yargo.inc.login.fragments.registration.RegistrationViewModel;
 
 public class RegistrPersonalData extends BaseFragment {
 
 
+    @BindView(R2.id.buttonBtn)
+    Button testButton;
     @BindView(R2.id.spinCity)
     Spinner spinCity;
     @BindView(R2.id.editSurname)
@@ -50,7 +55,8 @@ public class RegistrPersonalData extends BaseFragment {
     RadioGroup sexRadioGroup;
     @BindView(R2.id.editBdate)
     AutoCompleteTextView editBdate;
-    @Inject
+
+
     protected RegistrationViewModel registrationViewModel;
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -62,12 +68,12 @@ public class RegistrPersonalData extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
 
+        registrationViewModel = RegistrationFragment.getRegistrationViewModel();
         init();
         super.onViewCreated(view, savedInstanceState);
     }
 
     private void init() {
-        registrationViewModel.makeRegistr();
         spinCity.setOnTouchListener((v, event) -> {
             if (event.getAction()==MotionEvent.ACTION_UP)
             {
@@ -119,9 +125,18 @@ public class RegistrPersonalData extends BaseFragment {
     void onRadioButtonClicked(RadioButton radioButton){
         boolean checked = radioButton.isChecked();
         if (radioButton.getId() == R.id.sexMale && checked) {
-            registrationViewModel.setSex("male");
+            registrationViewModel.setSex("1");
         }else if (radioButton.getId() == R.id.sexFemale && checked) {
-            registrationViewModel.setSex("female");
+            registrationViewModel.setSex("0");
         }
+    }
+    @OnClick(R2.id.buttonBtn)
+    void onTestBtnClick(){
+        registrationViewModel.setRegistrationStatus();
+    }
+    @Override
+    public void onDestroyView() {
+        registrationViewModel = null;
+        super.onDestroyView();
     }
 }

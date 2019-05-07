@@ -36,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import yargo.inc.login.fragments.registration.RegistrationViewModel;
 
 public class LoginFragment extends BaseFragment {
 
@@ -59,6 +60,8 @@ public class LoginFragment extends BaseFragment {
 
     @Inject
     protected LoginViewModel viewModel;
+//    @Inject
+//    protected RegistrationViewModel registrationViewModel;
 
     protected static LoginComponent loginComponent;
 
@@ -78,6 +81,9 @@ public class LoginFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         init();
     }
+    public void finishRegistration(){
+
+    }
 
     private void init() {
         progressDialog = new ProgressDialog(getContext());
@@ -86,6 +92,8 @@ public class LoginFragment extends BaseFragment {
         root_swipe_layout.setEnabled(false);
 
         viewModel.initLoginInfo();
+
+
 
         viewModel.observeIsNetworkError(this, aBoolean -> {
             if (aBoolean) {
@@ -125,7 +133,6 @@ public class LoginFragment extends BaseFragment {
         });
 //        makeLogin();
     }
-
     private void viewComponentVisibility(int viewVisibility, boolean showProgress) {
         textInputLayoutEmail.setVisibility(viewVisibility);
         textInputLayoutPassword.setVisibility(viewVisibility);
@@ -178,6 +185,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     protected void inject() {
         CommonApplication application = (CommonApplication) getRoot().getApplication();
+        RegistrationFragment registrationFragment = null;
         navigator = application.component().navigator();
         loginComponent = DaggerLoginComponent
                 .builder()

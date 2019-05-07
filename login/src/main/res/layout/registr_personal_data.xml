@@ -110,6 +110,10 @@
 
             android:longClickable="false"
             android:textSize="18sp" />
+        <Button
+            android:id="@+id/buttonBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </ScrollView>

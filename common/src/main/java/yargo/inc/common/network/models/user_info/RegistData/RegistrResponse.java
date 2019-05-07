@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 @Generated("com.robohorse.robopojogenerator")
 public class RegistrResponse {
 
-    @SerializedName("registrResponse")
+    @SerializedName("response")
     private RegistrResponse registrResponse;
 
     @SerializedName("birthday")

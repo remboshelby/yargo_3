@@ -4,6 +4,7 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -37,6 +38,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 removeFragment((BaseFragment) fragment);
                 break;
             }
+        }
+    }
+    public void clear(){
+        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i< backStackEntryCount; i++ ){
+            getSupportFragmentManager().popBackStack();
         }
     }
 

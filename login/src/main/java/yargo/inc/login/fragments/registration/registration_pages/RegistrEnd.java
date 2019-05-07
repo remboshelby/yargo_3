@@ -22,6 +22,7 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.login.R;
 import yargo.inc.login.R2;
 import yargo.inc.login.fragments.LoginFragment;
+import yargo.inc.login.fragments.registration.RegistrationFragment;
 import yargo.inc.login.fragments.registration.RegistrationViewModel;
 
 public class RegistrEnd extends BaseFragment {
@@ -38,11 +39,9 @@ public class RegistrEnd extends BaseFragment {
     @BindView(R2.id.endRegistration)
     Button endRegistration;
 
-    @Inject
     protected RegistrationViewModel registrationViewModel;
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
-        LoginFragment.getLoginComponent().inject(this);
         return inflater.inflate(R.layout.registr_end, container, false);
     }
 
@@ -50,6 +49,8 @@ public class RegistrEnd extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+        registrationViewModel = RegistrationFragment.getRegistrationViewModel();
+
         registrationViewModel.observeBtnStatus(this, endRegistration::setEnabled);
 
     }
@@ -73,5 +74,10 @@ public class RegistrEnd extends BaseFragment {
     @OnClick(R2.id.endRegistration)
     void clickRegistrationBtn(){
         registrationViewModel.makeRegistr();
+    }
+    @Override
+    public void onDestroyView() {
+        registrationViewModel = null;
+        super.onDestroyView();
     }
 }
