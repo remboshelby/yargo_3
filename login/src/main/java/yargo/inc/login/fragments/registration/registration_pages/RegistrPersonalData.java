@@ -34,9 +34,6 @@ import yargo.inc.login.fragments.registration.RegistrationViewModel;
 
 public class RegistrPersonalData extends BaseFragment {
 
-
-    @BindView(R2.id.buttonBtn)
-    Button testButton;
     @BindView(R2.id.spinCity)
     Spinner spinCity;
     @BindView(R2.id.editSurname)
@@ -129,10 +126,6 @@ public class RegistrPersonalData extends BaseFragment {
         }else if (radioButton.getId() == R.id.sexFemale && checked) {
             registrationViewModel.setSex("0");
         }
-    }
-    @OnClick(R2.id.buttonBtn)
-    void onTestBtnClick(){
-        registrationViewModel.setRegistrationStatus();
     }
     @Override
     public void onDestroyView() {

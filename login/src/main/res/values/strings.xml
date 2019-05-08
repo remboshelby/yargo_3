@@ -36,6 +36,10 @@
     <string name="confirmation_text">Я ознакомлен/а с <a href="http://api.yargo.pro/site/oferta">правилами</a> и <a href="http://api.yargo.pro/pdn">политикой конфиденциальности</a> и принимаю их условия</string>
     <string name="getRegistrationCode">Получить код</string>
     <string name="OK">ОК</string>
+    <string name="mobile_number_incorrect">Мобильный номер уже используется, проверьте правильность ввода</string>
+    <string name="email_incorrect">Электронная почта уже используется, проверьте правильность ввода</string>
+    <string name="email_and_phone_incorrect">Электронная почта и мобильный номер уже используется, проверьте правильность ввода</string>
+    <string name="somethings_goes_wrong">Что-то пошло не так</string>
 
 
 </resources>

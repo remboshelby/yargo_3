@@ -64,12 +64,12 @@ public class LoginFragment extends BaseFragment {
 //    protected RegistrationViewModel registrationViewModel;
 
     protected static LoginComponent loginComponent;
+    private static ApplicationNavigator navigator;
 
     @Inject
     protected CommonSharedPreferences preferences;
-    private ProgressDialog progressDialog;
-    private ApplicationNavigator navigator;
 
+    private ProgressDialog progressDialog;
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.login_fragment, container, false);
@@ -81,10 +81,10 @@ public class LoginFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         init();
     }
+
     public void finishRegistration(){
 
     }
-
     private void init() {
         progressDialog = new ProgressDialog(getContext());
 
@@ -133,6 +133,7 @@ public class LoginFragment extends BaseFragment {
         });
 //        makeLogin();
     }
+
     private void viewComponentVisibility(int viewVisibility, boolean showProgress) {
         textInputLayoutEmail.setVisibility(viewVisibility);
         textInputLayoutPassword.setVisibility(viewVisibility);
@@ -149,7 +150,6 @@ public class LoginFragment extends BaseFragment {
             progressDialog.show();
         }
     }
-
     @OnClick(R2.id.email_sign_in_button)
     void onSingInBtnClick() {
         hideKeyboard();
@@ -161,7 +161,7 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R2.id.email_sign_button)
     void onClickSignInButton() {
-        getRoot().pushFragment(new RegistrationFragment() ,true);
+        getRoot().pushFragment(new RegistrationFragment() ,false);
     }
 
     @OnTextChanged(R2.id.email)
@@ -170,7 +170,6 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void makeLogin() {
-//        if (false) {
         if (viewModel.isAuthKeyExist()) {
             viewComponentVisibility(View.INVISIBLE, true);
             viewModel.makeLoginWithToken();
@@ -185,7 +184,6 @@ public class LoginFragment extends BaseFragment {
     @Override
     protected void inject() {
         CommonApplication application = (CommonApplication) getRoot().getApplication();
-        RegistrationFragment registrationFragment = null;
         navigator = application.component().navigator();
         loginComponent = DaggerLoginComponent
                 .builder()
@@ -199,5 +197,7 @@ public class LoginFragment extends BaseFragment {
     public static LoginComponent getLoginComponent() {
         return loginComponent;
     }
-
-}
+    public static ApplicationNavigator getNavigator() {
+        return navigator;
+    }
+    }

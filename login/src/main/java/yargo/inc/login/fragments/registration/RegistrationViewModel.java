@@ -105,8 +105,8 @@ public class RegistrationViewModel extends BaseViewModel {
     }
 
     public void setEmail(String textEmail) {
-        personData.getValue().setEmail(textEmail);
         if (isEmailValid(textEmail)) {
+            personData.getValue().setEmail(textEmail);
             isBtnNextOn.setValue(personData.getValue().isPersonEmpty());
         } else {
             isBtnNextOn.setValue(false);
@@ -161,11 +161,6 @@ public class RegistrationViewModel extends BaseViewModel {
 
     public void setPassword(String password) {
         personData.getValue().setPassword(password);
-        if (!password.isEmpty() && password.length() > PASSWORD_LENTH) {
-            isBtnNextOn.setValue(true);
-        } else {
-            isBtnNextOn.setValue(false);
-        }
     }
 
     public boolean isPasswodCorrect(String passwordConf) {

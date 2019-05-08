@@ -1,5 +1,7 @@
 package yargo.inc.login.fragments.registration;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +25,16 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import yargo.inc.common.base.BaseFragment;
+import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
 import yargo.inc.common.network.repository.RegistrRepository;
@@ -40,7 +46,7 @@ import yargo.inc.login.fragments.registration.registration_pages.RegistrMobilePh
 import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonalData;
 import yargo.inc.login.utils_view.LockableViewPager;
 
-public class RegistrationFragment extends BaseFragment {
+public class RegistrationFragment extends BaseFragment implements RegistrEnd.RegistrationEndListener {
 
 
     protected static RegistrationViewModel registrationViewModel;
@@ -50,7 +56,10 @@ public class RegistrationFragment extends BaseFragment {
     @Inject
     protected RegistrRepository registrRepository;
     @BindView(R2.id.tabLayout)
+
+
     TabLayout tabLayout;
+    private ApplicationNavigator navigator;
 
     @BindView(R2.id.imgBtnBackPress)
     ImageButton imgBtnBackPress;
@@ -67,6 +76,8 @@ public class RegistrationFragment extends BaseFragment {
     private static final int REGISTR_PAGE_COUNT = 3;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected int containerResId() {
         return R.id.registrationContainer;
@@ -81,29 +92,26 @@ public class RegistrationFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        registrationViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
-            @NonNull
-            @Override
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new RegistrationViewModel(registrRepository, commonSharedPreferences);
-            }
-        }).get(RegistrationViewModel.class);
-
+        init();
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        registrationСontainer.setSwipeable(false);
+        registrationСontainer.setAdapter(sectionsPagerAdapter);
         registrationViewModel.observeRegistrationStatus(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer status) {
+                progressDialog.cancel();
+
                 if (status==registrationViewModel.REGISTR_SUCCESS){
-                    getRoot().clear();
+                    navigator.openFragment(getRoot(), "Orders");
                 }else if (status==registrationViewModel.ERROR_PHONE){
-
+                    showErrorDialog(getString(R.string.mobile_number_incorrect));
                 }else if (status==registrationViewModel.ERROR_EMAIL){
-
+                    showErrorDialog(getString(R.string.email_incorrect));
                 }else if (status==registrationViewModel.ERROR_EMAIL_AND_PHONE){
-
+                    showErrorDialog(getString(R.string.email_and_phone_incorrect));
                 }else if (status==registrationViewModel.UNKNOWN_ERROR){
-
+                    showErrorDialog(getString(R.string.somethings_goes_wrong));
                 }
             }
         });
@@ -115,20 +123,15 @@ public class RegistrationFragment extends BaseFragment {
                 btnRegistNext.setVisibility(View.GONE);
             }
         });
-        registrationСontainer.setSwipeable(false);
-        registrationСontainer.setAdapter(sectionsPagerAdapter);
         registrationСontainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {
                 setTvToobarNameRegistration(registrationViewModel.getTitle(position));
                 registrationViewModel.getBtnStatus(position);
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -137,6 +140,24 @@ public class RegistrationFragment extends BaseFragment {
         registrationСontainer.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(registrationСontainer));
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void init() {
+        registrationViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new RegistrationViewModel(registrRepository, commonSharedPreferences);
+            }
+        }).get(RegistrationViewModel.class);
+        navigator = LoginFragment.getNavigator();
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle(getResources().getString(R.string.loading));
+        progressDialog.show();
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -153,7 +174,7 @@ public class RegistrationFragment extends BaseFragment {
                 case 1:
                     return new RegistrMobilePhone();
                 case 2:
-                    return new RegistrEnd();
+                    return new RegistrEnd(RegistrationFragment.this);
                 default:
                     return null;
             }
@@ -173,19 +194,13 @@ public class RegistrationFragment extends BaseFragment {
         }
     }
     @OnClick(R2.id.imgBtnBackPress)
-    public void onBtnBackPressClick(){
-        if (registrationСontainer.getCurrentItem()>0) {
+    public void onBtnBackPressClick(){ if (registrationСontainer.getCurrentItem()>0) {
             registrationСontainer.setCurrentItem(registrationСontainer.getCurrentItem()-1);
         }
-        else getRoot().onBackPressed();
+        else getRoot().pushFragment(new LoginFragment() ,false);
     }
     public void setTvToobarNameRegistration(String label) {
         this.tvToobarNameRegistration.setText(label);
-    }
-    @Override
-    public void onPause() {
-        registrationViewModel.replaceVacantSubscription(this);
-        super.onPause();
     }
 
     public static RegistrationViewModel getRegistrationViewModel() {
@@ -196,5 +211,12 @@ public class RegistrationFragment extends BaseFragment {
     public void onDestroyView() {
         registrationViewModel = null;
         super.onDestroyView();
+    }
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

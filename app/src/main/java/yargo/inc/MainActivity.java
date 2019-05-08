@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        if (preferences.getString(AUTH_KEY, null)==null){
+        if (preferences.getString(AUTH_KEY, null).equals("\"\"")){
             pushFragment(new LoginFragment(),false);
         }
         else {
