@@ -1,12 +1,13 @@
 package yargo.inc.common.di.modules;
 
-import yargo.inc.common.database.UserOrdersDao;
+import yargo.inc.common.database.OrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
-import yargo.inc.common.database.VacantOrdersDao;
+import yargo.inc.common.network.api.ComissionApiService;
 import yargo.inc.common.network.api.LoginApiService;
 import yargo.inc.common.network.api.OrderActionApiService;
 import yargo.inc.common.network.api.OrderApiService;
 import yargo.inc.common.network.api.RegistrApiService;
+import yargo.inc.common.network.repository.CommissionRepository;
 import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.common.network.repository.OrderActionRepository;
 import yargo.inc.common.network.repository.OrdersRepository;
@@ -22,8 +23,8 @@ public class RepositoryModule {
         return new LoginRepository(loginApiService);
     }
     @Provides
-    OrdersRepository ordersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao, UserOrdersDao userOrdersDao, CommonSharedPreferences commonSharedPreferences){
-        return new OrdersRepository(orderApiService,vacantOrdersDao,userOrdersDao,commonSharedPreferences);
+    OrdersRepository ordersRepository(OrderApiService orderApiService, OrdersDao ordersDao, CommonSharedPreferences commonSharedPreferences){
+        return new OrdersRepository(orderApiService, ordersDao,commonSharedPreferences);
     }
     @Provides
     RegistrRepository registrRepository(RegistrApiService registrApiService){
@@ -32,5 +33,9 @@ public class RepositoryModule {
     @Provides
     OrderActionRepository orderActionRepository(OrderActionApiService orderActionApiService, CommonSharedPreferences commonSharedPreferences){
         return new OrderActionRepository(orderActionApiService, commonSharedPreferences);
+    }
+    @Provides
+    CommissionRepository commissionRepository(OrderActionApiService orderActionApiService, ComissionApiService comissionApiService, CommonSharedPreferences commonSharedPreferences){
+        return new CommissionRepository(commonSharedPreferences, orderActionApiService,comissionApiService);
     }
 }

@@ -6,14 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PositionalDataSource;
 
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import yargo.inc.common.network.models.user_order.UserOrdersItem;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.network.repository.OrdersRepository;
 
-public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
+public class UserOrderDataSource extends PositionalDataSource<OrderItem> {
     private OrdersRepository ordersRepository;
     private CompositeDisposable compositeDisposable;
     private int categoryOrderId;
@@ -45,17 +44,16 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
     }
 
     @Override
-    public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<UserOrdersItem> callback) {
+    public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<OrderItem> callback) {
         isLoading.postValue(true);
 
         compositeDisposable.add(ordersRepository.getAllUserOrdersForView(params.requestedLoadSize, params.requestedStartPosition, categoryOrderId)
         .observeOn(Schedulers.io())
         .subscribeOn(Schedulers.io())
-        .subscribe(new Consumer<List<UserOrdersItem>>() {
+        .subscribe(new Consumer<List<OrderItem>>() {
             @Override
-            public void accept(List<UserOrdersItem> userOrdersItems) throws Exception {
+            public void accept(List<OrderItem> userOrdersItems) throws Exception {
                 isLoading.postValue(false);
-
                 callback.onResult(userOrdersItems, params.requestedStartPosition, getTotalCount());
             }
         }, new Consumer<Throwable>() {
@@ -67,15 +65,15 @@ public class UserOrderDataSource extends PositionalDataSource<UserOrdersItem> {
     }
 
     @Override
-    public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<UserOrdersItem> callback) {
+    public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<OrderItem> callback) {
         isLoading.postValue(true);
 
         compositeDisposable.add(ordersRepository.getAllUserOrdersForView(params.loadSize, params.startPosition, categoryOrderId)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<UserOrdersItem>>() {
+                .subscribe(new Consumer<List<OrderItem>>() {
                     @Override
-                    public void accept(List<UserOrdersItem> userOrdersItems) throws Exception {
+                    public void accept(List<OrderItem> userOrdersItems) throws Exception {
                         callback.onResult(userOrdersItems);
                         isLoading.postValue(false);
                     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import yargo.inc.common.di.ServerUrl;
+import yargo.inc.common.network.api.ComissionApiService;
 import yargo.inc.common.network.api.LoginApiService;
 import yargo.inc.common.network.api.OrderActionApiService;
 import yargo.inc.common.network.api.OrderApiService;
@@ -66,6 +67,11 @@ public class NetworkModule {
     @Singleton
     OrderActionApiService provideOrderActionApiService(Retrofit retrofit){
         return retrofit.create(OrderActionApiService.class);
+    }
+    @Provides
+    @Singleton
+    ComissionApiService comissionApiService(Retrofit retrofit){
+        return retrofit.create(ComissionApiService.class);
     }
 
 }

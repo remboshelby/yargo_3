@@ -15,9 +15,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            style="@style/CustomToolbarStyle"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <yargo.inc.orders.fragments.order_list.order_detailse.custom_view.CustomToolbarOrderDetail
+            <yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomToolbarOrderDetail
                 android:id="@+id/customToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -28,24 +29,18 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/deatilRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="?attr/actionBarSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 
@@ -59,15 +54,14 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary">
 
-        <Button
+        <yargo.inc.orders.fragments.order_list.order_details.custom_view.CusttomBottomBar
+            android:id="@+id/customBottomBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:background="@android:color/transparent"
-            android:text="ВЗЯТЬ ЗАКАЗ" />
+            android:layout_height="match_parent"/>
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,6 +6,7 @@ buildscript {
         jcenter()
         maven { url "http://oss.sonatype.org/content/groups/public" }
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://dl.bintray.com/yandex-money/maven/com/yandex/money/api/yandex-money-sdk-android/4.0.1/"  }
         
     }
     dependencies {
@@ -22,7 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url "https://dl.bintray.com/yandex-money/maven" }
     }
 }
 

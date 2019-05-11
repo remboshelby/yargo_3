@@ -45,6 +45,10 @@
     <string name="all_category">Все категории</string>
     <string name="category">Категории</string>
     <string name="cities">Города</string>
+    <string name="take_order">Взять заказ</string>
+    <string name="order_pay_comission">Оплатить комиссию</string>
+    <string name="finish_order">Завершить</string>
+    <string name="start_order">Приступить к работе</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>
@@ -54,11 +58,11 @@
         <item>Отказ клиента</item>
     </string-array>
 
-    <integer-array name="ordersCategoryId">
+    <string-array name="ordersCategoryId">
         <item>3</item>
         <item>8</item>
         <item>7</item>
         <item>4</item>
         <item>5</item>
-    </integer-array>
+    </string-array>
 </resources>

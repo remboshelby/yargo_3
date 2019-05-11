@@ -1,6 +1,7 @@
 package yargo.inc.common.di;
 
 import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.network.repository.CommissionRepository;
 import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.common.network.repository.OrderActionRepository;
 import yargo.inc.common.network.repository.OrdersRepository;
@@ -13,4 +14,5 @@ public interface CommonComponent {
     ApplicationNavigator navigator();
     RegistrRepository registrRepository();
     OrderActionRepository orderActionRepository();
+    CommissionRepository commissionRepository();
 }

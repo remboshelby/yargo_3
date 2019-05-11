@@ -40,6 +40,8 @@
     <string name="email_incorrect">Электронная почта уже используется, проверьте правильность ввода</string>
     <string name="email_and_phone_incorrect">Электронная почта и мобильный номер уже используется, проверьте правильность ввода</string>
     <string name="somethings_goes_wrong">Что-то пошло не так</string>
+    <string name="password_not_match">Пароли не совпадают</string>
+    <string name="password_is_short">Пароль слишком короткий (менее 5 символов)</string>
 
 
 </resources>

@@ -10,15 +10,14 @@ import androidx.paging.PagedList;
 
 import io.reactivex.disposables.CompositeDisposable;
 import yargo.inc.common.base.BaseViewModel;
-import yargo.inc.common.network.models.user_order.UserOrdersItem;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.network.repository.OrdersRepository;
-import yargo.inc.orders.R;
 import yargo.inc.orders.fragments.order_list.user_orders.pagging_orders.UserOrderDataSourceFactory;
 
 public class UserOrdersViewModel extends BaseViewModel {
     private OrdersRepository ordersRepository;
 
-    private LiveData<PagedList<UserOrdersItem>> userOrders;
+    private LiveData<PagedList<OrderItem>> userOrders;
 
     private LiveData<Boolean> isLoading;
     private LiveData<Integer> ordersCount;
@@ -47,7 +46,7 @@ public class UserOrdersViewModel extends BaseViewModel {
         if (userOrders!=null)  userOrders.removeObservers(owner);
         userOrders = createFiltredUsersOrders(orderCategoryId.getValue());
     }
-    private LiveData<PagedList<UserOrdersItem>> createFiltredUsersOrders(int categoryOrderId) {
+    private LiveData<PagedList<OrderItem>> createFiltredUsersOrders(int categoryOrderId) {
         UserOrderDataSourceFactory userOrderDataSourceFactory = new UserOrderDataSourceFactory(ordersRepository, compositeDisposable, categoryOrderId);
         isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
         ordersCount = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getRecordCount());
@@ -59,7 +58,7 @@ public class UserOrdersViewModel extends BaseViewModel {
                         .build()).setInitialLoadKey(0)
                 .build();
     }
-    public LiveData<PagedList<UserOrdersItem>> getUserOrders() {
+    public LiveData<PagedList<OrderItem>> getUserOrders() {
         return userOrders;
     }
     public void setOrderCategoryId(int valOrderCategoryId) {

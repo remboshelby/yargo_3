@@ -15,4 +15,5 @@
     <style name="CustomToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
         <item name="contentInsetStart">0dp</item>
     </style>
+
 </resources>

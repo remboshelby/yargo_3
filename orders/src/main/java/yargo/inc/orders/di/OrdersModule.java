@@ -1,11 +1,11 @@
 package yargo.inc.orders.di;
 
 import yargo.inc.common.dto.CommonSharedPreferences;
-import yargo.inc.common.network.repository.OrderActionRepository;
+import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.common.network.repository.OrdersRepository;
 import yargo.inc.orders.fragments.order_list.filters.FiltersViewModel;
-import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
+import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 
@@ -48,16 +48,16 @@ public class OrdersModule {
     }
     @Provides
     @OrdersScope
-    public OrderDetailViewModel provieOrderDetailViewModel(OrderListsFragment host,
-                                                           final OrderActionRepository orderActionRepository){
+    public OrderListViewModel provideOrderListViewModel(OrderListsFragment host,
+                                                           CommonSharedPreferences commonSharedPreferences){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             @Singleton
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new OrderDetailViewModel(orderActionRepository);
+                return (T) new OrderListViewModel(commonSharedPreferences);
             }
-        }).get(OrderDetailViewModel.class);
+        }).get(OrderListViewModel.class);
     }
     @Provides
     @OrdersScope

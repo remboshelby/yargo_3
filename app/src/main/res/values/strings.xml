@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">yargo_3</string>
     <string name="server_name">http://api.yargo.pro</string>
+    <string name="main_toolbar_title">Placing an order</string>
+
+    <string name="main_product_name">Comet</string>
+    <string name="main_product_description">Very bright, with an orbital period of 112 years.</string>
+
 </resources>

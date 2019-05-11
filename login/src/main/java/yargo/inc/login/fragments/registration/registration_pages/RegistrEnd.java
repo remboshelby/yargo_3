@@ -87,17 +87,18 @@ public class RegistrEnd extends BaseFragment {
 
     @OnClick(R2.id.endRegistration)
     void onBtnRegistrationClick() {
-        if (registrationViewModel.isPasswodCorrect(passConfirmation.getText().toString())) {
-
-        } else {
+        int passwodConfirmation = registrationViewModel.isPasswodCorrect(passConfirmation.getText().toString());
+        if (passwodConfirmation ==registrationViewModel.PASSWORD_CORRECT) {
+            listener.showProgressDialog();
+            registrationViewModel.makeRegistr();
+        } else if (passwodConfirmation==registrationViewModel.PASSWORD_IS_SHORT){
             passNotMach.setVisibility(View.VISIBLE);
+            passNotMach.setText(getString(R.string.password_is_short));
         }
-    }
-
-    @OnClick(R2.id.endRegistration)
-    void clickRegistrationBtn() {
-        listener.showProgressDialog();
-        registrationViewModel.makeRegistr();
+        else if (passwodConfirmation==registrationViewModel.PASSWORDS_NOT_MATCH){
+            passNotMach.setVisibility(View.VISIBLE);
+            passNotMach.setText(getString(R.string.password_not_match));
+        }
     }
 
     @OnCheckedChanged(R2.id.chkShowPswd)

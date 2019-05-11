@@ -1,7 +1,7 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders;
 
 import io.reactivex.functions.Consumer;
-import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.network.repository.OrdersRepository;
 
 import androidx.annotation.NonNull;
@@ -11,7 +11,7 @@ import androidx.paging.PositionalDataSource;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
+public class OrdersDataSource extends PositionalDataSource<OrderItem> {
     private OrdersRepository ordersRepository;
     private CompositeDisposable compositeDisposable;
     private String orderDescription;
@@ -32,7 +32,7 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
                         throwable -> throwable.printStackTrace()));
     }
     @Override
-    public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<VacantOrderItem> callback) {
+    public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<OrderItem> callback) {
         isLoading.postValue(true);
         compositeDisposable.add(ordersRepository.getAllVacantOrdersForView(params.requestedLoadSize, params.requestedStartPosition, orderDescription)
                 .observeOn(Schedulers.io())
@@ -44,7 +44,7 @@ public class OrdersDataSource extends PositionalDataSource<VacantOrderItem> {
     }
 
     @Override
-    public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<VacantOrderItem> callback) {
+    public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<OrderItem> callback) {
         isLoading.postValue(true);
         compositeDisposable.add(ordersRepository.getAllVacantOrdersForView(params.loadSize, params.startPosition, orderDescription).
                 observeOn(Schedulers.io())

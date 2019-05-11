@@ -11,7 +11,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
-import yargo.inc.common.network.models.user_info.PersonData;
+import yargo.inc.common.network.models.login.User;
+import yargo.inc.common.network.models.user_info.RegistData.PersonData;
 import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
 import yargo.inc.common.network.repository.RegistrRepository;
 
@@ -33,6 +34,10 @@ public class RegistrationViewModel extends BaseViewModel {
     public static final int ERROR_EMAIL = 2;
     public static final int ERROR_EMAIL_AND_PHONE = 3;
     public static final int UNKNOWN_ERROR = 4;
+
+    public static final int PASSWORD_CORRECT = 0;
+    public static final int PASSWORD_IS_SHORT = 1;
+    public static final int PASSWORDS_NOT_MATCH = 2;
 
     private MutableLiveData<PersonData> personData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isBtnNextOn = new MutableLiveData<>();
@@ -65,7 +70,8 @@ public class RegistrationViewModel extends BaseViewModel {
                     @Override
                     public void accept(RegistrResponse registResponse) throws Exception {
                         if (registResponse.getRegistrResponse().getType().equals("OK")) {
-                            String authKey = registResponse.getAuthKey();
+                            pushAuthToken(registResponse.getRegistrResponse().getAuthKey());
+                            pushUser(registResponse.getRegistrResponse().getUser());
                             registrationStatus.postValue(REGISTR_SUCCESS);
                         } else if (registResponse.getRegistrResponse().getType().equals("error")) {
                             if (registResponse.getRegistrResponse().getMessage().getPhone()!=null && registResponse.getRegistrResponse().getMessage().getEmail()==null)  {
@@ -163,8 +169,19 @@ public class RegistrationViewModel extends BaseViewModel {
         personData.getValue().setPassword(password);
     }
 
-    public boolean isPasswodCorrect(String passwordConf) {
-        return passwordConf == personData.getValue().getPassword();
+    public int isPasswodCorrect(String passwordConf) {
+        if ( passwordConf.equals(personData.getValue().getPassword()) && !passwordConf.isEmpty() && passwordConf.length()>PASSWORD_LENTH){
+            return PASSWORD_CORRECT;
+        }
+        else if (passwordConf.length()<PASSWORD_LENTH){
+            return PASSWORD_IS_SHORT;
+        }
+        else if (passwordConf != personData.getValue().getPassword()){
+            return PASSWORDS_NOT_MATCH;
+        }
+        else {
+            return PASSWORDS_NOT_MATCH;
+        }
     }
 
     public static boolean isEmailValid(String email) {
@@ -207,5 +224,11 @@ public class RegistrationViewModel extends BaseViewModel {
     public void replaceVacantSubscription(LifecycleOwner owner){
         onCleared();
         registrationStatus.removeObservers(owner);
+    }
+    public void pushAuthToken(String authKey){
+        commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
+    }
+    public void pushUser(User user){
+        commonSharedPreferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, user);
     }
 }

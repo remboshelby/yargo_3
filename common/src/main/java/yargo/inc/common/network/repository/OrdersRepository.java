@@ -5,18 +5,13 @@ import android.util.Log;
 import org.apache.commons.lang3.StringUtils;
 
 import io.reactivex.Notification;
-import io.reactivex.Scheduler;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import yargo.inc.common.database.UserOrdersDao;
-import yargo.inc.common.database.VacantOrdersDao;
+import yargo.inc.common.database.OrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.api.OrderApiService;
-import yargo.inc.common.network.models.user_order.UserOrderResponse;
-import yargo.inc.common.network.models.user_order.UserOrdersItem;
-import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
-import yargo.inc.common.network.models.vacant_order.OrdersResponse;
+import yargo.inc.common.network.models.order_list.OrderResponse;
+import yargo.inc.common.network.models.order_list.OrderItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,44 +23,42 @@ import io.reactivex.schedulers.Schedulers;
 
 public class OrdersRepository {
     private OrderApiService orderApiService;
-    private VacantOrdersDao vacantOrdersDao;
-    private UserOrdersDao userOrdersDao;
+    private OrdersDao ordersDao;
 
     private static final String TAG = OrdersRepository.class.getSimpleName();
     private CommonSharedPreferences commonSharedPreferences;
 
     private static final int PAGE_SIZE =5;
 
-    public OrdersRepository(OrderApiService orderApiService, VacantOrdersDao vacantOrdersDao,UserOrdersDao userOrdersDao, CommonSharedPreferences commonSharedPreferences) {
+    public OrdersRepository(OrderApiService orderApiService, OrdersDao ordersDao, CommonSharedPreferences commonSharedPreferences) {
         this.orderApiService = orderApiService;
-        this.vacantOrdersDao = vacantOrdersDao;
-        this.userOrdersDao = userOrdersDao;
+        this.ordersDao = ordersDao;
         this.commonSharedPreferences = commonSharedPreferences;
     }
 
-    public Observable<List<VacantOrderItem>> getAllVacantOrdersForView(int size, int startPos, String orderDescription){
+    public Observable<List<OrderItem>> getAllVacantOrdersForView(int size, int startPos, String orderDescription){
         return getAllVacantOrders(orderDescription).map(ordersItems -> {
             int outputSize = size+startPos;
             if (outputSize>ordersItems.size())
                 outputSize = ordersItems.size();
 
-            List<VacantOrderItem> vacantOrderItems1 = new ArrayList<>();
+            List<OrderItem> orderItems1 = new ArrayList<>();
             for (int i = startPos; i< outputSize; i++)
             {
-                vacantOrderItems1.add(ordersItems.get(i)); }
-            return vacantOrderItems1;
+                orderItems1.add(ordersItems.get(i)); }
+            return orderItems1;
         }).delay(20, TimeUnit.MILLISECONDS);
     }
 
-    public Observable<List<UserOrdersItem>> getAllUserOrdersForView(int size, int startPos, int categoryOrderId){
-        return getAllUserOrders(categoryOrderId).map(new Function<List<UserOrdersItem>, List<UserOrdersItem>>() {
+    public Observable<List<OrderItem>> getAllUserOrdersForView(int size, int startPos, int categoryOrderId){
+        return getAllUserOrders(categoryOrderId).map(new Function<List<OrderItem>, List<OrderItem>>() {
             @Override
-            public List<UserOrdersItem> apply(List<UserOrdersItem> ordersItems) throws Exception {
+            public List<OrderItem> apply(List<OrderItem> ordersItems) throws Exception {
                 int outputSize = size + startPos;
                 if (outputSize > ordersItems.size())
                     outputSize = ordersItems.size();
 
-                List<UserOrdersItem> userOrderItems1 = new ArrayList<>();
+                List<OrderItem> userOrderItems1 = new ArrayList<>();
                 for (int i = startPos; i < outputSize; i++) {
                     userOrderItems1.add(ordersItems.get(i));
                 }
@@ -75,78 +68,78 @@ public class OrdersRepository {
     }
 
 
-    public Observable<List<VacantOrderItem>> getAllVacantOrders(String orderDescription) {
+    public Observable<List<OrderItem>> getAllVacantOrders(String orderDescription) {
         String appId = UUID.randomUUID().toString();
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return Observable.concatArrayEager(getAllVacantOrdersFromDb(), getVacantOrdersFromRemote(authKey, appId))
                 .materialize()
                 .observeOn(Schedulers.io())
-                .map(new Function<Notification<List<VacantOrderItem>>, Notification<List<VacantOrderItem>>>() {
+                .map(new Function<Notification<List<OrderItem>>, Notification<List<OrderItem>>>() {
                     @Override
-                    public Notification<List<VacantOrderItem>> apply(Notification<List<VacantOrderItem>> listNotification) throws Exception {
+                    public Notification<List<OrderItem>> apply(Notification<List<OrderItem>> listNotification) throws Exception {
                         if (listNotification.getError() != null) {
                             Log.e(TAG, "vacantOrders Exeception: " + listNotification.getError().toString());
                         }
                         return listNotification;
                     }
                 })
-                .filter(new Predicate<Notification<List<VacantOrderItem>>>() {
+                .filter(new Predicate<Notification<List<OrderItem>>>() {
                     @Override
-                    public boolean test(Notification<List<VacantOrderItem>> listNotification) throws Exception {
+                    public boolean test(Notification<List<OrderItem>> listNotification) throws Exception {
                         return !listNotification.isOnError();
                     }
                 })
-                .dematerialize(new Function<Notification<List<VacantOrderItem>>, Notification<List<VacantOrderItem>>>() {
+                .dematerialize(new Function<Notification<List<OrderItem>>, Notification<List<OrderItem>>>() {
                     @Override
-                    public Notification<List<VacantOrderItem>> apply(Notification<List<VacantOrderItem>> listNotification) throws Exception {
+                    public Notification<List<OrderItem>> apply(Notification<List<OrderItem>> listNotification) throws Exception {
                         return listNotification;
                     }
                 })
                 .map(vacantOrderItems -> {
-                    List<VacantOrderItem> fileredVacantOrderItem = new ArrayList<>();
-                    for (VacantOrderItem vacantOrderItem : vacantOrderItems){
+                    List<OrderItem> fileredOrderItem = new ArrayList<>();
+                    for (OrderItem orderItem : vacantOrderItems){
                         //TODO Нужно добавить Фильтрацию по городам, а то отображаются ненужные заказы
-                        if (StringUtils.containsIgnoreCase(vacantOrderItem.getDescription(), orderDescription))
-                            fileredVacantOrderItem.add(vacantOrderItem);
+                        if (StringUtils.containsIgnoreCase(orderItem.getDescription(), orderDescription))
+                            fileredOrderItem.add(orderItem);
                     }
-                    return fileredVacantOrderItem;
+                    return fileredOrderItem;
                 })
                 .debounce(400, TimeUnit.MILLISECONDS);
     };
 
-    public Observable<List<UserOrdersItem>> getAllUserOrders(int categoryOrderId){
+    public Observable<List<OrderItem>> getAllUserOrders(int categoryOrderId){
         String appId = UUID.randomUUID().toString();
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return Observable.concatArrayEager(getAllUserOrdersFromDb(), getUserOrdersFromRemote(authKey,appId))
                 .materialize()
                 .observeOn(Schedulers.io())
-                .map(new Function<Notification<List<UserOrdersItem>>, Notification<List<UserOrdersItem>>>() {
+                .map(new Function<Notification<List<OrderItem>>, Notification<List<OrderItem>>>() {
                     @Override
-                    public Notification<List<UserOrdersItem>> apply(Notification<List<UserOrdersItem>> listNotification) throws Exception {
+                    public Notification<List<OrderItem>> apply(Notification<List<OrderItem>> listNotification) throws Exception {
                         if (listNotification.getError() != null) {
                             Log.e(TAG, "vacantOrders Exeception: " + listNotification.getError().toString());
                         }
                         return listNotification;
                     }
                 })
-                .filter(new Predicate<Notification<List<UserOrdersItem>>>() {
+                .filter(new Predicate<Notification<List<OrderItem>>>() {
                     @Override
-                    public boolean test(Notification<List<UserOrdersItem>> listNotification) throws Exception {
+                    public boolean test(Notification<List<OrderItem>> listNotification) throws Exception {
                          return !listNotification.isOnError();
                     }
-                }).dematerialize(new Function<Notification<List<UserOrdersItem>>, Notification<List<UserOrdersItem>>>() {
+                }).dematerialize(new Function<Notification<List<OrderItem>>, Notification<List<OrderItem>>>() {
                     @Override
-                    public Notification<List<UserOrdersItem>> apply(Notification<List<UserOrdersItem>> listNotification) throws Exception {
+                    public Notification<List<OrderItem>> apply(Notification<List<OrderItem>> listNotification) throws Exception {
                         return listNotification;
                     }
                 })
-                .map(new Function<List<UserOrdersItem>, List<UserOrdersItem>>() {
+                .map(new Function<List<OrderItem>, List<OrderItem>>() {
                     @Override
-                    public List<UserOrdersItem> apply(List<UserOrdersItem> userOrdersItems) throws Exception {
-                        List<UserOrdersItem> filteredUserOrderItem = new ArrayList<>();
-                        for (UserOrdersItem userOrdersItem: userOrdersItems) {
+                    public List<OrderItem> apply(List<OrderItem> userOrdersItems) throws Exception {
+                        List<OrderItem> filteredUserOrderItem = new ArrayList<>();
+                        for (OrderItem userOrdersItem: userOrdersItems) {
                             if (userOrdersItem.getIdOrderStatus()==categoryOrderId)
                                 filteredUserOrderItem.add(userOrdersItem);
                         }
@@ -156,10 +149,10 @@ public class OrdersRepository {
                 .debounce(400, TimeUnit.MILLISECONDS);
     }
 
-    public Observable<List<VacantOrderItem>> getVacantOrdersFromRemote(String authKey, String appId) {
-        return orderApiService.getVacantOrders(authKey, appId).map(new Function<OrdersResponse, List<VacantOrderItem>>() {
+    public Observable<List<OrderItem>> getVacantOrdersFromRemote(String authKey, String appId) {
+        return orderApiService.getVacantOrders(authKey, appId).map(new Function<OrderResponse, List<OrderItem>>() {
             @Override
-            public List<VacantOrderItem> apply(OrdersResponse ordersResponse) throws Exception {
+            public List<OrderItem> apply(OrderResponse ordersResponse) throws Exception {
                 pushAuthToken(ordersResponse.getResponse().getAuthKey());
                 return ordersResponse.getResponse().getOrders();
             }
@@ -167,10 +160,10 @@ public class OrdersRepository {
                  safeVacantOrderInBd(ordersItems);
                 });
     }
-    public Observable<List<UserOrdersItem>> getUserOrdersFromRemote(String authKey, String appId) {
-        return orderApiService.getUsersOrders(authKey, appId).map(new Function<UserOrderResponse, List<UserOrdersItem>>() {
+    public Observable<List<OrderItem>> getUserOrdersFromRemote(String authKey, String appId) {
+        return orderApiService.getUsersOrders(authKey, appId).map(new Function<OrderResponse, List<OrderItem>>() {
             @Override
-            public List<UserOrdersItem> apply(UserOrderResponse userOrderResponse) throws Exception {
+            public List<OrderItem> apply(OrderResponse userOrderResponse) throws Exception {
                 pushAuthToken(userOrderResponse.getResponse().getAuthKey());
                 return userOrderResponse.getResponse().getOrders();
             }
@@ -178,19 +171,19 @@ public class OrdersRepository {
         .doOnNext(userOrdersItems -> safeUserOrderInBd(userOrdersItems));
     }
 
-    public void safeVacantOrderInBd(final List<VacantOrderItem> vacantOrderList) {
+    public void safeVacantOrderInBd(final List<OrderItem> vacantOrderList) {
         Observable.fromCallable(() -> {
-            vacantOrdersDao.removeAll();
-            vacantOrdersDao.insertAll(vacantOrderList);
+            ordersDao.removeAll();
+            ordersDao.insertAll(vacantOrderList);
             return vacantOrderList;
         }).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(ordersItemList -> Log.d(TAG, "vacant order saved in DB, list count: " + ordersItemList.size()));
     }
-    public void safeUserOrderInBd(final List<UserOrdersItem> userOrdersItems) {
+    public void safeUserOrderInBd(final List<OrderItem> userOrdersItems) {
         Observable.fromCallable(() -> {
-            userOrdersDao.removeAll();
-            userOrdersDao.insertAll(userOrdersItems);
+            ordersDao.removeAll();
+            ordersDao.insertAll(userOrdersItems);
             return userOrdersItems;
         }).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -198,31 +191,36 @@ public class OrdersRepository {
     }
 
 
-    public Observable<List<VacantOrderItem>> getAllVacantOrdersFromDb() {
-        return vacantOrdersDao.getAllVacantOrders().filter(ordersItemList -> ordersItemList.size() != 0).toObservable();
+    public Observable<List<OrderItem>> getAllVacantOrdersFromDb() {
+        return ordersDao.getAllVacantOrders().filter(new Predicate<List<OrderItem>>() {
+            @Override
+            public boolean test(List<OrderItem> ordersItemList) throws Exception {
+               return ordersItemList.size() != 0;
+            }
+        }).toObservable();
     }
     //возращаем количество вакантных заказов из кэша
     public Observable<Integer> getVacantFromDbCount(){
-        return vacantOrdersDao.getAllVacantOrders().map(new Function<List<VacantOrderItem>, Integer>() {
+        return ordersDao.getAllVacantOrders().map(new Function<List<OrderItem>, Integer>() {
             @Override
-            public Integer apply(List<VacantOrderItem> vacantOrderItems) throws Exception {
-                return vacantOrderItems.size();
+            public Integer apply(List<OrderItem> orderItems) throws Exception {
+                return orderItems.size();
             }
         }).toObservable();
     }
     //возращаем количество заказов пользователя из кэша
     public Observable<Integer> getUsersOrdersFromDbCount(int categoryOrderId){
-        return userOrdersDao.getAllUserOrdersStatus(categoryOrderId).map(new Function<List<UserOrdersItem>, Integer>() {
+        return ordersDao.getAllUserOrdersStatus(categoryOrderId).map(new Function<List<OrderItem>, Integer>() {
             @Override
-            public Integer apply(List<UserOrdersItem> UserOrdersItem) throws Exception {
+            public Integer apply(List<OrderItem> UserOrdersItem) throws Exception {
                 return UserOrdersItem.size();
             }
         }).toObservable();
     }
-    public Observable<List<UserOrdersItem>> getAllUserOrdersFromDb() {
-        return userOrdersDao.getAllUserOrders().filter(new Predicate<List<UserOrdersItem>>() {
+    public Observable<List<OrderItem>> getAllUserOrdersFromDb() {
+        return ordersDao.getAllUserOrders().filter(new Predicate<List<OrderItem>>() {
             @Override
-            public boolean test(List<UserOrdersItem> ordersItemList) throws Exception {
+            public boolean test(List<OrderItem> ordersItemList) throws Exception {
                 return ordersItemList.size() != 0;
             }
         }).toObservable();

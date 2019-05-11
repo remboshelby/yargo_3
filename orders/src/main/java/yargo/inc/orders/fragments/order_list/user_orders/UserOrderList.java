@@ -20,14 +20,14 @@ import com.google.android.material.appbar.AppBarLayout;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.network.models.user_order.UserOrdersItem;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
-import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailView;
-import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
+import yargo.inc.orders.fragments.order_list.order_commission.OrderCommissionView;
+import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.user_orders.utils.UserOrdersItemAdapter;
 import yargo.inc.orders.fragments.order_list.user_orders.custom_view.CustomToolbarUserOrders;
 
@@ -47,8 +47,9 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
 
     @Inject
     protected UserOrdersViewModel ordersViewModel;
+
     @Inject
-    protected OrderDetailViewModel orderDetailViewModel;
+    protected OrderListViewModel orderListViewModel;
 
     private UserOrdersItemAdapter userOrdersItemAdapter;
 
@@ -105,9 +106,9 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
             }
         });
 
-        ordersViewModel.getUserOrders().observe(this, new Observer<PagedList<UserOrdersItem>>() {
+        ordersViewModel.getUserOrders().observe(this, new Observer<PagedList<OrderItem>>() {
             @Override
-            public void onChanged(PagedList<UserOrdersItem> userOrdersItems) {
+            public void onChanged(PagedList<OrderItem> userOrdersItems) {
                 userOrdersItemAdapter.submitList(userOrdersItems);
             }
         });
@@ -118,9 +119,13 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     }
 
     @Override
-    public void showItemDetails(UserOrdersItem userOrdersItem) {
-        orderDetailViewModel.setOrderId(userOrdersItem.getID());
-        getRoot().pushFragment(new OrderDetailView(), true);
+    public void showItemDetails(OrderItem userOrdersItem) {
+        orderListViewModel.setOrder(userOrdersItem);
+        if (userOrdersItem.getIdOrderStatus()!=7) {
+            getRoot().pushFragment(new OrderDetailsView(), true);
+        }else {
+            getRoot().pushFragment(new OrderCommissionView(), true);
+        }
     }
 
     public void setLoadingState(boolean isLoading) {

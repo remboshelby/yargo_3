@@ -12,20 +12,18 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
-import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailView;
-import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
+import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
 import yargo.inc.orders.fragments.order_list.vacant_orders.utils.VacantOrdersItemAdapter;
 
@@ -48,7 +46,7 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
     @Inject
     public VacantOrdersViewModel vacantOrdersViewModel;
     @Inject
-    protected OrderDetailViewModel orderDetailViewModel;
+    protected OrderListViewModel orderListViewModel;
 
 
     @Override
@@ -100,8 +98,8 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
     }
 
     @Override
-    public void showItemDetails(VacantOrderItem vacantOrderItem) {
-        orderDetailViewModel.setOrderId(vacantOrderItem.getID());
-        getRoot().pushFragment(new OrderDetailView(), true);
+    public void showItemDetails(OrderItem orderItem) {
+        orderListViewModel.setOrder(orderItem);
+        getRoot().pushFragment(new OrderDetailsView(), true);
     }
 }

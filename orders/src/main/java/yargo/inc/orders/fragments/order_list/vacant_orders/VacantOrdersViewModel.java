@@ -6,13 +6,10 @@ import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import yargo.inc.common.base.BaseViewModel;
-import yargo.inc.common.network.models.user_order.UserOrdersItem;
-import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.network.repository.OrdersRepository;
-import yargo.inc.orders.fragments.order_list.user_orders.pagging_orders.UserOrderDataSourceFactory;
 import yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders.OrderDataSourceFactory;
 
 import androidx.lifecycle.LifecycleOwner;
@@ -21,8 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 public class VacantOrdersViewModel extends BaseViewModel {
     private OrdersRepository ordersRepository;
 
-    private LiveData<PagedList<VacantOrderItem>> vacantOrders;
-
+    private LiveData<PagedList<OrderItem>> vacantOrders;
 
     private LiveData<Boolean> isLoading;
     private LiveData<Integer> ordersCount;
@@ -31,7 +27,6 @@ public class VacantOrdersViewModel extends BaseViewModel {
 
     private MutableLiveData<String> orderDescription = new MutableLiveData<>();
     private MutableLiveData<Integer> vacantOrdersCount = new MutableLiveData<>();
-
 
     public VacantOrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
@@ -46,7 +41,7 @@ public class VacantOrdersViewModel extends BaseViewModel {
     public void observVacantOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
         vacantOrdersCount.observe(owner, userOrderCountValue);
     }
-    private LiveData<PagedList<VacantOrderItem>> createFiltredVacantOrders(String orderDescription) {
+    private LiveData<PagedList<OrderItem>> createFiltredVacantOrders(String orderDescription) {
         if (orderDescription==null)
             orderDescription="";
         OrderDataSourceFactory orderDataSourceFactory = new OrderDataSourceFactory(ordersRepository, compositeDisposable, orderDescription);
@@ -75,7 +70,7 @@ public class VacantOrdersViewModel extends BaseViewModel {
         super.onViewCreated();
     }
 
-    public LiveData<PagedList<VacantOrderItem>> getVacantOrders() {
+    public LiveData<PagedList<OrderItem>> getVacantOrders() {
         return vacantOrders;
     }
 
@@ -83,7 +78,6 @@ public class VacantOrdersViewModel extends BaseViewModel {
     public void setOrderDescription(String orderDescription) {
         this.orderDescription.postValue(orderDescription);
     }
-
 
     public void setVacantOrdersCount(int vacantOrdersCountValue) {
         vacantOrdersCount.postValue(vacantOrdersCountValue);

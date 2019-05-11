@@ -1,6 +1,5 @@
 package yargo.inc.orders.fragments.order_list;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
@@ -21,6 +21,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,20 +32,23 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.common.di.CommonApplication;
 import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.network.models.login.User;
+import yargo.inc.common.utils.CircleImageView_;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.di.DaggerOrdersComponent;
 import yargo.inc.orders.di.OrdersComponent;
 import yargo.inc.orders.fragments.order_list.filters.FiltersView;
-import yargo.inc.orders.fragments.order_list.order_detailse.OrderDetailViewModel;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
+import static yargo.inc.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
+
 public class OrderListsFragment extends BaseFragment {
 
-    private static final String TAG  = OrderListsFragment.class.getName();
+    private static final String TAG = OrderListsFragment.class.getName();
 
     @BindView(R2.id.imgBtnMap)
     ImageButton imgBtnMap;
@@ -60,11 +67,11 @@ public class OrderListsFragment extends BaseFragment {
     protected static OrdersComponent ordersComponent;
 
     @Inject
-    protected OrderDetailViewModel orderDetailViewModel;
+    protected OrderListViewModel orderListViewModel;
+
     @Inject
-    protected VacantOrdersViewModel vacantOrdersViewModel;
-    @Inject
-    protected CommonSharedPreferences preferences;
+    protected UserOrdersViewModel ordersViewModel;
+
     private ApplicationNavigator navigator;
 
     @Override
@@ -88,21 +95,25 @@ public class OrderListsFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onViewCreated");
         super.onViewCreated(view, savedInstanceState);
-        init();
+        init(view);
     }
 
-    private void init() {
-
+    private void init(View view) {
+        ButterKnife.bind(this, view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getRoot(), drawerLayout, toolbar_main, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (orderDetailViewModel.getOrderStatus()==-1 || orderDetailViewModel.getOrderStatus()==1){
+
+        if (orderListViewModel.getOrderStatus() == -1 || orderListViewModel.getOrderStatus() == 1)
             pushFragmentIntoFragment(new VacantOrderList());
-        }
         else {
+            Integer orderStatus = orderListViewModel.getOrderStatus();
+            String[] array = getResources().getStringArray(R.array.ordersCategoryId);
+            Integer position = Arrays.asList(array).indexOf(String.valueOf(orderStatus));
+            ordersViewModel.setStartPositon(position);
             pushFragmentIntoFragment(new UserOrderList());
         }
 
@@ -121,6 +132,7 @@ public class OrderListsFragment extends BaseFragment {
             drawerLayout.closeDrawer(Gravity.LEFT);
             return false;
         });
+        initHeader();
     }
 
     public static OrdersComponent getOrdersComponent() {
@@ -131,7 +143,7 @@ public class OrderListsFragment extends BaseFragment {
         AlertDialog.Builder accoutExitDialog = new AlertDialog.Builder(getRoot());
         accoutExitDialog.setMessage(getResources().getString(R.string.exit_question)).setCancelable(false).
                 setPositiveButton(getResources().getString(R.string.YES), (dialog, which) -> {
-                    preferences.putObject(CommonSharedPreferences.AUTH_KEY, "");
+                    orderListViewModel.pushAuthToken("");
                     navigator.openFragment(getRoot(), "Login");
                 })
                 .setNegativeButton(getResources().getString(R.string.NO), (dialog, which) -> dialog.cancel()).create();
@@ -142,12 +154,20 @@ public class OrderListsFragment extends BaseFragment {
     }
 
     @OnClick(R2.id.imgBtnMap)
-    void onBtnMapClick(){
+    void onBtnMapClick() {
 
     }
+
     @OnClick(R2.id.imgBtnFilter)
-    void onImgBtnFilter(){
+    void onImgBtnFilter() {
         getRoot().pushFragment(new FiltersView(), true);
+    }
+
+    private void initHeader() {
+        User user = orderListViewModel.getUser();
+
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tvDrawlerTitle)).setText(user.getUsername() + " " + user.getSurname());
+        ((CircleImageView_) navigationView.getHeaderView(0).findViewById(R.id.clientAvatar)).setImageResource(R.drawable.person);
     }
 
     @Override

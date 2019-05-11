@@ -24,6 +24,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "MERCHANT_TOKEN", '"live_NTQ0MDIxk7aBD5wWDF7ZVBHLSzSntBlZgfk2wEGMYmg"'
+        buildConfigField "String", "GATEWAY_ID", '"gatewayId"'
+        buildConfigField "int", "DB_VERSION", '7'
+        buildConfigField "String", "SHOP_ID", '"544021"'
+
+        manifestPlaceholders = [YANDEX_CLIENT_ID: "69124c77b83d457bac43407444a1eed2"]
     }
     buildTypes {
         release {

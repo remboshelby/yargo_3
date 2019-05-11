@@ -20,8 +20,7 @@ import java.util.Locale;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import yargo.inc.common.network.models.user_order.UserOrdersItem;
-import yargo.inc.common.network.models.vacant_order.VacantOrderItem;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.utils.AutoResizeTextView;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
@@ -59,31 +58,12 @@ public class OrderItemView extends ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.order_item, this);
         ButterKnife.bind(this);
     }
-
-    public void bind(VacantOrderItem vacantOrderItem) {
-        if (vacantOrderItem != null) {
-            tvOrderAbout.setVisibility(View.VISIBLE);
-            pbItemIsLoading.setVisibility(View.GONE);
-
-            tvOrderAbout.setText(vacantOrderItem.getAddress());
-            imgOrderType.setImageResource(getIconByOrderType(vacantOrderItem.getIdSpecialization()));
-            tvOrderAbout.setText(vacantOrderItem.getDescription());
-            tvOrderData.setText(dateCreator(vacantOrderItem.getStartworking()) + " - " + dateCreator(vacantOrderItem.getDeadline()));
-            tvOrderPrice.setText(String.valueOf(vacantOrderItem.getPrice()) + Html.fromHtml(" &#x20bd"));
-            imgPayType.setImageResource(vacantOrderItem.getIdPaymentMethod() == 1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);
-        } else {
-            tvOrderAbout.setVisibility(View.GONE);
-            pbItemIsLoading.setVisibility(View.VISIBLE);
-        }
-    }
-    public void bind(UserOrdersItem userOrdersItem) {
+    public void bind(OrderItem userOrdersItem) {
         if (userOrdersItem != null) {
             tvOrderAbout.setVisibility(View.VISIBLE);
             pbItemIsLoading.setVisibility(View.GONE);
-
-            tvOrderAbout.setText(userOrdersItem.getAddress());
             imgOrderType.setImageResource(getIconByOrderType(userOrdersItem.getIdSpecialization()));
-            tvOrderAbout.setText(userOrdersItem.getDescription());
+            tvOrderAbout.setText(userOrdersItem.getName());
             tvOrderData.setText(dateCreator(userOrdersItem.getStartworking()) + " - " + dateCreator(userOrdersItem.getDeadline()));
             tvOrderPrice.setText(String.valueOf(userOrdersItem.getPrice()) + Html.fromHtml(" &#x20bd"));
             imgPayType.setImageResource(userOrdersItem.getIdPaymentMethod() == 1 ? R.drawable.ic_credit_card_yellow_24dp : android.R.color.transparent);

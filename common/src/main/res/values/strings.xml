@@ -16,4 +16,11 @@
         <item>43729</item>
         <item>40308</item>
     </string-array>
+
+    <string name="order_addres"><b>Адрес:</b> %s</string>
+    <string name="order_manager"><b>Заказчик:</b> %s</string>
+    <string name="order_date"><b>Дата:</b> %s</string>
+    <string name="commission_pay">Оплатить комиссию</string>
+    <string name="order_star_price">Окончательная стоимость заявки: %1$s</string>
+    <string name="order_commisson_price">Размер комиссии по заявке: %1$s</string>
 </resources>

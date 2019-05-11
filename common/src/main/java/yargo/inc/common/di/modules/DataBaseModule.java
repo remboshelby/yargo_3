@@ -2,11 +2,10 @@ package yargo.inc.common.di.modules;
 
 import android.app.Application;
 
-import yargo.inc.common.database.VacantOrdersDao;
+import yargo.inc.common.database.OrdersDao;
 import yargo.inc.common.database.YargoDataBase;
 import yargo.inc.common.database.listofcitycoordinate.CityCoordinateDao;
 import yargo.inc.common.database.listofspeciality.SpecialityDao;
-import yargo.inc.common.database.UserOrdersDao;
 
 import javax.inject.Singleton;
 
@@ -37,13 +36,7 @@ public class DataBaseModule {
 
     @Provides
     @Singleton
-    public UserOrdersDao provideManagerUserOrders(YargoDataBase yargoDataBase){
-        return yargoDataBase.userOrdersDao();
-    }
-
-    @Provides
-    @Singleton
-    public VacantOrdersDao provideManagerVanactOrders(YargoDataBase yargoDataBase){
-        return yargoDataBase.vacantOrdersDao();
+    public OrdersDao provideManagerOrders(YargoDataBase yargoDataBase){
+        return yargoDataBase.OrdersDao();
     }
 }
