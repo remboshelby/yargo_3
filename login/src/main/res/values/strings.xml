@@ -3,14 +3,6 @@
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
     <!--Login Fragment-->
-    <string name="action_regist_new_account">Зарегистрироваться</string>
-    <string name="action_sign_in_account">Войти</string>
-    <string name="action_sign_in_short">Вход</string>
-    <string name="prompt_email">Логин (электронная почта):</string>
-    <string name="prompt_password">Пароль</string>
-    <string name="password_confirm">Подтверждение пароля</string>
-
-
 
     <!--Utils-->
     <string name="loading">Загрузка</string>
@@ -42,6 +34,11 @@
     <string name="somethings_goes_wrong">Что-то пошло не так</string>
     <string name="password_not_match">Пароли не совпадают</string>
     <string name="password_is_short">Пароль слишком короткий (менее 5 символов)</string>
-
+    <!--Registration Fragments-->
+    <string name="registration">Регистрация</string>
+    <string name="next">Далее</string>
+    <string name="order_description">Описание</string>
+    <string name="order_comment">Комментарий</string>
+    <string name="client">Заказчик</string>
 
 </resources>

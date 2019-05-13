@@ -1,4 +1,4 @@
-package yargo.inc;
+package yargo.inc.orders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,10 +10,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -24,8 +24,8 @@ import ru.yandex.money.android.sdk.Amount;
 import ru.yandex.money.android.sdk.Checkout;
 import ru.yandex.money.android.sdk.PaymentMethodType;
 import ru.yandex.money.android.sdk.ShopParameters;
-import yargo.inc.yandex_utils.AmountFormatter;
-import yargo.inc.yandex_utils.Settings;
+import yargo.inc.orders.yandex_utils.AmountFormatter;
+import yargo.inc.orders.yandex_utils.Settings;
 
 public class YandexActivity extends AppCompatActivity {
     private static final BigDecimal MAX_AMOUNT = new BigDecimal("99999.99");

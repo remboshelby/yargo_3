@@ -20,6 +20,7 @@ public class CommonSharedPreferences {
     public static final String FILTERED_CITY = "filtered_city";
 
 
+
     public static final String SHARED_PREFERENCES = "shared_preferences";
 
     private Gson gson = new GsonBuilder().create();
@@ -49,6 +50,7 @@ public class CommonSharedPreferences {
     }
     public String getUserCityName(){
         User user = (User) getObject(USER_ABOUT_RESPONSE, User.class);
+        putObject(FILTERED_CITY, user.getIdCity());
         String[] stringArray = context.getResources().getStringArray(R.array.citiesId);
         int position = new ArrayList<>(Arrays.asList(stringArray)).indexOf(String.valueOf(user.getIdCity()));
         return context.getResources().getStringArray(R.array.citiesName)[position];

@@ -25,8 +25,8 @@ public interface OrdersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<OrderItem> orderItemList);
 
-    @Query("Select *from orders where idUser is null")
-    Flowable<List<OrderItem>> getAllVacantOrders();
+    @Query("Select *from orders where idUser is null and name like '%' || :orderName || '%' and idCity = :idCity")
+    Flowable<List<OrderItem>> getAllVacantOrders(String orderName, int idCity);
 
     @Query("Select *from orders where idOrderStatus = :idOrderStatus")
     Flowable<List<OrderItem>> getAllUserOrdersStatus(int idOrderStatus);

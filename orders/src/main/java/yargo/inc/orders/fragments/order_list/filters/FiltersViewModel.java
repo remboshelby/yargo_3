@@ -1,10 +1,16 @@
 package yargo.inc.orders.fragments.order_list.filters;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import java.util.ArrayList;
+
+import yargo.inc.common.base.BaseViewAndroidModel;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.orders.R;
@@ -12,7 +18,7 @@ import yargo.inc.orders.fragments.order_list.filters.custom_view.models.Category
 import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CityModel;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.models.SettingModel;
 
-public class FiltersViewModel extends BaseViewModel {
+public class FiltersViewModel extends BaseViewAndroidModel {
 
     MutableLiveData <Boolean> isAllCategoryChecked = new MutableLiveData<>();
 
@@ -79,7 +85,12 @@ public class FiltersViewModel extends BaseViewModel {
             "caterogy_item_17"};
     private CommonSharedPreferences commonSharedPreferences;
 
-    public FiltersViewModel(CommonSharedPreferences commonSharedPreferences) {
+//    public FiltersViewModel(CommonSharedPreferences commonSharedPreferences) {
+//        this.commonSharedPreferences = commonSharedPreferences;
+//    }
+
+    public FiltersViewModel(@NonNull Application application,CommonSharedPreferences commonSharedPreferences) {
+        super(application);
         this.commonSharedPreferences = commonSharedPreferences;
     }
 

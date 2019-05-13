@@ -21,7 +21,7 @@ public class CommissionRepository {
     }
 
     public Observable<OrderDetailResponse> getOrderDetail(int idOrder){
-        String appId = UUID.randomUUID().toString();
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return orderActionApiService.getOrderDetail(authKey,idOrder,appId).doOnNext(new Consumer<OrderDetailResponse>() {

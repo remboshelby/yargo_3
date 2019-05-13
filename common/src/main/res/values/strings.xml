@@ -9,12 +9,14 @@
         <item>Сургут</item>
         <item>Нижневартовск</item>
         <item>Тюмень</item>
+        <item>Нефтеюганск</item>
     </string-array>
 
     <string-array name="citiesId">
         <item>40127</item>
         <item>43729</item>
         <item>40308</item>
+        <item>43730</item>
     </string-array>
 
     <string name="order_addres"><b>Адрес:</b> %s</string>
@@ -23,4 +25,12 @@
     <string name="commission_pay">Оплатить комиссию</string>
     <string name="order_star_price">Окончательная стоимость заявки: %1$s</string>
     <string name="order_commisson_price">Размер комиссии по заявке: %1$s</string>
+
+    <string name="action_regist_new_account">Зарегистрироваться</string>
+    <string name="action_sign_in_account">Войти</string>
+    <string name="action_sign_in_short">Вход</string>
+    <string name="prompt_email">Логин (электронная почта):</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="password_confirm">Подтверждение пароля</string>
+
 </resources>

@@ -19,7 +19,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package yargo.inc.yandex_utils;
+package yargo.inc.orders.yandex_utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

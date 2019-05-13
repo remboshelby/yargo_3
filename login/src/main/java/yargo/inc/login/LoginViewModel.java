@@ -118,6 +118,7 @@ public class LoginViewModel extends BaseViewModel {
         commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
     }
     public void pushUser(User user){
+        commonSharedPreferences.putObject(CommonSharedPreferences.FILTERED_CITY, user.getIdCity());
         commonSharedPreferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, user);
     }
 }

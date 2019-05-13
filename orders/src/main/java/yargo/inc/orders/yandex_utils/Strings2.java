@@ -19,9 +19,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package yargo.inc.yandex_utils;
+package yargo.inc.orders.yandex_utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public final class Strings2 {
 

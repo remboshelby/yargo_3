@@ -13,8 +13,6 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(listener);
     }
 
-
-
     public abstract void bind(T item);
 
     public void bind(T item, int position){

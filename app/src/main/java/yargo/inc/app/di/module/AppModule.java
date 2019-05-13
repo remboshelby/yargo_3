@@ -1,5 +1,8 @@
 package yargo.inc.app.di.module;
 
+import android.app.Application;
+
+import yargo.inc.app.App;
 import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.Navigator;
 

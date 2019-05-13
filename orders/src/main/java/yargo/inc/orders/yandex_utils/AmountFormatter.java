@@ -19,15 +19,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package yargo.inc.yandex_utils;
+package yargo.inc.orders.yandex_utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-
-import org.jetbrains.annotations.Nullable;
+import androidx.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;

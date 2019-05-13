@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
+import static yargo.inc.common.dto.CommonSharedPreferences.FILTERED_CITY;
+
 public class OrdersRepository {
     private OrderApiService orderApiService;
     private OrdersDao ordersDao;
@@ -68,11 +70,11 @@ public class OrdersRepository {
     }
 
 
-    public Observable<List<OrderItem>> getAllVacantOrders(String orderDescription) {
-        String appId = UUID.randomUUID().toString();
+    public Observable<List<OrderItem>> getAllVacantOrders(String orderName) {
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
-        return Observable.concatArrayEager(getAllVacantOrdersFromDb(), getVacantOrdersFromRemote(authKey, appId))
+        return Observable.concatArrayEager(getAllVacantOrdersFromDb(orderName), getVacantOrdersFromRemote(authKey, appId))
                 .materialize()
                 .observeOn(Schedulers.io())
                 .map(new Function<Notification<List<OrderItem>>, Notification<List<OrderItem>>>() {
@@ -96,20 +98,20 @@ public class OrdersRepository {
                         return listNotification;
                     }
                 })
-                .map(vacantOrderItems -> {
-                    List<OrderItem> fileredOrderItem = new ArrayList<>();
-                    for (OrderItem orderItem : vacantOrderItems){
-                        //TODO Нужно добавить Фильтрацию по городам, а то отображаются ненужные заказы
-                        if (StringUtils.containsIgnoreCase(orderItem.getDescription(), orderDescription))
-                            fileredOrderItem.add(orderItem);
-                    }
-                    return fileredOrderItem;
-                })
+//                .map(vacantOrderItems -> {
+//                    List<OrderItem> fileredOrderItem = new ArrayList<>();
+//                    for (OrderItem orderItem : vacantOrderItems){
+//                        //TODO Нужно добавить Фильтрацию по городам, а то отображаются ненужные заказы
+//                        if (StringUtils.containsIgnoreCase(orderItem.getName(), orderName))
+//                            fileredOrderItem.add(orderItem);
+//                    }
+//                    return fileredOrderItem;
+//                })
                 .debounce(400, TimeUnit.MILLISECONDS);
     };
 
     public Observable<List<OrderItem>> getAllUserOrders(int categoryOrderId){
-        String appId = UUID.randomUUID().toString();
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return Observable.concatArrayEager(getAllUserOrdersFromDb(), getUserOrdersFromRemote(authKey,appId))
@@ -173,7 +175,7 @@ public class OrdersRepository {
 
     public void safeVacantOrderInBd(final List<OrderItem> vacantOrderList) {
         Observable.fromCallable(() -> {
-            ordersDao.removeAll();
+//            ordersDao.removeAll();
             ordersDao.insertAll(vacantOrderList);
             return vacantOrderList;
         }).subscribeOn(Schedulers.io())
@@ -182,7 +184,7 @@ public class OrdersRepository {
     }
     public void safeUserOrderInBd(final List<OrderItem> userOrdersItems) {
         Observable.fromCallable(() -> {
-            ordersDao.removeAll();
+//            ordersDao.removeAll();
             ordersDao.insertAll(userOrdersItems);
             return userOrdersItems;
         }).subscribeOn(Schedulers.io())
@@ -191,8 +193,12 @@ public class OrdersRepository {
     }
 
 
-    public Observable<List<OrderItem>> getAllVacantOrdersFromDb() {
-        return ordersDao.getAllVacantOrders().filter(new Predicate<List<OrderItem>>() {
+    public Observable<List<OrderItem>> getAllVacantOrdersFromDb(String orderName) {
+        int cityId =(int)commonSharedPreferences.getObject(FILTERED_CITY, int.class);
+
+//        commonSharedPreferences.getObject()
+
+        return ordersDao.getAllVacantOrders(orderName, cityId).filter(new Predicate<List<OrderItem>>() {
             @Override
             public boolean test(List<OrderItem> ordersItemList) throws Exception {
                return ordersItemList.size() != 0;
@@ -200,8 +206,12 @@ public class OrdersRepository {
         }).toObservable();
     }
     //возращаем количество вакантных заказов из кэша
-    public Observable<Integer> getVacantFromDbCount(){
-        return ordersDao.getAllVacantOrders().map(new Function<List<OrderItem>, Integer>() {
+    public Observable<Integer> getVacantFromDbCount(String orderName){
+        int cityId =(int)commonSharedPreferences.getObject(FILTERED_CITY, int.class);
+
+
+
+        return ordersDao.getAllVacantOrders(orderName, cityId).map(new Function<List<OrderItem>, Integer>() {
             @Override
             public Integer apply(List<OrderItem> orderItems) throws Exception {
                 return orderItems.size();

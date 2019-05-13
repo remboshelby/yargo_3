@@ -3,7 +3,9 @@ package yargo.inc.app.di;
 import android.app.Application;
 import android.content.Context;
 
+import dagger.Binds;
 import yargo.inc.MainActivity;
+import yargo.inc.app.App;
 import yargo.inc.common.di.CommonComponent;
 import yargo.inc.common.di.ServerUrl;
 import yargo.inc.common.di.modules.DataBaseModule;
@@ -22,8 +24,6 @@ import yargo.inc.login.fragments.registration.RegistrationFragment;
 @Component (modules = {NetworkModule.class, RepositoryModule.class, SharedPreferenceModule.class,
         DataBaseModule.class, AppModule.class})
 public interface ApplicationComponent extends CommonComponent {
-
-    void inject(MainActivity mainActivity);
 
     @Component.Builder
     interface Builder{

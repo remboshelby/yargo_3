@@ -19,7 +19,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package yargo.inc.yandex_utils;
+package yargo.inc.orders.yandex_utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -31,8 +31,7 @@ import android.text.style.MetricAffectingSpan;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
-
-import org.jetbrains.annotations.Nullable;
+import androidx.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

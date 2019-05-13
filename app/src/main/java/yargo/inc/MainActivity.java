@@ -49,8 +49,4 @@ public class MainActivity extends BaseActivity {
         }
 
     }
-    public void removeFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
-    }
-
 }

@@ -39,6 +39,7 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.di.DaggerOrdersComponent;
 import yargo.inc.orders.di.OrdersComponent;
 import yargo.inc.orders.fragments.order_list.filters.FiltersView;
+import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
@@ -167,7 +168,15 @@ public class OrderListsFragment extends BaseFragment {
         User user = orderListViewModel.getUser();
 
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tvDrawlerTitle)).setText(user.getUsername() + " " + user.getSurname());
-        ((CircleImageView_) navigationView.getHeaderView(0).findViewById(R.id.clientAvatar)).setImageResource(R.drawable.person);
+        CircleImageView_ headerImageView = (CircleImageView_) navigationView.getHeaderView(0).findViewById(R.id.clientAvatar);
+        headerImageView.setImageResource(R.drawable.person);
+        headerImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getRoot().pushFragment(new ProfileEditorView(), true);
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
     }
 
     @Override
@@ -178,6 +187,7 @@ public class OrderListsFragment extends BaseFragment {
                 .builder()
                 .commonComponent(commonApplication.component())
                 .root(this)
+                .application(getRoot().getApplication())
                 .build();
 
         ordersComponent.inject(this);

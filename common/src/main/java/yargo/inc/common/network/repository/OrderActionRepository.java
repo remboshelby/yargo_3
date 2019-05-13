@@ -19,7 +19,7 @@ public class OrderActionRepository {
         this.commonSharedPreferences = commonSharedPreferences;
     }
     public Observable<OrderDetailResponse> getOrderDetail(int idOrder){
-        String appId = UUID.randomUUID().toString();
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return orderActionApiService.getOrderDetail(authKey,idOrder,appId).doOnNext(new Consumer<OrderDetailResponse>() {
@@ -30,7 +30,7 @@ public class OrderActionRepository {
         });
     }
     public Observable<ActionResponse> actionGetOrder(int idOrder){
-        String appId = UUID.randomUUID().toString();
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return orderActionApiService.actionGetOrder(authKey, idOrder, appId).doOnNext(new Consumer<ActionResponse>() {
@@ -43,7 +43,7 @@ public class OrderActionRepository {
         });
     }
     public Observable<ActionResponse> actionStartOrder(int idOrder){
-        String appId = UUID.randomUUID().toString();
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return orderActionApiService.actionStartOrder(authKey, idOrder, appId).doOnNext(new Consumer<ActionResponse>() {
@@ -56,7 +56,7 @@ public class OrderActionRepository {
         });
     }
     public Observable<ActionResponse> actionAccomplishedOrder(int idOrder){
-        String appId = UUID.randomUUID().toString();
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
         return orderActionApiService.actionAccomplishedOrder(authKey, idOrder, appId).doOnNext(new Consumer<ActionResponse>() {

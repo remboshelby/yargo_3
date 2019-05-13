@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarLayout"
+        style="@style/Widget.Design.AppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/CustomToolbarStyle"
+            android:layout_width="match_parent"
+            android:minHeight="?actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
+            app:popupTheme="@style/Theme.AppCompat.Light">
+
+            <yargo.inc.orders.fragments.order_list.profile_editor.custom_view.CustomToolBarEditor
+                android:id="@+id/customToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <AutoCompleteTextView
+            android:id="@+id/editSurname"
+            style="@style/RegistrInputTextStyle"
+            android:hint="@string/your_surname"
+            android:inputType="textEmailAddress" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editName"
+            style="@style/RegistrInputTextStyle"
+            android:hint="@string/your_name"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/cityId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:text="@string/your_city"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:entries="@array/citiesName" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:text="@string/your_sex"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/sexRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:checkedButton="@id/sexMale"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp">
+
+            <RadioButton
+                android:id="@+id/sexMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/male"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/sexFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/female"
+                android:textSize="16sp" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:text="@string/your_bithday"
+            android:textSize="16sp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editBdate"
+            style="@style/RegistrInputTextStyle"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="@string/your_birthday"
+
+            android:longClickable="false"
+            android:textSize="18sp" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
