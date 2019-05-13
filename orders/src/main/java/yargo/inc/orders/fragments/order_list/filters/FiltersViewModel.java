@@ -15,7 +15,6 @@ import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.orders.R;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CategoryModel;
-import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CityModel;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.models.SettingModel;
 
 public class FiltersViewModel extends BaseViewAndroidModel {
