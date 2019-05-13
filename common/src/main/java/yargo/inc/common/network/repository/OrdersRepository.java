@@ -194,7 +194,7 @@ public class OrdersRepository {
 
 
     public Observable<List<OrderItem>> getAllVacantOrdersFromDb(String orderName) {
-        int cityId =(int)commonSharedPreferences.getObject(FILTERED_CITY, int.class);
+        int cityId =(int)commonSharedPreferences.getIntObject(FILTERED_CITY, int.class);
 
 //        commonSharedPreferences.getObject()
 
@@ -207,9 +207,7 @@ public class OrdersRepository {
     }
     //возращаем количество вакантных заказов из кэша
     public Observable<Integer> getVacantFromDbCount(String orderName){
-        int cityId =(int)commonSharedPreferences.getObject(FILTERED_CITY, int.class);
-
-
+        int cityId =(int)commonSharedPreferences.getIntObject(FILTERED_CITY, int.class);
 
         return ordersDao.getAllVacantOrders(orderName, cityId).map(new Function<List<OrderItem>, Integer>() {
             @Override
