@@ -1,5 +1,6 @@
 package yargo.inc.common.network.repository;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import io.reactivex.Notification;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import yargo.inc.common.R;
 import yargo.inc.common.database.OrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.api.OrderApiService;
@@ -31,10 +33,12 @@ public class OrdersRepository {
     private CommonSharedPreferences commonSharedPreferences;
 
     private static final int PAGE_SIZE =5;
+    private Context mContext;
 
-    public OrdersRepository(OrderApiService orderApiService, OrdersDao ordersDao, CommonSharedPreferences commonSharedPreferences) {
+    public OrdersRepository(OrderApiService orderApiService, OrdersDao ordersDao, CommonSharedPreferences commonSharedPreferences, Context context) {
         this.orderApiService = orderApiService;
         this.ordersDao = ordersDao;
+        this.mContext = context;
         this.commonSharedPreferences = commonSharedPreferences;
     }
 
@@ -186,17 +190,63 @@ public class OrdersRepository {
         Observable.fromCallable(() -> {
 //            ordersDao.removeAll();
             ordersDao.insertAll(userOrdersItems);
-            return userOrdersItems;
-        }).subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(ordersItemList -> Log.d(TAG, "vacant order saved in DB, list count: " + ordersItemList.size()));
-    }
+                  return userOrdersItems;
+    }).subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(ordersItemList -> Log.d(TAG, "vacant order saved in DB, list count: " + ordersItemList.size()));
+}
 
 
     public Observable<List<OrderItem>> getAllVacantOrdersFromDb(String orderName) {
         int cityId =(int)commonSharedPreferences.getObject(FILTERED_CITY, int.class);
 
-//        commonSharedPreferences.getObject()
+        String[] filterItems = mContext.getResources().getStringArray(R.array.item_name);
+        String parametrs ="(";
+        String final_parametrs = "";
+        
+        if ((Boolean) commonSharedPreferences.getBooleanObject(filterItems[0], Boolean.class))
+            parametrs = parametrs + "1,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[1], Boolean.class))
+            parametrs = parametrs + "2,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[2], Boolean.class))
+            parametrs = parametrs + "3,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[3], Boolean.class))
+            parametrs = parametrs + "4,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[4], Boolean.class))
+            parametrs = parametrs + "5,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[5], Boolean.class))
+            parametrs = parametrs + "6,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[6], Boolean.class))
+            parametrs = parametrs + "7,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[7], Boolean.class))
+            parametrs = parametrs + "8,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[8], Boolean.class))
+            parametrs = parametrs + "9,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[9], Boolean.class))
+            parametrs = parametrs + "10,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[10], Boolean.class))
+            parametrs = parametrs + "11,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[11], Boolean.class))
+            parametrs = parametrs + "12,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[12], Boolean.class))
+            parametrs = parametrs + "13,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[13], Boolean.class))
+            parametrs = parametrs + "14,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[14], Boolean.class))
+            parametrs = parametrs + "15,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[15], Boolean.class))
+            parametrs = parametrs + "16,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[16], Boolean.class))
+            parametrs = parametrs + "17,";
+        if ((Boolean)commonSharedPreferences.getBooleanObject(filterItems[17], Boolean.class))
+            parametrs = parametrs + "18,";
+
+        final_parametrs = parametrs.substring(0, parametrs.length() - 1);
+
+        final_parametrs = final_parametrs + ")";
+        if (final_parametrs.equals(")")){
+            String t = "";
+        }
 
         return ordersDao.getAllVacantOrders(orderName, cityId).filter(new Predicate<List<OrderItem>>() {
             @Override

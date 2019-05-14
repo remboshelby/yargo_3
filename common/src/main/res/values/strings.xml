@@ -18,7 +18,50 @@
         <item>40308</item>
         <item>43730</item>
     </string-array>
+    
+    <string-array name="categoryName">
+        <item>Сантехнические работы</item>
+        <item>Электромонтажные работы</item>
+        <item>Сварочные работы</item>
+        <item>Отделочные работы</item>
+        <item>Двери</item>
+        <item>Замки</item>
+        <item>Мебель</item>
+        <item>Мелкий ремонт</item>
+        <item>Окна</item>
+        <item>Отопление</item>
+        <item>Вентиляция</item>
+        <item>Слесарные работы</item>
+        <item>Столярные работы</item>
+        <item>Токарные работы</item>
+        <item>Общестроительные работы</item>
+        <item>Информационные технологии</item>
+        <item>Клининг</item>
+        <item>Ремонт бытовой техники</item>
+    </string-array>
 
+    <string-array name="item_name">
+        <item>caterogy_item_0</item>
+        <item>caterogy_item_1</item>
+        <item>caterogy_item_2</item>
+        <item>caterogy_item_3</item>
+        <item>caterogy_item_4</item>
+        <item>caterogy_item_5</item>
+        <item>caterogy_item_6</item>
+        <item>caterogy_item_7</item>
+        <item>caterogy_item_8</item>
+        <item>caterogy_item_9</item>
+        <item>caterogy_item_10</item>
+        <item>caterogy_item_11</item>
+        <item>caterogy_item_12</item>
+        <item>caterogy_item_13</item>
+        <item>caterogy_item_14</item>
+        <item>caterogy_item_15</item>
+        <item>caterogy_item_16</item>
+        <item>caterogy_item_17</item>
+    </string-array>
+
+    
     <string name="order_addres"><b>Адрес:</b> %s</string>
     <string name="order_manager"><b>Заказчик:</b> %s</string>
     <string name="order_date"><b>Дата:</b> %s</string>

@@ -1,5 +1,7 @@
 package yargo.inc.common.di.modules;
 
+import android.content.Context;
+
 import yargo.inc.common.database.OrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.api.ComissionApiService;
@@ -23,8 +25,8 @@ public class RepositoryModule {
         return new LoginRepository(loginApiService);
     }
     @Provides
-    OrdersRepository ordersRepository(OrderApiService orderApiService, OrdersDao ordersDao, CommonSharedPreferences commonSharedPreferences){
-        return new OrdersRepository(orderApiService, ordersDao,commonSharedPreferences);
+    OrdersRepository ordersRepository(OrderApiService orderApiService, OrdersDao ordersDao, CommonSharedPreferences commonSharedPreferences, Context context){
+        return new OrdersRepository(orderApiService, ordersDao,commonSharedPreferences, context);
     }
     @Provides
     RegistrRepository registrRepository(RegistrApiService registrApiService){

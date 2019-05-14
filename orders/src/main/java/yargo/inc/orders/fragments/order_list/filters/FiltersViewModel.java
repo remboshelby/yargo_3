@@ -3,7 +3,6 @@ package yargo.inc.orders.fragments.order_list.filters;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -11,7 +10,6 @@ import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 
 import yargo.inc.common.base.BaseViewAndroidModel;
-import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.orders.R;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.models.CategoryModel;
@@ -20,7 +18,8 @@ import yargo.inc.orders.fragments.order_list.filters.custom_view.models.SettingM
 public class FiltersViewModel extends BaseViewAndroidModel {
 
     MutableLiveData <Boolean> isAllCategoryChecked = new MutableLiveData<>();
-
+    private String[] item_name;
+    private String[] categoryNames;
 
     int iconsCategory[] = {
             R.drawable.icon_santech,
@@ -43,54 +42,13 @@ public class FiltersViewModel extends BaseViewAndroidModel {
             R.drawable.icon_bit,
     };
 
-    String categoryNames[] = {
-            "Сантехнические работы",
-            "Электромонтажные работы",
-            "Сварочные работы",
-            "Отделочные работы",
-            "Двери",
-            "Замки",
-            "Мебель",
-            "Мелкий ремонт",
-            "Окна",
-            "Отопление",
-            "Вентиляция",
-            "Слесарные работы",
-            "Столярные работы",
-            "Токарные работы",
-            "Общестроительные работы",
-            "Информационные технологии",
-            "Клининг",
-            "Ремонт бытовой техники",
-    };
-    String item_name[] = {
-            "caterogy_item_0",
-            "caterogy_item_1",
-            "caterogy_item_2",
-            "caterogy_item_3",
-            "caterogy_item_4",
-            "caterogy_item_5",
-            "caterogy_item_6",
-            "caterogy_item_7",
-            "caterogy_item_8",
-            "caterogy_item_9",
-            "caterogy_item_10",
-            "caterogy_item_11",
-            "caterogy_item_12",
-            "caterogy_item_13",
-            "caterogy_item_14",
-            "caterogy_item_15",
-            "caterogy_item_16",
-            "caterogy_item_17"};
     private CommonSharedPreferences commonSharedPreferences;
-
-//    public FiltersViewModel(CommonSharedPreferences commonSharedPreferences) {
-//        this.commonSharedPreferences = commonSharedPreferences;
-//    }
 
     public FiltersViewModel(@NonNull Application application,CommonSharedPreferences commonSharedPreferences) {
         super(application);
         this.commonSharedPreferences = commonSharedPreferences;
+        this.item_name = getApplication().getResources().getStringArray(R.array.item_name);
+        this.categoryNames = getApplication().getResources().getStringArray(R.array.categoryName);
     }
 
     public void observeIsAllCategoryChecked(LifecycleOwner lifecycleOwner, Observer observer){
