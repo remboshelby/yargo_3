@@ -47,7 +47,7 @@ public class VacantOrdersViewModel extends BaseViewModel {
             orderName = "";
         OrderDataSourceFactory orderDataSourceFactory = new OrderDataSourceFactory(ordersRepository, compositeDisposable, orderName);
         isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> {
-            setOrdersCount(input.getTotalCount());
+//            setOrdersCount(input.getTotalCount());
             return input.getIsLoading();
         });
         return new LivePagedListBuilder<>(orderDataSourceFactory,
