@@ -18,8 +18,9 @@ public class UserOrderDataSource extends PositionalDataSource<OrderItem> {
     private int categoryOrderId;
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-
     private MutableLiveData<Integer> recordCount = new MutableLiveData<>();
+
+    private int totalCount;
 
     public UserOrderDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable, int categoryOrderId) {
         this.ordersRepository = ordersRepository;
@@ -34,11 +35,11 @@ public class UserOrderDataSource extends PositionalDataSource<OrderItem> {
     }
 
     public int getTotalCount() {
-        return recordCount.getValue();
+        return totalCount;
     }
 
     public void setTotalCount(int totalCount) {
-        this.recordCount.postValue(totalCount);
+        this.totalCount = totalCount;
         if (totalCount==0)
             isLoading.postValue(false);
     }
@@ -84,10 +85,6 @@ public class UserOrderDataSource extends PositionalDataSource<OrderItem> {
 
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
-    }
-
-    public MutableLiveData<Integer> getRecordCount() {
-        return recordCount;
     }
 
 }

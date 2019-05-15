@@ -17,7 +17,7 @@ import yargo.inc.orders.fragments.order_list.filters.custom_view.models.SettingM
 
 public class FiltersViewModel extends BaseViewAndroidModel {
 
-    MutableLiveData <Boolean> isAllCategoryChecked = new MutableLiveData<>();
+    MutableLiveData<Boolean> isAllCategoryChecked = new MutableLiveData<>();
     private String[] item_name;
     private String[] categoryNames;
 
@@ -44,19 +44,20 @@ public class FiltersViewModel extends BaseViewAndroidModel {
 
     private CommonSharedPreferences commonSharedPreferences;
 
-    public FiltersViewModel(@NonNull Application application,CommonSharedPreferences commonSharedPreferences) {
+    public FiltersViewModel(@NonNull Application application, CommonSharedPreferences commonSharedPreferences) {
         super(application);
         this.commonSharedPreferences = commonSharedPreferences;
         this.item_name = getApplication().getResources().getStringArray(R.array.item_name);
         this.categoryNames = getApplication().getResources().getStringArray(R.array.categoryName);
     }
 
-    public void observeIsAllCategoryChecked(LifecycleOwner lifecycleOwner, Observer observer){
+    public void observeIsAllCategoryChecked(LifecycleOwner lifecycleOwner, Observer observer) {
         isAllCategoryChecked.observe(lifecycleOwner, observer);
     }
+
     public ArrayList<SettingModel> createSettingsArray() {
         ArrayList<SettingModel> settingsList = new ArrayList<>();
-        int categoryCount = (int) commonSharedPreferences.getIntObject("category_count", int.class);
+        int categoryCount = getFilterCategoryCount();
         if (categoryCount == 0) {
             settingsList.add(new SettingModel("Категории", "Все категории", R.drawable.ic_apps_black_24dp, 1));
         } else {
@@ -69,32 +70,41 @@ public class FiltersViewModel extends BaseViewAndroidModel {
     public ArrayList<CategoryModel> createCategoryArray() {
         ArrayList<CategoryModel> categoryList = new ArrayList<>();
         boolean checkedAll = true;
-        for (int i =0; i<iconsCategory.length; i++){
-            boolean test = (boolean)commonSharedPreferences.getBooleanObject(item_name[i], boolean.class);
-            checkedAll = checkedAll&test;
-            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i,(boolean)commonSharedPreferences.getBooleanObject( item_name[i], boolean.class)));
+        for (int i = 0; i < iconsCategory.length; i++) {
+            boolean test = (boolean) commonSharedPreferences.getBooleanObject(item_name[i], boolean.class);
+            checkedAll = checkedAll & test;
+            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i, (boolean) commonSharedPreferences.getBooleanObject(item_name[i], boolean.class)));
         }
         isAllCategoryChecked.setValue(checkedAll);
         return categoryList;
     }
 
-    public ArrayList<CategoryModel> dropChecked(){
+    public ArrayList<CategoryModel> dropChecked() {
         ArrayList<CategoryModel> categoryList = new ArrayList<>();
-        for (int i =0; i<iconsCategory.length; i++){
+        for (int i = 0; i < iconsCategory.length; i++) {
             commonSharedPreferences.putObject(item_name[i], "false");
-            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i,false));
+            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i, false));
         }
         return categoryList;
     }
-    public ArrayList<CategoryModel> setCheckedAll(){
+
+    public ArrayList<CategoryModel> setCheckedAll() {
         ArrayList<CategoryModel> categoryList = new ArrayList<>();
-        for (int i =0; i<iconsCategory.length; i++){
+        for (int i = 0; i < iconsCategory.length; i++) {
             commonSharedPreferences.putObject(item_name[i], "true");
-            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i,true));
+            categoryList.add(new CategoryModel(categoryNames[i], iconsCategory[i], i, true));
         }
         return categoryList;
     }
-    public void setCheck(int position, boolean checked){
+
+    public void setCheck(int position, boolean checked) {
         commonSharedPreferences.putObject(item_name[position], checked);
+    }
+    public int getFilterCategoryCount(){
+        int count = 0;
+        for (int i = 0; i < iconsCategory.length; i++) {
+            if ((Boolean)commonSharedPreferences.getBooleanObject(item_name[i], Boolean.class)) count++;
+        }
+        return count;
     }
 }

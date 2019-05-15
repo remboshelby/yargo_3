@@ -20,7 +20,6 @@ public class UserOrdersViewModel extends BaseViewModel {
     private LiveData<PagedList<OrderItem>> userOrders;
 
     private LiveData<Boolean> isLoading;
-    private LiveData<Integer> ordersCount;
 
     private CompositeDisposable compositeDisposable;
 
@@ -34,13 +33,14 @@ public class UserOrdersViewModel extends BaseViewModel {
         this.ordersRepository = ordersRepository;
         compositeDisposable = getCompositeDisposable();
     }
+
     public void observUserOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
         userOrdersCount.observe(owner, userOrderCountValue);
     }
-
     public void observOrderCategoryId(LifecycleOwner owner, Observer<Integer> valOrderCategoryId){
         orderCategoryId.observe(owner, valOrderCategoryId);
     }
+
     public void replaceUserOrdersSubscription(LifecycleOwner owner){
         compositeDisposable.clear();
         if (userOrders!=null)  userOrders.removeObservers(owner);
@@ -48,8 +48,10 @@ public class UserOrdersViewModel extends BaseViewModel {
     }
     private LiveData<PagedList<OrderItem>> createFiltredUsersOrders(int categoryOrderId) {
         UserOrderDataSourceFactory userOrderDataSourceFactory = new UserOrderDataSourceFactory(ordersRepository, compositeDisposable, categoryOrderId);
-        isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
-        ordersCount = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getRecordCount());
+        isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> {
+            setUserOrdersCount(input.getTotalCount());
+            return input.getIsLoading();
+        });
 
         return new LivePagedListBuilder<>(userOrderDataSourceFactory,
                 new PagedList.Config.Builder()
@@ -67,13 +69,14 @@ public class UserOrdersViewModel extends BaseViewModel {
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
-    public LiveData<Integer> getRecordCount(){
-        return ordersCount;
-    }
     public int getStartPositon() {
         return startPositon;
     }
+
     public void setStartPositon(int startPositon) {
         this.startPositon = startPositon;
+    }
+    public void setUserOrdersCount(int userOrdersCount) {
+        this.userOrdersCount.postValue(userOrdersCount);
     }
 }

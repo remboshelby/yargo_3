@@ -1,6 +1,8 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,12 +66,17 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
         recyclerOrders.setNestedScrollingEnabled(true);
         vacantOrdersViewModel.observSearchText(this, t -> replaceSubscription());
 
-        vacantOrdersViewModel.observVacantOrderCount(this, count -> imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE));
+        vacantOrdersViewModel.observVacantOrderCount(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer count) {
+                Log.d(VacantOrderList.class.getSimpleName(), " count " + count);
+                imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
+            }
+        });
 
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
 
         vacantOrdersItemAdapter = new VacantOrdersItemAdapter(this);
-
         swipeRefreshLayout.setOnRefreshListener(() -> replaceSubscription());
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerOrders.getContext(), layoutManager.getOrientation());
@@ -81,8 +89,8 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
         vacantOrdersViewModel.onViewCreated();
     }
     private void startListening(){
-        vacantOrdersViewModel.getIsLoading().observe(this, VacantOrderList.this::setLoadingState);
         vacantOrdersViewModel.getVacantOrders().observe(this, ordersItems -> vacantOrdersItemAdapter.submitList(ordersItems));
+        vacantOrdersViewModel.getIsLoading().observe(this, VacantOrderList.this::setLoadingState);
     }
     public void replaceSubscription(){
         vacantOrdersViewModel.replaceVacantSubscription(this);

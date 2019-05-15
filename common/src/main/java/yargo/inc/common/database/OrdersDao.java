@@ -25,8 +25,11 @@ public interface OrdersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<OrderItem> orderItemList);
 
-    @Query("Select *from orders where idUser is null and name like '%' || :orderName || '%' and idCity = :idCity")
+    @Query("Select *from orders where idUser is null and name like '%' || :orderName || '%' and idCity = :idCity order by createdAt asc")
     Flowable<List<OrderItem>> getAllVacantOrders(String orderName, int idCity);
+
+    @Query("Select *from orders where idUser is null and name like '%' || :orderName || '%' and idCity = :idCity and idSpecialization in (:specialParams) order by createdAt asc")
+    Flowable<List<OrderItem>> getAllVacantOrdersWithFilter(String orderName, int idCity, List<Integer> specialParams);
 
     @Query("Select *from orders where idOrderStatus = :idOrderStatus")
     Flowable<List<OrderItem>> getAllUserOrdersStatus(int idOrderStatus);

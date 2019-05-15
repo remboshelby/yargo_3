@@ -2,6 +2,7 @@ package yargo.inc.orders.fragments.order_list.order_commission;
 
 import android.text.format.DateUtils;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -10,18 +11,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import io.reactivex.schedulers.Schedulers;
+import ru.yandex.money.android.sdk.PaymentMethodType;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.common.network.repository.CommissionRepository;
 import yargo.inc.common.network.repository.OrderActionRepository;
+import yargo.inc.orders.fragments.order_list.order_commission.entity.PayEntity;
+import yargo.inc.orders.yandex_utils.Settings;
 
 public class CommissionViewModel extends BaseViewModel {
     private OrderActionRepository orderActionRepository;
     private CommissionRepository commissionRepository;
 
+    private MutableLiveData<PayEntity> payRequisites = new MutableLiveData<>();
     private MutableLiveData<OrderDetailResponse> orderDetailData = new MutableLiveData<>();
 
     public CommissionViewModel(CommissionRepository commissionRepository,OrderActionRepository orderActionRepository) {
@@ -77,5 +84,33 @@ public class CommissionViewModel extends BaseViewModel {
             return date_1;
         }
         return date_1;
+    }
+    @NonNull
+    protected static Set<PaymentMethodType> getPaymentMethodTypes(Settings settings) {
+        final Set<PaymentMethodType> paymentMethodTypes = new HashSet<>();
+
+        if (settings.isYandexMoneyAllowed()) {
+            paymentMethodTypes.add(PaymentMethodType.YANDEX_MONEY);
+        }
+
+        if (settings.isNewCardAllowed()) {
+            paymentMethodTypes.add(PaymentMethodType.BANK_CARD);
+        }
+
+        if (settings.isSberbankOnlineAllowed()) {
+            paymentMethodTypes.add(PaymentMethodType.SBERBANK);
+        }
+
+        if (settings.isGooglePayAllowed()) {
+            paymentMethodTypes.add(PaymentMethodType.GOOGLE_PAY);
+        }
+        return paymentMethodTypes;
+    }
+
+    public void setPayRequisites(PayEntity payEntity) {
+        this.payRequisites.postValue(payEntity);
+    }
+    public PayEntity getPayRequisites() {
+        return this.payRequisites.getValue();
     }
 }

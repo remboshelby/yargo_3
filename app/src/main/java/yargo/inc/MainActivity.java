@@ -41,8 +41,8 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
 
-        disableFCM();
-        enableFCM();
+//        disableFCM();
+//        enableFCM();
 
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         if (preferences.getString(AUTH_KEY, "\"\"").equals("\"\"")){

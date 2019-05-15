@@ -21,12 +21,11 @@ public class VacantOrdersViewModel extends BaseViewModel {
     private LiveData<PagedList<OrderItem>> vacantOrders;
 
     private LiveData<Boolean> isLoading;
-    private LiveData<Integer> ordersCount;
+    private MutableLiveData<Integer> ordersCount = new MutableLiveData<>();
 
     private CompositeDisposable compositeDisposable;
 
     private MutableLiveData<String> orderDescription = new MutableLiveData<>();
-    private MutableLiveData<Integer> vacantOrdersCount = new MutableLiveData<>();
 
     public VacantOrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
@@ -35,18 +34,22 @@ public class VacantOrdersViewModel extends BaseViewModel {
 
     }
 
-    public void observSearchText(LifecycleOwner owner, Observer<String> searchString){
+    public void observSearchText(LifecycleOwner owner, Observer<String> searchString) {
         orderDescription.observe(owner, searchString);
     }
-    public void observVacantOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
-        vacantOrdersCount.observe(owner, userOrderCountValue);
+
+    public void observVacantOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue) {
+        ordersCount.observe(owner, userOrderCountValue);
     }
+
     private LiveData<PagedList<OrderItem>> createFiltredVacantOrders(String orderName) {
-        if (orderName ==null)
-            orderName ="";
+        if (orderName == null)
+            orderName = "";
         OrderDataSourceFactory orderDataSourceFactory = new OrderDataSourceFactory(ordersRepository, compositeDisposable, orderName);
-        isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
-        ordersCount = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> input.getRecordCount());
+        isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> {
+            setOrdersCount(input.getTotalCount());
+            return input.getIsLoading();
+        });
         return new LivePagedListBuilder<>(orderDataSourceFactory,
                 new PagedList.Config.Builder()
                         .setEnablePlaceholders(true)
@@ -54,8 +57,10 @@ public class VacantOrdersViewModel extends BaseViewModel {
                         .build()).setInitialLoadKey(0)
                 .build();
 
+
     }
-    public void replaceVacantSubscription(LifecycleOwner owner){
+
+    public void replaceVacantSubscription(LifecycleOwner owner) {
         compositeDisposable.clear();
         vacantOrders.removeObservers(owner);
         vacantOrders = createFiltredVacantOrders(orderDescription.getValue());
@@ -79,4 +84,7 @@ public class VacantOrdersViewModel extends BaseViewModel {
         this.orderDescription.postValue(orderDescription);
     }
 
+    public void setOrdersCount(int ordersCount) {
+        this.ordersCount.postValue(ordersCount);
+    }
 }

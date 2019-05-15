@@ -32,6 +32,7 @@ public class FilterSettings extends BaseFragment implements FilterSettingsAdapte
     protected FiltersViewModel filtersViewModel;
 
     private ArrayList<SettingModel> settingsList = new ArrayList<>();
+    private FilterSettingsAdapter filterSettingsAdapter;
 
     @BindView(R2.id.recyclerFilterSettings)
     RecyclerView recyclerFilterSettings;
@@ -45,8 +46,16 @@ public class FilterSettings extends BaseFragment implements FilterSettingsAdapte
 
     private void init(@NonNull View view) {
         ButterKnife.bind(this, view);
-        settingsList = filtersViewModel.createSettingsArray();
-        FilterSettingsAdapter filterSettingsAdapter = new FilterSettingsAdapter(settingsList, this);
+
+        if (settingsList.size()!=0){
+            settingsList.clear();
+            settingsList.addAll(filtersViewModel.createSettingsArray());
+            filterSettingsAdapter.notifyDataSetChanged();
+        }
+        else {
+            settingsList.addAll(filtersViewModel.createSettingsArray());
+        }
+        filterSettingsAdapter = new FilterSettingsAdapter(settingsList, this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerFilterSettings.getContext(), layoutManager.getOrientation());

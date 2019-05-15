@@ -1,5 +1,7 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders;
 
+import android.util.Log;
+
 import io.reactivex.functions.Consumer;
 import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.network.repository.OrdersRepository;
@@ -16,7 +18,6 @@ public class OrdersDataSource extends PositionalDataSource<OrderItem> {
     private CompositeDisposable compositeDisposable;
     private String orderName;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private MutableLiveData<Integer> recordCount = new MutableLiveData<>();
 
     private int totalCount;
 
@@ -28,7 +29,13 @@ public class OrdersDataSource extends PositionalDataSource<OrderItem> {
         compositeDisposable.add(ordersRepository.getVacantFromDbCount(orderName)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(integer -> setTotalCount(integer),
+                .subscribe(new Consumer<Integer>() {
+                               @Override
+                               public void accept(Integer integer) throws Exception {
+                                   OrdersDataSource.this.setTotalCount(integer);
+                                   Log.d(OrdersDataSource.class.getSimpleName(), " count " +integer );
+                               }
+                           },
                         throwable -> throwable.printStackTrace()));
     }
     @Override
@@ -62,9 +69,6 @@ public class OrdersDataSource extends PositionalDataSource<OrderItem> {
 
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
-    }
-    public MutableLiveData<Integer> getRecordCount() {
-        return recordCount;
     }
 
     public int getTotalCount() {

@@ -62,12 +62,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ordersViewModel.observUserOrderCount(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer count) {
-                imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
-            }
-        });
+        ordersViewModel.observUserOrderCount(this, count -> imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE));
 
         ordersViewModel.observOrderCategoryId(this, new Observer<Integer>() {
             @Override
@@ -99,19 +94,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
 
     private void startListening(){
         ordersViewModel.getIsLoading().observe(this, aBoolean -> setLoadingState(aBoolean));
-        ordersViewModel.getRecordCount().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                imgBanner.setVisibility(integer > 0 ? View.GONE : View.VISIBLE);
-            }
-        });
-
-        ordersViewModel.getUserOrders().observe(this, new Observer<PagedList<OrderItem>>() {
-            @Override
-            public void onChanged(PagedList<OrderItem> userOrdersItems) {
-                userOrdersItemAdapter.submitList(userOrdersItems);
-            }
-        });
+        ordersViewModel.getUserOrders().observe(this, userOrdersItems -> userOrdersItemAdapter.submitList(userOrdersItems));
     }
     public void replaceSubscription(){
         ordersViewModel.replaceUserOrdersSubscription(this);

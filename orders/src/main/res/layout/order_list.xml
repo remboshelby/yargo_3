@@ -52,7 +52,7 @@
                 android:focusableInTouchMode="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/noinet" />
+                app:srcCompat="@drawable/noorder" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerOrders"

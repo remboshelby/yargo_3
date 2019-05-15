@@ -10,6 +10,7 @@ import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterSettings;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.utils.CategoryItemView;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.utils.CityItemView;
 import yargo.inc.orders.fragments.order_list.order_commission.OrderCommissionView;
+import yargo.inc.orders.fragments.order_list.order_commission.SuccessTokinizeView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
 import yargo.inc.orders.fragments.order_list.profile_editor.custom_view.CustomToolBarEditor;
@@ -47,6 +48,8 @@ public interface OrdersComponent {
     void inject(CustomToolBarEditor customToolBarEditor);
 
     void inject(ProfileEditorView profileEditorView);
+
+    void inject(SuccessTokinizeView successTokinizeView);
 
     @Component.Builder
     interface Builder{

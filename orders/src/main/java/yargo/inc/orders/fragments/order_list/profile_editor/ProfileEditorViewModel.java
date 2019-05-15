@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.login.User;
+import yargo.inc.common.network.models.profile_editor_model.ProfileEditResponse;
 import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.common.network.repository.OrdersRepository;
 
@@ -55,10 +56,10 @@ public class ProfileEditorViewModel extends BaseViewModel {
                 userMutableLiveData.getValue().getBirthday())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<User>() {
+                .subscribe(new Consumer<ProfileEditResponse>() {
                     @Override
-                    public void accept(User user) throws Exception {
-                        userMutableLiveData.postValue(user);
+                    public void accept(ProfileEditResponse profileEditResponse) throws Exception {
+                        userMutableLiveData.postValue(profileEditResponse.getResponse().getUser());
                     }
                 }));
 
