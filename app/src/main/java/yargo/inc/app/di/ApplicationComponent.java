@@ -3,9 +3,6 @@ package yargo.inc.app.di;
 import android.app.Application;
 import android.content.Context;
 
-import dagger.Binds;
-import yargo.inc.MainActivity;
-import yargo.inc.app.App;
 import yargo.inc.app.di.module.ServiceModule;
 import yargo.inc.common.di.CommonComponent;
 import yargo.inc.common.di.ServerUrl;
@@ -19,7 +16,6 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import yargo.inc.login.fragments.registration.RegistrationFragment;
 import yargo.inc.services.FirebaseMessaging;
 
 @Singleton

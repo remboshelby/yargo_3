@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import javax.inject.Inject;
 
@@ -22,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -107,6 +110,7 @@ public class OrderListsFragment extends BaseFragment {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        enableFCM();
 
         if (orderListViewModel.getOrderStatus() == -1 || orderListViewModel.getOrderStatus() == 1)
             pushFragmentIntoFragment(new VacantOrderList());
@@ -145,6 +149,7 @@ public class OrderListsFragment extends BaseFragment {
         accoutExitDialog.setMessage(getResources().getString(R.string.exit_question)).setCancelable(false).
                 setPositiveButton(getResources().getString(R.string.YES), (dialog, which) -> {
                     orderListViewModel.pushAuthToken("");
+                    disableFCM();
                     navigator.openFragment(getRoot(), "Login");
                 })
                 .setNegativeButton(getResources().getString(R.string.NO), (dialog, which) -> dialog.cancel()).create();
@@ -191,5 +196,23 @@ public class OrderListsFragment extends BaseFragment {
                 .build();
 
         ordersComponent.inject(this);
+    }
+
+    public void enableFCM(){
+        // Enable FCM via enable Auto-init service which generate new token and receive in FCMService
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+    }
+    public void disableFCM(){
+        // Disable auto init
+        FirebaseMessaging.getInstance().setAutoInitEnabled(false);
+        new Thread(() -> {
+            try {
+                // Remove InstanceID initiate to unsubscribe all topic
+                // TODO: May be a better way to use FirebaseMessaging.getInstance().unsubscribeFromTopic()
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

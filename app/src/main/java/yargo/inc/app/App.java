@@ -35,7 +35,7 @@ public class App extends Application implements CommonApplication {
         SharedPreferences preferences;
         preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE);
         if (preferences.getString("app_id", "").isEmpty()){
-            preferences.edit().putString("app_id",UUID.randomUUID().toString()).commit();
+            preferences.edit().putString("app_id",UUID.randomUUID().toString().substring(0,32)).commit();
         }
     }
 
