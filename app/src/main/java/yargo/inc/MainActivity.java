@@ -40,9 +40,7 @@ public class MainActivity extends BaseActivity {
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
 
-
-//        disableFCM();
-//        enableFCM();
+        disableFCM();
 
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         if (preferences.getString(AUTH_KEY, "\"\"").equals("\"\"")){
@@ -64,10 +62,7 @@ public class MainActivity extends BaseActivity {
             getSupportFragmentManager().popBackStack();
         }
     }
-    public void enableFCM(){
-        // Enable FCM via enable Auto-init service which generate new token and receive in FCMService
-        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-    }
+
 
     public void disableFCM(){
         // Disable auto init

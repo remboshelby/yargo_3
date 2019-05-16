@@ -2,7 +2,6 @@ package yargo.inc.orders.di;
 
 import android.app.Application;
 
-import dagger.Binds;
 import yargo.inc.orders.fragments.order_list.filters.FiltersView;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterCategory;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterCity;

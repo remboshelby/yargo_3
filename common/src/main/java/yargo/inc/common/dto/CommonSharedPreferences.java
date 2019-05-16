@@ -16,6 +16,7 @@ import yargo.inc.common.network.models.login.User;
 public class CommonSharedPreferences {
     public static final String APP_ID = "app_id";
     public static final String AUTH_KEY = "auth_key";
+    public static final String FCM_KEY = "fcm_key";
     public static final String USER_ABOUT_RESPONSE = "user_about_response";
     public static final String FILTERED_CITY = "filtered_city";
 
