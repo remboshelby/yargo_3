@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "585389549393-4cljt0qb2t3q3am6mproohl6e1dr48tk.apps.googleusercontent.com",
+          "client_id": "585389549393-u9vtusi21r669c5jnkfinotv7p8m9c07.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "yargo.inc",
-            "certificate_hash": "7809421169412087586cb37c21b006852018d7ca"
+            "certificate_hash": "ab8ef16d172ab556503031cdae037b64dfb3e05f"
+          }
+        },
+        {
+          "client_id": "585389549393-ra5rjgc72d73ipu85pqjq3t4qt3mm5q2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "yargo.inc",
+            "certificate_hash": "bc7bf548fd44c9e60e3ad1c134df4158d08e4bb2"
           }
         },
         {
@@ -31,19 +39,19 @@
           }
         },
         {
+          "client_id": "585389549393-4cljt0qb2t3q3am6mproohl6e1dr48tk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "yargo.inc",
+            "certificate_hash": "7809421169412087586cb37c21b006852018d7ca"
+          }
+        },
+        {
           "client_id": "585389549393-asb4092o0o7jm7ha4i185kftslg56gu3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "yargo.inc",
             "certificate_hash": "307dbe26d7a95405823dacb0f950fcca3260073a"
-          }
-        },
-        {
-          "client_id": "585389549393-ra5rjgc72d73ipu85pqjq3t4qt3mm5q2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "yargo.inc",
-            "certificate_hash": "bc7bf548fd44c9e60e3ad1c134df4158d08e4bb2"
           }
         },
         {
@@ -70,3 +78,4 @@
   ],
   "configuration_version": "1"
 }
+© 2019 GitHub, Inc.
