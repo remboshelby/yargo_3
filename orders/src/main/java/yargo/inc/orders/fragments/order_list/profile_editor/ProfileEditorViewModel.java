@@ -60,6 +60,7 @@ public class ProfileEditorViewModel extends BaseViewModel {
                     @Override
                     public void accept(ProfileEditResponse profileEditResponse) throws Exception {
                         userMutableLiveData.postValue(profileEditResponse.getResponse().getUser());
+                        commonSharedPreferences.putObject(commonSharedPreferences.USER_ABOUT_RESPONSE, profileEditResponse.getResponse().getUser());
                     }
                 }));
 

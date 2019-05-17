@@ -1,5 +1,6 @@
 package yargo.inc.common.network.api;
 
+import yargo.inc.common.network.models.app.AppResponse;
 import yargo.inc.common.network.models.order_list.OrderResponse;
 
 import io.reactivex.Observable;
@@ -17,4 +18,8 @@ public interface OrderApiService {
     Observable<OrderResponse> getOrderWatchedCount(@Query("LoginForm[auth_key]") String auth_key,
                                                    @Query("app_id") String app_id,
                                                    @Query("id_order") String id_order);
+    @GET("/app")
+    Observable<AppResponse> pushAppData(@Query("LoginForm[auth_key]") String auth_key,
+                                        @Query("app_id") String app_id,
+                                        @Query("fcm-token") String fcm);
 }

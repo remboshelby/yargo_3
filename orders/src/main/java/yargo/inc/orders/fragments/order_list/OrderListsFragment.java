@@ -110,7 +110,6 @@ public class OrderListsFragment extends BaseFragment {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        enableFCM();
 
         if (orderListViewModel.getOrderStatus() == -1 || orderListViewModel.getOrderStatus() == 1)
             pushFragmentIntoFragment(new VacantOrderList());
@@ -149,7 +148,7 @@ public class OrderListsFragment extends BaseFragment {
         accoutExitDialog.setMessage(getResources().getString(R.string.exit_question)).setCancelable(false).
                 setPositiveButton(getResources().getString(R.string.YES), (dialog, which) -> {
                     orderListViewModel.pushAuthToken("");
-                    disableFCM();
+                    orderListViewModel.clearTokenToServer();
                     navigator.openFragment(getRoot(), "Login");
                 })
                 .setNegativeButton(getResources().getString(R.string.NO), (dialog, which) -> dialog.cancel()).create();
@@ -198,21 +197,4 @@ public class OrderListsFragment extends BaseFragment {
         ordersComponent.inject(this);
     }
 
-    public void enableFCM(){
-        // Enable FCM via enable Auto-init service which generate new token and receive in FCMService
-        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-    }
-    public void disableFCM(){
-        // Disable auto init
-        FirebaseMessaging.getInstance().setAutoInitEnabled(false);
-        new Thread(() -> {
-            try {
-                // Remove InstanceID initiate to unsubscribe all topic
-                // TODO: May be a better way to use FirebaseMessaging.getInstance().unsubscribeFromTopic()
-                FirebaseInstanceId.getInstance().deleteInstanceId();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
 }

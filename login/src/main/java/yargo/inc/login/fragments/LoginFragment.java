@@ -115,6 +115,7 @@ public class LoginFragment extends BaseFragment {
             if (loginResponse.getResponse().getType().equals("OK")) {
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, loginResponse.getResponse().getAuthKey());
                 navigator.openFragment(getRoot(), "Orders");
+                viewModel.sendTokenToServer();
             } else {
                 preferences.putObject(CommonSharedPreferences.AUTH_KEY, "");
                 textInputLayoutEmail.setErrorEnabled(true);

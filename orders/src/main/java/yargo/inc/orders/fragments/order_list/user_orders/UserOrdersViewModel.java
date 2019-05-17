@@ -79,4 +79,5 @@ public class UserOrdersViewModel extends BaseViewModel {
     public void setUserOrdersCount(int userOrdersCount) {
         this.userOrdersCount.postValue(userOrdersCount);
     }
+
 }

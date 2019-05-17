@@ -59,6 +59,7 @@
     <string name="main_buy">Buy</string>
     <string name="main_toolbar_title">Placing an order</string>
     <string name="main">Основное</string>
+    <string name="profile_changed">Профиль успешно изменен</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

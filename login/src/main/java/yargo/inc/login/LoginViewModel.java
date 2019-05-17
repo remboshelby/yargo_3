@@ -1,7 +1,12 @@
 package yargo.inc.login;
 
+import android.util.Log;
+
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.network.models.app.AppResponse;
 import yargo.inc.common.network.models.login.LoginResponse;
 import yargo.inc.common.network.models.login.User;
 import yargo.inc.common.network.repository.LoginRepository;
@@ -13,6 +18,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static yargo.inc.common.dto.CommonSharedPreferences.FCM_KEY;
 
 public class LoginViewModel extends BaseViewModel {
     private LoginRepository loginRepository;
@@ -121,4 +128,21 @@ public class LoginViewModel extends BaseViewModel {
         commonSharedPreferences.putObject(CommonSharedPreferences.FILTERED_CITY, user.getIdCity());
         commonSharedPreferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, user);
     }
-}
+    public void sendTokenToServer() {
+        String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
+        String fcmToken = (String) commonSharedPreferences.getObject(CommonSharedPreferences.FCM_KEY, String.class);
+        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
+            addDisposible(loginRepository.pushAppData(authKey, appId, fcmToken)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new Consumer<AppResponse>() {
+                        @Override
+                        public void accept(AppResponse appResponse) throws Exception {
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                        }
+                    }));
+        }
+    }

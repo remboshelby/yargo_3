@@ -10,6 +10,7 @@ import yargo.inc.common.R;
 import yargo.inc.common.database.OrdersDao;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.api.OrderApiService;
+import yargo.inc.common.network.models.app.AppResponse;
 import yargo.inc.common.network.models.order_list.OrderResponse;
 import yargo.inc.common.network.models.order_list.OrderItem;
 
@@ -75,7 +76,7 @@ public class OrdersRepository {
         String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
-        return Observable.concatArrayEager(getVacantOrdersFromRemote(authKey, appId),getAllVacantOrdersFromDb(orderName))
+        return Observable.concatArrayEager(getVacantOrdersFromRemote(authKey, appId), getAllVacantOrdersFromDb(orderName))
                 .materialize()
                 .observeOn(Schedulers.io())
                 .map(new Function<Notification<List<OrderItem>>, Notification<List<OrderItem>>>() {
@@ -171,7 +172,7 @@ public class OrdersRepository {
         Observable.fromCallable(() -> {
 //            ordersDao.removeAll();
             List<Integer> ids = new ArrayList<>();
-            for (OrderItem orderItem: vacantOrderList) {
+            for (OrderItem orderItem : vacantOrderList) {
                 ids.add(orderItem.getID());
             }
             ordersDao.clearCashe(ids);
@@ -198,7 +199,7 @@ public class OrdersRepository {
         int cityId = (int) commonSharedPreferences.getIntObject(FILTERED_CITY, int.class);
 
         List<Integer> finalParametrs = createFilterParams();
-        if (finalParametrs.size()==0) {
+        if (finalParametrs.size() == 0) {
             return ordersDao.getAllVacantOrders(orderName, cityId).filter(new Predicate<List<OrderItem>>() {
                 @Override
                 public boolean test(List<OrderItem> ordersItemList) throws Exception {
@@ -221,7 +222,7 @@ public class OrdersRepository {
         int cityId = (int) commonSharedPreferences.getIntObject(FILTERED_CITY, int.class);
 
         List<Integer> finalParametrs = createFilterParams();
-        if (finalParametrs.size()==0) {
+        if (finalParametrs.size() == 0) {
             return ordersDao.getAllVacantOrders(orderName, cityId).map(new Function<List<OrderItem>, Integer>() {
                 @Override
                 public Integer apply(List<OrderItem> orderItems) throws Exception {
@@ -247,6 +248,7 @@ public class OrdersRepository {
             }
         }).toObservable();
     }
+
     public Observable<List<OrderItem>> getAllUserOrdersFromDb() {
         return ordersDao.getAllUserOrders().filter(new Predicate<List<OrderItem>>() {
             @Override
@@ -262,6 +264,11 @@ public class OrdersRepository {
 
     public void pushAuthToken(String authKey) {
         commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
+    }
+
+    public Observable<AppResponse> pushAppData(String auth_key,
+                                               String app_id, String fcm) {
+        return orderApiService.pushAppData(auth_key, app_id, fcm);
     }
 
     private List<Integer> createFilterParams() {

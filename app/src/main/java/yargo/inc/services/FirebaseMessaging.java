@@ -59,17 +59,6 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_yargo_notificate, options);
 
-        Intent resultIntent = null;
-//        Intent resultIntent = new Intent(this, OrderActivity.class);
-//        resultIntent.putExtra("_id", 15);
-//        resultIntent.setAction("_id");
-//        resultIntent.putExtra("idd", Integer.valueOf(idd));
-//        resultIntent.setAction("idd");
-//        resultIntent.putExtra("number", Integer.valueOf(idd));
-//        resultIntent.setAction("number");
-//        resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         Log.d(TAG, notification.getBody());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.getApplicationContext(), "notify_001")
@@ -78,8 +67,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
                 .setContentTitle(notification.getTitle())
                 .setContentText(notification.getBody())
                 .setDefaults(Notification.DEFAULT_SOUND)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent);
+                .setAutoCancel(true);
 
         long time = new Date().getTime();
         String tmpStr = String.valueOf(time);
@@ -106,28 +94,6 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     }
 
     private void saveToken(String token) {
-        sendTokenToServer(token);
-    }
-
-    private void sendTokenToServer(String token) {
         commonSharedPreferences.putObject(FCM_KEY, token);
-        String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
-        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
-
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
-        compositeDisposable.add(loginRepository.pushAppData(authKey, appId, token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(new Consumer<AppResponse>() {
-                    @Override
-                    public void accept(AppResponse appResponse) throws Exception {
-                        Log.d(TAG, "asdasdsa");
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.d(TAG, throwable.getMessage());
-                    }
-                }));
     }
 }

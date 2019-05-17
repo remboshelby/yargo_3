@@ -33,7 +33,6 @@ public class MainActivity extends BaseActivity {
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
 
-        disableFCM();
 
         preferences = getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         if (preferences.getString(AUTH_KEY, "\"\"").equals("\"\"")){

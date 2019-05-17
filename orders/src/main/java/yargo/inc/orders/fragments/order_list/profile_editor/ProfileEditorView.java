@@ -10,6 +10,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -83,6 +84,7 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
         profileEditorViewModel.observUserLiveData(this, new Observer<User>() {
             @Override
             public void onChanged(User o) {
+
                 editSurname.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getSurname());
                 editName.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getSurname());
 

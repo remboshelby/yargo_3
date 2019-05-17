@@ -53,14 +53,14 @@ public class OrdersModule {
     }
     @Provides
     @OrdersScope
-    public OrderListViewModel provideOrderListViewModel(OrderListsFragment host,
+    public OrderListViewModel provideOrderListViewModel(OrderListsFragment host,OrdersRepository ordersRepository,
                                                            CommonSharedPreferences commonSharedPreferences){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             @Singleton
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new OrderListViewModel(commonSharedPreferences);
+                return (T) new OrderListViewModel(commonSharedPreferences, ordersRepository);
             }
         }).get(OrderListViewModel.class);
     }
