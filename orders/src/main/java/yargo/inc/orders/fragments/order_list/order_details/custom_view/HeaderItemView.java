@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -26,16 +27,19 @@ import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 
 public class HeaderItemView extends ConstraintLayout {
 
+
     @BindView(R2.id.orderDate)
     TextView orderDate;
     @BindView(R2.id.orderViewCount)
     TextView orderViewCount;
-    @BindView(R2.id.orderDescription)
-    TextView orderDescription;
+    @BindView(R2.id.orderName)
+    TextView orderName;
     @BindView(R2.id.orderPrice)
     TextView orderPrice;
     @BindView(R2.id.orderPayType)
     TextView orderPayType;
+    @BindView(R2.id.imageView)
+    ImageView imageView;
 
     public HeaderItemView(Context context) {
         super(context);
@@ -63,7 +67,7 @@ public class HeaderItemView extends ConstraintLayout {
 
         orderViewCount.setText(String.valueOf(ordersItem.getWatched()));
 
-        orderDescription.setText(ordersItem.getDescription());
+        orderName.setText(ordersItem.getDescription());
         orderPrice.setText(String.valueOf(ordersItem.getPrice()) + Html.fromHtml(" &#x20bd"));
         orderPayType.setText(ordersItem.getIdPaymentMethod() == 1 ? "Наличный расчет" : "Безналичный расчет");
     }

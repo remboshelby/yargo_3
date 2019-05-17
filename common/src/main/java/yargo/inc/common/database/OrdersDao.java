@@ -22,6 +22,8 @@ public interface OrdersDao {
     @Query("Delete from orders")
     void removeAll();
 
+    @Query("Delete from orders where Id not in (:ids)")
+    void clearCashe(List<Integer> ids);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<OrderItem> orderItemList);
 

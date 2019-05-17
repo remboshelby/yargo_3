@@ -113,6 +113,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         commonSharedPreferences.putObject(FCM_KEY, token);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
         String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
+
         CompositeDisposable compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(loginRepository.pushAppData(authKey, appId, token)
                 .subscribeOn(Schedulers.io())
