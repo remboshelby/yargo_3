@@ -119,44 +119,41 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
                 bottomNav.setVisibility(View.VISIBLE);
             }
         });
-        orderDetailsViewModel.observOrderChangeResult(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer result) {
-                progressDialog.cancel();
-                switch (result) {
-                    case OrderDetailsViewModel.ORDER_GET_SUCCESS:
-                        orderListViewModel.setOrderStatusId(ORDER_IS_ASSIGNED);
-                        getRoot().onBackPressed();
-                        break;
-                    case OrderDetailsViewModel.ORDER_ACTION_SOMETHING_WRONG:
-                        showErrorDialog("Заказ не может быть взят, что то пошло не так!");
-                        break;
-                    case OrderDetailsViewModel.ORDER_GET_FAIL:
-                        showErrorDialog("Заказ не может быть взят!");
-                        break;
-                    case ORDER_GET_ISBUSY:
-                        showErrorDialogExtended("Заказ не может быть взят, так как уже находится у другого исполнителя!");
-                        break;
-                    case OrderDetailsViewModel.ORDER_GET_UFULL:
-                        showErrorDialog("Заказ не может быть взят, так как у вас достигнут лимит заказов!");
-                        break;
-                    case OrderDetailsViewModel.ORDER_STAR_ALREADY_SET:
-                        showErrorDialogExtended("Заказ уже переведен в статус \"В РАБОТЕ\"!");
-                        break;
-                    case OrderDetailsViewModel.ORDER_FINISHED_ALREADY_SET:
-                        showErrorDialogExtended("Заказ уже переведен в статус \"ОЖИДАЕТ ОПЛАТЫ\"!");
-                        break;
-                    case OrderDetailsViewModel.ORDER_START_SUCCESS:
-                        orderListViewModel.setOrderStatusId(ORDER_IS_INWORK);
-                        getRoot().onBackPressed();
-                        break;
-                    case OrderDetailsViewModel.ORDER_FINISED_SUCCESS:
-                        orderListViewModel.setOrderStatusId(ORDER_WAIT_PAY);
-                        getRoot().onBackPressed();
-                        break;
+        orderDetailsViewModel.observOrderChangeResult(this, result -> {
+            progressDialog.cancel();
+            switch (result) {
+                case OrderDetailsViewModel.ORDER_GET_SUCCESS:
+                    orderListViewModel.setOrderStatusId(ORDER_IS_ASSIGNED);
+                    getRoot().onBackPressed();
+                    break;
+                case OrderDetailsViewModel.ORDER_ACTION_SOMETHING_WRONG:
+                    showErrorDialog("Заказ не может быть взят, что то пошло не так!");
+                    break;
+                case OrderDetailsViewModel.ORDER_GET_FAIL:
+                    showErrorDialog("Заказ не может быть взят!");
+                    break;
+                case ORDER_GET_ISBUSY:
+                    showErrorDialogExtended("Заказ не может быть взят, так как уже находится у другого исполнителя!");
+                    break;
+                case OrderDetailsViewModel.ORDER_GET_UFULL:
+                    showErrorDialog("Заказ не может быть взят, так как у вас достигнут лимит заказов!");
+                    break;
+                case OrderDetailsViewModel.ORDER_STAR_ALREADY_SET:
+                    showErrorDialogExtended("Заказ уже переведен в статус \"В РАБОТЕ\"!");
+                    break;
+                case OrderDetailsViewModel.ORDER_FINISHED_ALREADY_SET:
+                    showErrorDialogExtended("Заказ уже переведен в статус \"ОЖИДАЕТ ОПЛАТЫ\"!");
+                    break;
+                case OrderDetailsViewModel.ORDER_START_SUCCESS:
+                    orderListViewModel.setOrderStatusId(ORDER_IS_INWORK);
+                    getRoot().onBackPressed();
+                    break;
+                case OrderDetailsViewModel.ORDER_FINISED_SUCCESS:
+                    orderListViewModel.setOrderStatusId(ORDER_WAIT_PAY);
+                    getRoot().onBackPressed();
+                    break;
 
 
-                }
             }
         });
         super.onViewCreated(view, savedInstanceState);

@@ -54,10 +54,10 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
-        android:background="@color/colorPrimary">
+        android:background="@android:color/transparent">
 
         <yargo.inc.orders.fragments.order_list.order_details.custom_view.CusttomBottomBar
             android:id="@+id/customBottomBar"

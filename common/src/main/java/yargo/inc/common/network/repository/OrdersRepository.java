@@ -75,7 +75,7 @@ public class OrdersRepository {
         String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
         String authKey = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
 
-        return Observable.concatArrayEager(getAllVacantOrdersFromDb(orderName), getVacantOrdersFromRemote(authKey, appId))
+        return Observable.concatArrayEager(getVacantOrdersFromRemote(authKey, appId),getAllVacantOrdersFromDb(orderName))
                 .materialize()
                 .observeOn(Schedulers.io())
                 .map(new Function<Notification<List<OrderItem>>, Notification<List<OrderItem>>>() {
@@ -164,13 +164,17 @@ public class OrdersRepository {
                 pushAuthToken(userOrderResponse.getResponse().getAuthKey());
                 return userOrderResponse.getResponse().getOrders();
             }
-        })
-                .doOnNext(userOrdersItems -> safeUserOrderInBd(userOrdersItems));
+        }).doOnNext(userOrdersItems -> safeUserOrderInBd(userOrdersItems));
     }
 
     public void safeVacantOrderInBd(final List<OrderItem> vacantOrderList) {
         Observable.fromCallable(() -> {
 //            ordersDao.removeAll();
+            List<Integer> ids = new ArrayList<>();
+            for (OrderItem orderItem: vacantOrderList) {
+                ids.add(orderItem.getID());
+            }
+            ordersDao.clearCashe(ids);
             ordersDao.insertAll(vacantOrderList);
             return vacantOrderList;
         }).subscribeOn(Schedulers.io())
@@ -180,7 +184,8 @@ public class OrdersRepository {
 
     public void safeUserOrderInBd(final List<OrderItem> userOrdersItems) {
         Observable.fromCallable(() -> {
-//            ordersDao.removeAll();
+
+
             ordersDao.insertAll(userOrdersItems);
             return userOrdersItems;
         }).subscribeOn(Schedulers.io())

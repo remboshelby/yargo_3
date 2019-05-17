@@ -30,6 +30,7 @@ public class CommissionViewModel extends BaseViewModel {
 
     private MutableLiveData<PayEntity> payRequisites = new MutableLiveData<>();
     private MutableLiveData<OrderDetailResponse> orderDetailData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isPayed = new MutableLiveData<>();
 
     public CommissionViewModel(CommissionRepository commissionRepository,OrderActionRepository orderActionRepository) {
         this.commissionRepository = commissionRepository;
@@ -44,6 +45,12 @@ public class CommissionViewModel extends BaseViewModel {
     }
     public void observOrderDetailData(LifecycleOwner owner, Observer<OrderDetailResponse> observer) {
         orderDetailData.observe(owner, observer);
+    }
+    public void observIsPayed(LifecycleOwner owner, Observer<Boolean> observer){
+        isPayed.observe(owner, observer);
+    }
+    public void observPayData(LifecycleOwner owner, Observer<PayEntity> observer){
+        payRequisites.observe(owner,observer);
     }
     public static boolean isYesterday(Date d) {
         return DateUtils.isToday(d.getTime() + DateUtils.DAY_IN_MILLIS);
@@ -86,7 +93,7 @@ public class CommissionViewModel extends BaseViewModel {
         return date_1;
     }
     @NonNull
-    protected static Set<PaymentMethodType> getPaymentMethodTypes(Settings settings) {
+    public static Set<PaymentMethodType> getPaymentMethodTypes(Settings settings) {
         final Set<PaymentMethodType> paymentMethodTypes = new HashSet<>();
 
         if (settings.isYandexMoneyAllowed()) {
@@ -110,7 +117,8 @@ public class CommissionViewModel extends BaseViewModel {
     public void setPayRequisites(PayEntity payEntity) {
         this.payRequisites.postValue(payEntity);
     }
-    public PayEntity getPayRequisites() {
-        return this.payRequisites.getValue();
+
+    public void setIsPayed(boolean isPayed) {
+        this.isPayed.postValue(isPayed);
     }
 }

@@ -1,6 +1,7 @@
-package yargo.inc.orders.fragments.order_list.order_commission;
+package yargo.inc.orders.fragments.order_list.order_commission.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,11 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +26,9 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.order_commission.CommissionViewModel;
 import yargo.inc.orders.fragments.order_list.order_commission.entity.PayEntity;
 
 public class SuccessTokinizeView extends BaseFragment {
@@ -38,11 +40,14 @@ public class SuccessTokinizeView extends BaseFragment {
     @Inject
     protected CommonSharedPreferences commonSharedPreferences;
 
-    ProgressDialog progressDialog;
-    public CommissionViewModel commissionViewModel;
-    private static final String TITLE =SuccessTokinizeView.class.getSimpleName();
+    private CommissionViewModel commissionViewModel;
 
-    public SuccessTokinizeView(CommissionViewModel commissionViewModel) {
+    ProgressDialog progressDialog;
+    private static final String TITLE = SuccessTokinizeView.class.getSimpleName();
+    private PayEntity payEntity;
+
+    public SuccessTokinizeView(PayEntity payEntity,CommissionViewModel commissionViewModel) {
+        this.payEntity = payEntity;
         this.commissionViewModel = commissionViewModel;
     }
 
@@ -54,7 +59,6 @@ public class SuccessTokinizeView extends BaseFragment {
         progressDialog.setMessage("Загрузка...");
         ButterKnife.bind(this, view);
 
-        PayEntity payEntity =commissionViewModel.getPayRequisites();
         payEntity.getAmmount();
 
         webView.setWebViewClient(new MyWebViewClient());
@@ -67,15 +71,17 @@ public class SuccessTokinizeView extends BaseFragment {
                 "&Payment[amount]=" + payEntity.getAmmount() +
                 "&Payment[currency]=RUB" +
                 "&Payment[id_order]=" + payEntity.getOrderId() +
-                "&Payment[description]="+payEntity.getDescription());
+                "&Payment[description]=" + payEntity.getDescription());
     }
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.success_tokinez, container, false);
     }
+
     class MyWebViewClient extends WebViewClient {
-        private final String secure ="https://checkout.gateline.net/secure3d/rf3d";
+        private final String secure = "https://checkout.gateline.net/secure3d/rf3d";
+        private final String FINISH_PAGE = "http://api.yargo.pro/payment/success-confirmed";
         private final long LOADING_ERROR_TIMEOUT = TimeUnit.SECONDS.toMillis(45);
 
         // WebView instance is kept in WeakReference because of mPageLoadingTimeoutHandlerTask
@@ -111,8 +117,7 @@ public class SuccessTokinizeView extends BaseFragment {
             url = removeLastSlash(url);
             if (!startsWith(url, mUrl) && !mLoadingFinished) {
                 Log.e(TITLE, "shouldOverrideUrlLoading: " + url);
-                Toast.makeText(getRoot(), "Redirect detected :" + url, Toast.LENGTH_SHORT).show();
-
+                if (url.equals(secure))progressDialog.show();
                 mUrl = null;
                 onPageStarted(view, url, null);
             }
@@ -129,11 +134,10 @@ public class SuccessTokinizeView extends BaseFragment {
                 mLoadingError = true;
 
                 mLoadingFinished = false;
-                if(url.equals(secure)) {
+                if (url.equals(secure)) {
                     view.setVisibility(View.GONE);
                     progressDialog.show();
-                }
-                else view.setVisibility(View.VISIBLE);
+                } else view.setVisibility(View.VISIBLE);
                 onPageFinished(view, url);
             }
             if (mUrl == null) {
@@ -152,23 +156,21 @@ public class SuccessTokinizeView extends BaseFragment {
         public void onPageFinished(WebView view, String url) {
             Log.e(TITLE, "onPageFinished: " + url);
             url = removeLastSlash(url);
-            if(progressDialog.isShowing()){
+            if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
             if (startsWith(url, mUrl) && !mLoadingFinished) {
                 Log.e(TITLE, "Page ");
                 mLoadingFinished = true;
                 view.removeCallbacks(mPageLoadingTimeoutHandlerTask);
-                if(url.equals(secure)) {
+                if (url.equals(secure)) {
+                    view.setVisibility(View.GONE);
+                } else view.setVisibility(View.VISIBLE);
+
+                if (url.contains(FINISH_PAGE)) {
+                    commissionViewModel.setIsPayed(true);
                     view.setVisibility(View.GONE);
                 }
-                else view.setVisibility(View.VISIBLE);
-//                long loadingTime = System.currentTimeMillis() - mLoadingStartTime;
-//                if (!mLoadingError) {
-//                    Toast.makeText(getRoot(), "Web page loading success: " + loadingTime, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(getRoot(), "Web page loading error: " + loadingTime, Toast.LENGTH_SHORT).show();
-//                }
                 mOnErrorUrl = null;
                 mUrl = null;
             } else if (mUrl == null) {
@@ -206,8 +208,10 @@ public class SuccessTokinizeView extends BaseFragment {
                     }
                 }
 
-                Toast.makeText(getRoot(), "Web page loading error: " + loadingTime, Toast.LENGTH_SHORT).show();
+                //              Toast.makeText(getRoot(), "Web page loading error: " + loadingTime, Toast.LENGTH_SHORT).show();
             }
         };
-    };
+    }
+
+    ;
 }
