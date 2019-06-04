@@ -1,6 +1,7 @@
 package yargo.inc.orders.fragments.order_list.user_orders;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,11 +28,11 @@ import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_commission.OrderCommissionView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
-import yargo.inc.orders.fragments.order_list.user_orders.utils.UserOrdersItemAdapter;
 import yargo.inc.orders.fragments.order_list.user_orders.custom_view.CustomToolbarUserOrders;
+import yargo.inc.orders.fragments.order_list.user_orders.utils.UserOrdersItemAdapter;
 
 public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter.itemClickListener {
-
+    private static final String TAG =UserOrderList.class.getSimpleName();
 
     @BindView(R2.id.recyclerUserOrders)
     RecyclerView recyclerUserOrders;
@@ -62,7 +62,6 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ordersViewModel.observUserOrderCount(this, count -> imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE));
 
         ordersViewModel.observOrderCategoryId(this, new Observer<Integer>() {
             @Override
@@ -92,11 +91,16 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
         ordersViewModel.onViewCreated();
     }
 
-    private void startListening(){
+    private void startListening() {
         ordersViewModel.getIsLoading().observe(this, aBoolean -> setLoadingState(aBoolean));
         ordersViewModel.getUserOrders().observe(this, userOrdersItems -> userOrdersItemAdapter.submitList(userOrdersItems));
+        ordersViewModel.observUserOrderCount(this, count -> {
+            imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
+            Log.d(TAG, "USER_ORDER_COUNT: " +count);
+        });
     }
-    public void replaceSubscription(){
+
+    public void replaceSubscription() {
         ordersViewModel.replaceUserOrdersSubscription(this);
         startListening();
     }
@@ -104,9 +108,9 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     @Override
     public void showItemDetails(OrderItem userOrdersItem) {
         orderListViewModel.setOrder(userOrdersItem);
-        if (userOrdersItem.getIdOrderStatus()!=7) {
+        if (userOrdersItem.getIdOrderStatus() != 7) {
             getRoot().pushFragment(new OrderDetailsView(), true);
-        }else {
+        } else {
             getRoot().pushFragment(new OrderCommissionView(), true);
         }
     }

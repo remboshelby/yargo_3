@@ -4,6 +4,7 @@
 
     <string name="YES">Да</string>
     <string name="NO">НЕТ</string>
+    <string name="OK">OK</string>
 
     <string-array name="citiesName">
         <item>Сургут</item>

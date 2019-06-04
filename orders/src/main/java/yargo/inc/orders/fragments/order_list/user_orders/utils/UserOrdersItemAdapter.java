@@ -13,7 +13,6 @@ import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.common.OrderItemView;
 
 public class UserOrdersItemAdapter extends PagedListAdapter<OrderItem, BaseViewHolder<OrderItem>> {
-
     public UserOrdersItemAdapter(itemClickListener itemClickListener) {
         super(DIFF_CALLBACK);
         this.itemClickListener = itemClickListener;

@@ -1,6 +1,8 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
@@ -12,16 +14,13 @@ import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.network.repository.OrdersRepository;
 import yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders.OrderDataSourceFactory;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MutableLiveData;
-
 public class VacantOrdersViewModel extends BaseViewModel {
     private OrdersRepository ordersRepository;
 
     private LiveData<PagedList<OrderItem>> vacantOrders;
 
     private LiveData<Boolean> isLoading;
-    private MutableLiveData<Integer> ordersCount = new MutableLiveData<>();
+    private LiveData<Integer> ordersCount;
 
     private CompositeDisposable compositeDisposable;
 
@@ -46,10 +45,8 @@ public class VacantOrdersViewModel extends BaseViewModel {
         if (orderName == null)
             orderName = "";
         OrderDataSourceFactory orderDataSourceFactory = new OrderDataSourceFactory(ordersRepository, compositeDisposable, orderName);
-        isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> {
-//            setOrdersCount(input.getTotalCount());
-            return input.getIsLoading();
-        });
+        isLoading = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
+        ordersCount = Transformations.switchMap(orderDataSourceFactory.getDataSourceLiveData(), input -> input.getTotalCount());
         return new LivePagedListBuilder<>(orderDataSourceFactory,
                 new PagedList.Config.Builder()
                         .setEnablePlaceholders(true)
@@ -82,9 +79,5 @@ public class VacantOrdersViewModel extends BaseViewModel {
 
     public void setOrderDescription(String orderDescription) {
         this.orderDescription.postValue(orderDescription);
-    }
-
-    public void setOrdersCount(int ordersCount) {
-        this.ordersCount.postValue(ordersCount);
     }
 }

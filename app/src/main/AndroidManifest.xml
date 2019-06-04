@@ -28,10 +28,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <activity
-            android:name=".orders.YandexActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="52eca52e860633f8994539c7ec21c4058e2cd5fb" />

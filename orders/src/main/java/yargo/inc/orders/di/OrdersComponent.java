@@ -12,6 +12,7 @@ import yargo.inc.orders.fragments.order_list.order_commission.OrderCommissionVie
 import yargo.inc.orders.fragments.order_list.order_commission.fragments.CommissionDetailView;
 import yargo.inc.orders.fragments.order_list.order_commission.fragments.SuccessTokinizeView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
+import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
 import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
 import yargo.inc.orders.fragments.order_list.profile_editor.custom_view.CustomToolBarEditor;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
@@ -52,6 +53,8 @@ public interface OrdersComponent {
     void inject(SuccessTokinizeView successTokinizeView);
 
     void inject(CommissionDetailView commissionDetailView);
+
+    void inject(OrderDetailsViewModel orderDetailsViewModel);
 
     @Component.Builder
     interface Builder{

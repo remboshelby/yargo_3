@@ -24,12 +24,10 @@ import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsVi
 import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_WAIT_PAY;
 
 public class CusttomBottomBar extends ConstraintLayout {
-
     @BindView(R2.id.detailBottomBar)
     Button detailBottomBar;
 
     private OrderDetailsViewModel orderDetailsViewModel;
-
     public onClickBtnListener listener;
 
     public interface onClickBtnListener {
@@ -86,10 +84,6 @@ public class CusttomBottomBar extends ConstraintLayout {
         }
     }
 
-    public void setListener(onClickBtnListener listener) {
-        this.listener = listener;
-    }
-
     @OnClick(R2.id.detailBottomBar)
     void onActionClick() {
         listener.actionBtnClick();
@@ -106,5 +100,9 @@ public class CusttomBottomBar extends ConstraintLayout {
             case ORDER_WAIT_PAY:
                 break;
         }
+    }
+
+    public void setListener(onClickBtnListener listener) {
+        this.listener = listener;
     }
 }

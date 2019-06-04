@@ -2,24 +2,23 @@ package yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders;
 
 import android.util.Log;
 
-import io.reactivex.functions.Consumer;
-import yargo.inc.common.network.models.order_list.OrderItem;
-import yargo.inc.common.network.repository.OrdersRepository;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PositionalDataSource;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import yargo.inc.common.network.models.order_list.OrderItem;
+import yargo.inc.common.network.repository.OrdersRepository;
 
 public class OrdersDataSource extends PositionalDataSource<OrderItem> {
     private OrdersRepository ordersRepository;
     private CompositeDisposable compositeDisposable;
     private String orderName;
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
-    private int totalCount;
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private MutableLiveData<Integer> totalCount = new MutableLiveData<>();
 
     public OrdersDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable, String orderName) {
         this.ordersRepository = ordersRepository;
@@ -33,11 +32,12 @@ public class OrdersDataSource extends PositionalDataSource<OrderItem> {
                                @Override
                                public void accept(Integer integer) throws Exception {
                                    OrdersDataSource.this.setTotalCount(integer);
-                                   Log.d(OrdersDataSource.class.getSimpleName(), " count " +integer );
+                                   Log.d(OrdersDataSource.class.getSimpleName(), " count " + integer);
                                }
                            },
                         throwable -> throwable.printStackTrace()));
     }
+
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<OrderItem> callback) {
         isLoading.postValue(true);
@@ -45,7 +45,7 @@ public class OrdersDataSource extends PositionalDataSource<OrderItem> {
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(ordersItems -> {
-                    callback.onResult(ordersItems, params.requestedStartPosition, OrdersDataSource.this.getTotalCount());
+                    callback.onResult(ordersItems, params.requestedStartPosition, getTotalCount().getValue());
                     isLoading.postValue(false);
                 }, throwable -> throwable.printStackTrace()));
     }
@@ -71,13 +71,13 @@ public class OrdersDataSource extends PositionalDataSource<OrderItem> {
         return isLoading;
     }
 
-    public int getTotalCount() {
+    public MutableLiveData<Integer> getTotalCount() {
         return totalCount;
     }
 
     public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
-        if (totalCount==0)
+        this.totalCount.postValue(totalCount);
+        if (totalCount == 0)
             isLoading.postValue(false);
     }
 }

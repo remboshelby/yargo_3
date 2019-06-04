@@ -1,5 +1,7 @@
 package yargo.inc.login.di;
 
+import dagger.BindsInstance;
+import dagger.Component;
 import yargo.inc.common.di.CommonComponent;
 import yargo.inc.login.fragments.LoginFragment;
 import yargo.inc.login.fragments.registration.RegistrationFragment;
@@ -8,9 +10,6 @@ import yargo.inc.login.fragments.registration.registration_pages.RegistrEnd;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrMobilePhone;
 import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonalData;
 import yargo.inc.login.utils_view.СustomEnterPasswordView;
-
-import dagger.BindsInstance;
-import dagger.Component;
 
 @LoginScope
 @Component(dependencies = CommonComponent.class, modules = {LoginModule.class})

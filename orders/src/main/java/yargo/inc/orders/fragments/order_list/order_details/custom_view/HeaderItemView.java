@@ -26,8 +26,6 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 
 public class HeaderItemView extends ConstraintLayout {
-
-
     @BindView(R2.id.orderDate)
     TextView orderDate;
     @BindView(R2.id.orderViewCount)
@@ -45,12 +43,10 @@ public class HeaderItemView extends ConstraintLayout {
         super(context);
         init(context);
     }
-
     public HeaderItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
-
     private void init(Context context) {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -58,15 +54,12 @@ public class HeaderItemView extends ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.header_item_view, this);
         ButterKnife.bind(this);
     }
-
     public void bind(OrderDetailItem item) {
         OrderDetailResponse orderDetailResponse = item.getOrderDetailResponse();
         OrdersItem ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
 
         orderDate.setText(dateCreator(ordersItem.getStartworking()) + " - " + dateCreator(ordersItem.getDeadline()));
-
         orderViewCount.setText(String.valueOf(ordersItem.getWatched()));
-
         orderName.setText(ordersItem.getDescription());
         orderPrice.setText(String.valueOf(ordersItem.getPrice()) + Html.fromHtml(" &#x20bd"));
         orderPayType.setText(ordersItem.getIdPaymentMethod() == 1 ? "Наличный расчет" : "Безналичный расчет");

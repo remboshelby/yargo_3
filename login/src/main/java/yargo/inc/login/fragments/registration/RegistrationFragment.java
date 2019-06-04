@@ -1,7 +1,6 @@
 package yargo.inc.login.fragments.registration;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,8 +34,6 @@ import butterknife.OnClick;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.common.dto.CommonSharedPreferences;
-import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
-import yargo.inc.common.network.repository.RegistrRepository;
 import yargo.inc.login.R;
 import yargo.inc.login.R2;
 import yargo.inc.login.fragments.LoginFragment;
@@ -47,17 +43,12 @@ import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonal
 import yargo.inc.login.utils_view.LockableViewPager;
 
 public class RegistrationFragment extends BaseFragment implements RegistrEnd.RegistrationEndListener {
-
-
     protected static RegistrationViewModel registrationViewModel;
 
     @Inject
     protected CommonSharedPreferences commonSharedPreferences;
-    @Inject
-    protected RegistrRepository registrRepository;
+
     @BindView(R2.id.tabLayout)
-
-
     TabLayout tabLayout;
     private ApplicationNavigator navigator;
 
@@ -97,29 +88,25 @@ public class RegistrationFragment extends BaseFragment implements RegistrEnd.Reg
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         registrationСontainer.setSwipeable(false);
         registrationСontainer.setAdapter(sectionsPagerAdapter);
-        registrationViewModel.observeRegistrationStatus(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer status) {
-                progressDialog.cancel();
+        registrationViewModel.observeRegistrationStatus(this, status -> {
+            progressDialog.cancel();
 
-                if (status==registrationViewModel.REGISTR_SUCCESS){
-                    navigator.openFragment(getRoot(), "Orders");
-                }else if (status==registrationViewModel.ERROR_PHONE){
-                    showErrorDialog(getString(R.string.mobile_number_incorrect));
-                }else if (status==registrationViewModel.ERROR_EMAIL){
-                    showErrorDialog(getString(R.string.email_incorrect));
-                }else if (status==registrationViewModel.ERROR_EMAIL_AND_PHONE){
-                    showErrorDialog(getString(R.string.email_and_phone_incorrect));
-                }else if (status==registrationViewModel.UNKNOWN_ERROR){
-                    showErrorDialog(getString(R.string.somethings_goes_wrong));
-                }
+            if (status == registrationViewModel.REGISTR_SUCCESS) {
+                navigator.openFragment(getRoot(), "Orders");
+            } else if (status == registrationViewModel.ERROR_PHONE) {
+                showErrorDialog(getString(R.string.mobile_number_incorrect));
+            } else if (status == registrationViewModel.ERROR_EMAIL) {
+                showErrorDialog(getString(R.string.email_incorrect));
+            } else if (status == registrationViewModel.ERROR_EMAIL_AND_PHONE) {
+                showErrorDialog(getString(R.string.email_and_phone_incorrect));
+            } else if (status == registrationViewModel.UNKNOWN_ERROR) {
+                showErrorDialog(getString(R.string.somethings_goes_wrong));
             }
         });
         registrationViewModel.observeBtnStatus(this, aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 btnRegistNext.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 btnRegistNext.setVisibility(View.GONE);
             }
         });
@@ -127,11 +114,13 @@ public class RegistrationFragment extends BaseFragment implements RegistrEnd.Reg
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 setTvToobarNameRegistration(registrationViewModel.getTitle(position));
                 registrationViewModel.getBtnStatus(position);
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -147,7 +136,7 @@ public class RegistrationFragment extends BaseFragment implements RegistrEnd.Reg
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new RegistrationViewModel(registrRepository, commonSharedPreferences);
+                return (T) new RegistrationViewModel();
             }
         }).get(RegistrationViewModel.class);
         navigator = LoginFragment.getNavigator();
@@ -187,18 +176,21 @@ public class RegistrationFragment extends BaseFragment implements RegistrEnd.Reg
 
 
     }
+
     @OnClick(R2.id.btnRegistNext)
-    public void onBtnRegistNextClick(){
-        if(registrationСontainer.getCurrentItem()!=2){
-            registrationСontainer.setCurrentItem(registrationСontainer.getCurrentItem()+1);
+    public void onBtnRegistNextClick() {
+        if (registrationСontainer.getCurrentItem() != 2) {
+            registrationСontainer.setCurrentItem(registrationСontainer.getCurrentItem() + 1);
         }
     }
+
     @OnClick(R2.id.imgBtnBackPress)
-    public void onBtnBackPressClick(){ if (registrationСontainer.getCurrentItem()>0) {
-            registrationСontainer.setCurrentItem(registrationСontainer.getCurrentItem()-1);
-        }
-        else getRoot().pushFragment(new LoginFragment() ,false);
+    public void onBtnBackPressClick() {
+        if (registrationСontainer.getCurrentItem() > 0) {
+            registrationСontainer.setCurrentItem(registrationСontainer.getCurrentItem() - 1);
+        } else getRoot().pushFragment(new LoginFragment(), false);
     }
+
     public void setTvToobarNameRegistration(String label) {
         this.tvToobarNameRegistration.setText(label);
     }

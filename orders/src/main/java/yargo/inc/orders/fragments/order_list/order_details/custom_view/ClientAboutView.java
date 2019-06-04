@@ -18,7 +18,6 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 
 public class ClientAboutView extends ConstraintLayout {
-
     private OrdersItem ordersItem;
 
     @BindView(R2.id.titleClient)

@@ -15,17 +15,15 @@ import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 
 public class CustomToolbarOrderDetail extends ConstraintLayout {
+    public onCustomToolbarClick onCustomToolbarClick;
 
     public void setOnCustomToolbarClick(onCustomToolbarClick onCustomToolbarClick) {
         this.onCustomToolbarClick = onCustomToolbarClick;
     }
 
-    public onCustomToolbarClick onCustomToolbarClick;
-
     public interface onCustomToolbarClick {
         void onBackPressed();
     }
-
 
     @BindView(R2.id.imgBtnBackPress)
     ImageButton imgBtnBackPress;
@@ -46,11 +44,13 @@ public class CustomToolbarOrderDetail extends ConstraintLayout {
         super(context, attrs);
         init(context);
     }
+
     @OnClick(R2.id.imgBtnBackPress)
-    void onBtnBackPress(){
+    void onBtnBackPress() {
         onCustomToolbarClick.onBackPressed();
     }
-    public void setToolbarTitle (String toolbarTitle){
+
+    public void setToolbarTitle(String toolbarTitle) {
         tvToolBarTitle.setText(toolbarTitle);
     }
 }

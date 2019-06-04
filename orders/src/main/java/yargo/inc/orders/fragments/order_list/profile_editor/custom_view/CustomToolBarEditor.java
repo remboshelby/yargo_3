@@ -16,7 +16,6 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 
 public class CustomToolBarEditor extends ConstraintLayout {
-
     public profileListener listener;
 
     public interface profileListener{

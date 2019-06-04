@@ -60,6 +60,15 @@
     <string name="main_toolbar_title">Placing an order</string>
     <string name="main">Основное</string>
     <string name="profile_changed">Профиль успешно изменен</string>
+    <string name="request_number">Заявка №%d</string>
+    <string name="order_cant_take_something_goes_wrong">Заказ не может быть взят, что то пошло не так!</string>
+    <string name="order_cant_be_taken">Заказ не может быть взят!</string>
+    <string name="order_cant_take_other_user_get_it">Заказ не может быть взят, так как уже находится у другого исполнителя!</string>
+    <string name="order_cant_take_limit_reached">Заказ не может быть взят, так как у вас достигнут лимит заказов!</string>
+    <string name="order_status_is_allready_at_work">Заказ уже переведен в статус \"В РАБОТЕ\"!</string>
+    <string name="order_status_is_allready_wait_pay">Заказ уже переведен в статус \"ОЖИДАЕТ ОПЛАТЫ\"!</string>
+    <string name="commission_payed_seccussfully">Комиссия к заявке оплачена!</string>
+    <string name="request">Заяква</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

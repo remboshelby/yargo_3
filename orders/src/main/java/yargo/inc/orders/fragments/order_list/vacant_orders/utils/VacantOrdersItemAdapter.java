@@ -14,9 +14,10 @@ public class VacantOrdersItemAdapter extends PagedListAdapter<OrderItem, BaseVie
 
     public itemClickListener itemClickListener;
 
-    public interface itemClickListener{
+    public interface itemClickListener {
         void showItemDetails(OrderItem orderItem);
     }
+
     public VacantOrdersItemAdapter(itemClickListener itemClickListener) {
         super(DIFF_CALLBACK);
         this.itemClickListener = itemClickListener;
@@ -28,7 +29,7 @@ public class VacantOrdersItemAdapter extends PagedListAdapter<OrderItem, BaseVie
         return new BaseViewHolder<OrderItem>(new OrderItemView(parent.getContext())) {
             @Override
             public void bind(OrderItem item) {
-                ((OrderItemView)itemView).bind(item);
+                ((OrderItemView) itemView).bind(item);
             }
         };
     }

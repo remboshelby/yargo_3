@@ -7,6 +7,7 @@ import yargo.inc.app.di.module.ServiceModule;
 import yargo.inc.common.di.CommonComponent;
 import yargo.inc.common.di.ServerUrl;
 import yargo.inc.common.di.modules.DataBaseModule;
+import yargo.inc.common.di.modules.InteractorModule;
 import yargo.inc.common.di.modules.NetworkModule;
 import yargo.inc.common.di.modules.RepositoryModule;
 import yargo.inc.common.di.modules.SharedPreferenceModule;
@@ -20,7 +21,7 @@ import yargo.inc.services.FirebaseMessaging;
 
 @Singleton
 @Component (modules = {NetworkModule.class, RepositoryModule.class, SharedPreferenceModule.class,
-        DataBaseModule.class, AppModule.class, ServiceModule.class})
+        DataBaseModule.class, AppModule.class, ServiceModule.class, InteractorModule.class})
 public interface ApplicationComponent extends CommonComponent {
 
     void inject(FirebaseMessaging firebaseMessaging);

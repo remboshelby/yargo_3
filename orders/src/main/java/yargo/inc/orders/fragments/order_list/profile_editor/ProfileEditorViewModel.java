@@ -4,11 +4,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import java.util.Observable;
-
-import javax.inject.Inject;
-
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -17,15 +12,12 @@ import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.login.User;
 import yargo.inc.common.network.models.profile_editor_model.ProfileEditResponse;
 import yargo.inc.common.network.repository.LoginRepository;
-import yargo.inc.common.network.repository.OrdersRepository;
 
 import static yargo.inc.common.dto.CommonSharedPreferences.APP_ID;
 import static yargo.inc.common.dto.CommonSharedPreferences.AUTH_KEY;
 import static yargo.inc.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 
 public class ProfileEditorViewModel extends BaseViewModel {
-
-
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
 
     private CommonSharedPreferences commonSharedPreferences;

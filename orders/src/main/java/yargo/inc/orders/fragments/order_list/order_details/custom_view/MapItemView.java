@@ -28,7 +28,6 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 
 public class MapItemView extends ConstraintLayout implements OnMapReadyCallback {
-
     @BindView(R2.id.litleMap)
     MapView litleMap;
     @BindView(R2.id.orderAdress)
@@ -55,15 +54,14 @@ public class MapItemView extends ConstraintLayout implements OnMapReadyCallback 
     }
 
     public void bind(OrderDetailItem item) {
-
         OrderDetailResponse orderDetailResponse = item.getOrderDetailResponse();
         ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
 
         litleMap.onCreate(null);
         litleMap.getMapAsync(this);
         ImageSpan imageSpan = new ImageSpan(getContext(), R.drawable.ic_room_black_24dp);
-        SpannableString spannableString = new SpannableString(" "+ ordersItem.getAddress());
-        spannableString.setSpan(imageSpan, 0,1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString spannableString = new SpannableString(" " + ordersItem.getAddress());
+        spannableString.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         orderAdress.setText(spannableString);
     }
 

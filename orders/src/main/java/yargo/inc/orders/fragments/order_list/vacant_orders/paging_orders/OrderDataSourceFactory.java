@@ -1,11 +1,11 @@
 package yargo.inc.orders.fragments.order_list.vacant_orders.paging_orders;
 
-import yargo.inc.common.network.models.order_list.OrderItem;
-import yargo.inc.common.network.repository.OrdersRepository;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
+
 import io.reactivex.disposables.CompositeDisposable;
+import yargo.inc.common.network.models.order_list.OrderItem;
+import yargo.inc.common.network.repository.OrdersRepository;
 
 public class OrderDataSourceFactory extends DataSource.Factory<Integer, OrderItem> {
     private OrdersRepository ordersRepository;
@@ -26,7 +26,8 @@ public class OrderDataSourceFactory extends DataSource.Factory<Integer, OrderIte
         dataSourceLiveData.postValue(ordersDataSource);
         return ordersDataSource;
     }
-    public MutableLiveData<OrdersDataSource> getDataSourceLiveData(){
+
+    public MutableLiveData<OrdersDataSource> getDataSourceLiveData() {
         return dataSourceLiveData;
     }
 }

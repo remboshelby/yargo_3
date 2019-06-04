@@ -1,6 +1,5 @@
 package yargo.inc.orders.fragments.order_list.order_commission;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,21 +21,15 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.network.models.order_detail.OrdersItem;
-import yargo.inc.common.network.repository.CommissionRepository;
-import yargo.inc.common.network.repository.OrderActionRepository;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
-import yargo.inc.orders.fragments.order_list.order_commission.entity.PayEntity;
 import yargo.inc.orders.fragments.order_list.order_commission.fragments.CommissionDetailView;
 import yargo.inc.orders.fragments.order_list.order_commission.fragments.SuccessTokinizeView;
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomToolbarOrderDetail;
 
 public class OrderCommissionView extends BaseFragment implements CustomToolbarOrderDetail.onCustomToolbarClick {
-
-
     @BindView(R2.id.customToolbar)
     CustomToolbarOrderDetail customToolbar;
     @BindView(R2.id.toolbar)
@@ -47,11 +39,7 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
     @BindView(R2.id.commissonContainer)
     FrameLayout commissonContainer;
     @Inject
-    protected CommissionRepository commissionRepository;
-    @Inject
     protected OrderListViewModel orderListViewModel;
-    @Inject
-    protected OrderActionRepository orderActionRepository;
 
     public CommissionViewModel commissionViewModel;
 
@@ -69,11 +57,10 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-
     }
 
     private void init(@NonNull View view) {
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         OrderListsFragment.getOrdersComponent().inject(this);
         getRoot().setSupportActionBar(toolbar);
         customToolbar.setOnCustomToolbarClick(this);
@@ -82,7 +69,7 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new CommissionViewModel(commissionRepository, orderActionRepository);
+                return (T) new CommissionViewModel();
             }
         }).get(CommissionViewModel.class);
 
@@ -93,7 +80,7 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
                 ShowDialog();
             }
         });
-        customToolbar.setToolbarTitle("Заявка №" + orderListViewModel.getOrderId());
+        customToolbar.setToolbarTitle(getString(R.string.request_number,orderListViewModel.getOrderId()));
 
         pushFragmentIntoFragment(new CommissionDetailView(commissionViewModel));
 
@@ -101,9 +88,9 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
     }
     public void ShowDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Комиссия к заявке оплачена!");
-        builder.setTitle("Заявка");
-        builder.setPositiveButton("OK", (dialog, which) -> onBackPressed());
+        builder.setMessage(getString(R.string.commission_payed_seccussfully));
+        builder.setTitle(getString(R.string.request));
+        builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> onBackPressed());
         builder.setCancelable(true);
         builder.create().show();
     }

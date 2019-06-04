@@ -10,7 +10,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,8 +36,6 @@ import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.profile_editor.custom_view.CustomToolBarEditor;
 
 public class ProfileEditorView extends BaseFragment implements CustomToolBarEditor.profileListener {
-
-
     @BindView(R2.id.customToolbar)
     CustomToolBarEditor customToolbar;
     @BindView(R2.id.toolbar)
@@ -90,11 +87,9 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
 
                 editBdate.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getBirthday());
 
-                if (profileEditorViewModel.getUserMutableLiveData().getValue().getSex()==1)
+                if (profileEditorViewModel.getUserMutableLiveData().getValue().getSex() == 1)
                     sexRadioGroup.check(R.id.sexMale);
                 else sexRadioGroup.check(R.id.sexFemale);
-
-
 
                 Integer cityId = profileEditorViewModel.getUserMutableLiveData().getValue().getIdCity();
                 String[] array = getResources().getStringArray(R.array.citiesId);
@@ -115,20 +110,24 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
         profileEditorViewModel.pushUserInfo();
 
     }
+
     @OnTextChanged(R2.id.editSurname)
-    void editSurname(){
+    void editSurname() {
         profileEditorViewModel.setSurname(editSurname.getText().toString());
     }
+
     @OnTextChanged(R2.id.editName)
-    void editName(){
+    void editName() {
         profileEditorViewModel.setName(editName.getText().toString());
     }
+
     @OnItemSelected(R2.id.spinCity)
     void spinnerItemSelected(int position) {
         profileEditorViewModel.setCityId(getResources().getIntArray(R.array.citiesId)[position]);
     }
+
     @OnClick(R2.id.editBdate)
-    void chooseBirthday(){
+    void chooseBirthday() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH);
@@ -136,25 +135,23 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
 
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), (view, myear, mmonth, mdayOfMonth) -> {
-            if (mmonth>8){
-                editBdate.setText(mdayOfMonth + "." + (mmonth +1) + "." + myear);
-                profileEditorViewModel.setBirthday(mdayOfMonth + "." + (mmonth +1) + "." + myear);
+            if (mmonth > 8) {
+                editBdate.setText(mdayOfMonth + "." + (mmonth + 1) + "." + myear);
+                profileEditorViewModel.setBirthday(mdayOfMonth + "." + (mmonth + 1) + "." + myear);
+            } else {
+                editBdate.setText(mdayOfMonth + ".0" + (mmonth + 1) + "." + myear);
+                profileEditorViewModel.setBirthday(mdayOfMonth + ".0" + (mmonth + 1) + "." + myear);
             }
-            else
-            {
-                editBdate.setText(mdayOfMonth + ".0" + (mmonth +1) + "." + myear);
-                profileEditorViewModel.setBirthday(mdayOfMonth + ".0" + (mmonth +1) + "." + myear);
-            }
-        }, year,month,day);
+        }, year, month, day);
         datePickerDialog.show();
     }
 
     @OnClick({R2.id.sexMale, R2.id.sexFemale})
-    void onRadioButtonClicked(RadioButton radioButton){
+    void onRadioButtonClicked(RadioButton radioButton) {
         boolean checked = radioButton.isChecked();
         if (radioButton.getId() == R.id.sexMale && checked) {
             profileEditorViewModel.setSex(1);
-        }else if (radioButton.getId() == R.id.sexFemale && checked) {
+        } else if (radioButton.getId() == R.id.sexFemale && checked) {
             profileEditorViewModel.setSex(0);
         }
     }

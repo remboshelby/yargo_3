@@ -17,7 +17,6 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 
 public class OrderPayTypeView extends ConstraintLayout {
-
     @BindView(R2.id.tvPayType)
     TextView tvPayType;
     @BindView(R2.id.tvPhoneNumber)
@@ -46,7 +45,6 @@ public class OrderPayTypeView extends ConstraintLayout {
     public void bind(OrderDetailItem item) {
         OrderDetailResponse orderDetailResponse = item.getOrderDetailResponse();
         ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
-
         tvPayType.setText(ordersItem.getIdPaymentMethod() == 1 ? "Наличный расчет" : "Безналичный расчет");
         tvPhoneNumber.setVisibility(GONE);
     }

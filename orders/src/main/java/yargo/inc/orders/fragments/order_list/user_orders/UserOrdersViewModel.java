@@ -1,5 +1,6 @@
 package yargo.inc.orders.fragments.order_list.user_orders;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,14 +21,14 @@ public class UserOrdersViewModel extends BaseViewModel {
     private LiveData<PagedList<OrderItem>> userOrders;
 
     private LiveData<Boolean> isLoading;
-
+    private LiveData<Integer> userOrderCount;
     private CompositeDisposable compositeDisposable;
 
     private int startPositon = 0;
 
     private MutableLiveData<Integer> orderCategoryId = new MutableLiveData<>();
 
-    private MutableLiveData<Integer> userOrdersCount = new MutableLiveData<>();
+//    private MutableLiveData<Integer> userOrdersCount = new MutableLiveData<>();
 
     public UserOrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
@@ -35,12 +36,11 @@ public class UserOrdersViewModel extends BaseViewModel {
     }
 
     public void observUserOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
-        userOrdersCount.observe(owner, userOrderCountValue);
+        userOrderCount.observe(owner, userOrderCountValue);
     }
     public void observOrderCategoryId(LifecycleOwner owner, Observer<Integer> valOrderCategoryId){
         orderCategoryId.observe(owner, valOrderCategoryId);
     }
-
     public void replaceUserOrdersSubscription(LifecycleOwner owner){
         compositeDisposable.clear();
         if (userOrders!=null)  userOrders.removeObservers(owner);
@@ -48,9 +48,10 @@ public class UserOrdersViewModel extends BaseViewModel {
     }
     private LiveData<PagedList<OrderItem>> createFiltredUsersOrders(int categoryOrderId) {
         UserOrderDataSourceFactory userOrderDataSourceFactory = new UserOrderDataSourceFactory(ordersRepository, compositeDisposable, categoryOrderId);
-        isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> {
-            setUserOrdersCount(input.getTotalCount());
-            return input.getIsLoading();
+        isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
+        userOrderCount = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> {
+            String t ="fdsfs";
+            return input.getTotalCount();
         });
 
         return new LivePagedListBuilder<>(userOrderDataSourceFactory,
@@ -76,8 +77,8 @@ public class UserOrdersViewModel extends BaseViewModel {
     public void setStartPositon(int startPositon) {
         this.startPositon = startPositon;
     }
-    public void setUserOrdersCount(int userOrdersCount) {
-        this.userOrdersCount.postValue(userOrdersCount);
-    }
+//    public void setUserOrdersCount(int userOrdersCount) {
+//        this.userOrdersCount.postValue(userOrdersCount);
+//    }
 
 }

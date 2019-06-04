@@ -1,21 +1,28 @@
 package yargo.inc.login.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.LoginEvent;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.textfield.TextInputLayout;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.common.di.CommonApplication;
@@ -26,17 +33,6 @@ import yargo.inc.login.R2;
 import yargo.inc.login.di.DaggerLoginComponent;
 import yargo.inc.login.di.LoginComponent;
 import yargo.inc.login.fragments.registration.RegistrationFragment;
-
-import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
-import yargo.inc.login.fragments.registration.RegistrationViewModel;
 
 public class LoginFragment extends BaseFragment {
 
@@ -60,16 +56,15 @@ public class LoginFragment extends BaseFragment {
 
     @Inject
     protected LoginViewModel viewModel;
-//    @Inject
-//    protected RegistrationViewModel registrationViewModel;
+    @Inject
+    protected CommonSharedPreferences preferences;
 
     protected static LoginComponent loginComponent;
     private static ApplicationNavigator navigator;
 
-    @Inject
-    protected CommonSharedPreferences preferences;
 
     private ProgressDialog progressDialog;
+
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.login_fragment, container, false);
@@ -82,9 +77,6 @@ public class LoginFragment extends BaseFragment {
         init();
     }
 
-    public void finishRegistration(){
-
-    }
     private void init() {
         progressDialog = new ProgressDialog(getContext());
 
@@ -92,8 +84,6 @@ public class LoginFragment extends BaseFragment {
         root_swipe_layout.setEnabled(false);
 
         viewModel.initLoginInfo();
-
-
 
         viewModel.observeIsNetworkError(this, aBoolean -> {
             if (aBoolean) {
@@ -106,8 +96,7 @@ public class LoginFragment extends BaseFragment {
                 viewComponentVisibility(View.INVISIBLE, false);
                 no_internet_img.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), "no internet", Toast.LENGTH_LONG).show();
-            }
-            else {
+            } else {
                 viewComponentVisibility(View.VISIBLE, false);
             }
         });
@@ -132,7 +121,6 @@ public class LoginFragment extends BaseFragment {
             if (!aBoolean) email_sign_in_button.setEnabled(false);
             else email_sign_in_button.setEnabled(true);
         });
-//        makeLogin();
     }
 
     private void viewComponentVisibility(int viewVisibility, boolean showProgress) {
@@ -141,7 +129,7 @@ public class LoginFragment extends BaseFragment {
         email_sign_button.setVisibility(viewVisibility);
         email_sign_in_button.setVisibility(viewVisibility);
 
-        if (no_internet_img.getVisibility()==View.VISIBLE && viewVisibility==View.VISIBLE){
+        if (no_internet_img.getVisibility() == View.VISIBLE && viewVisibility == View.VISIBLE) {
             no_internet_img.setVisibility(View.GONE);
             root_swipe_layout.setRefreshing(false);
             root_swipe_layout.setEnabled(false);
@@ -151,6 +139,7 @@ public class LoginFragment extends BaseFragment {
             progressDialog.show();
         }
     }
+
     @OnClick(R2.id.email_sign_in_button)
     void onSingInBtnClick() {
         hideKeyboard();
@@ -162,7 +151,7 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R2.id.email_sign_button)
     void onClickSignInButton() {
-        getRoot().pushFragment(new RegistrationFragment() ,false);
+        getRoot().pushFragment(new RegistrationFragment(), false);
     }
 
     @OnTextChanged(R2.id.email)
@@ -174,9 +163,8 @@ public class LoginFragment extends BaseFragment {
         if (viewModel.isAuthKeyExist()) {
             viewComponentVisibility(View.INVISIBLE, true);
             viewModel.makeLoginWithToken();
-        }
-        else {
-            if (email_sign_in_button.isEnabled()){
+        } else {
+            if (email_sign_in_button.isEnabled()) {
                 viewModel.makeLoginWithPassword();
             }
         }
@@ -198,7 +186,8 @@ public class LoginFragment extends BaseFragment {
     public static LoginComponent getLoginComponent() {
         return loginComponent;
     }
+
     public static ApplicationNavigator getNavigator() {
         return navigator;
     }
-    }
+}

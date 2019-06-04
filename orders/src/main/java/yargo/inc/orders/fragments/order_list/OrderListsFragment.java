@@ -10,23 +10,20 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import javax.inject.Inject;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 
-import java.io.IOException;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.Arrays;
-import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +31,8 @@ import butterknife.OnClick;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.common.di.CommonApplication;
-import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.login.User;
+import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.utils.CircleImageView_;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
@@ -45,13 +42,9 @@ import yargo.inc.orders.fragments.order_list.filters.FiltersView;
 import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
-import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
-import static yargo.inc.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
-
 public class OrderListsFragment extends BaseFragment {
-
     private static final String TAG = OrderListsFragment.class.getName();
 
     @BindView(R2.id.imgBtnMap)
@@ -110,16 +103,20 @@ public class OrderListsFragment extends BaseFragment {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-
-        if (orderListViewModel.getOrderStatus() == -1 || orderListViewModel.getOrderStatus() == 1)
-            pushFragmentIntoFragment(new VacantOrderList());
-        else {
-            Integer orderStatus = orderListViewModel.getOrderStatus();
-            String[] array = getResources().getStringArray(R.array.ordersCategoryId);
-            Integer position = Arrays.asList(array).indexOf(String.valueOf(orderStatus));
-            ordersViewModel.setStartPositon(position);
-            pushFragmentIntoFragment(new UserOrderList());
-        }
+        orderListViewModel.observeOrderStatus(this, new Observer<OrderItem>() {
+            @Override
+            public void onChanged(OrderItem orderItem) {
+                if (orderItem==null || orderItem.getIdOrderStatus() == 1)
+                    pushFragmentIntoFragment(new VacantOrderList());
+                else {
+                    Integer orderStatus = orderItem.getIdOrderStatus();
+                    String[] array = getResources().getStringArray(R.array.ordersCategoryId);
+                    Integer position = Arrays.asList(array).indexOf(String.valueOf(orderStatus));
+                    ordersViewModel.setStartPositon(position);
+                    pushFragmentIntoFragment(new UserOrderList());
+                }
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             if (menuItem.getItemId() == R.id.menu_orders) {
@@ -160,7 +157,7 @@ public class OrderListsFragment extends BaseFragment {
 
     @OnClick(R2.id.imgBtnMap)
     void onBtnMapClick() {
-
+        //TODO MAP BTN
     }
 
     @OnClick(R2.id.imgBtnFilter)
@@ -172,14 +169,11 @@ public class OrderListsFragment extends BaseFragment {
         User user = orderListViewModel.getUser();
 
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tvDrawlerTitle)).setText(user.getUsername() + " " + user.getSurname());
-        CircleImageView_ headerImageView = (CircleImageView_) navigationView.getHeaderView(0).findViewById(R.id.clientAvatar);
+        CircleImageView_ headerImageView = navigationView.getHeaderView(0).findViewById(R.id.clientAvatar);
         headerImageView.setImageResource(R.drawable.person);
-        headerImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getRoot().pushFragment(new ProfileEditorView(), true);
-                drawerLayout.closeDrawer(Gravity.LEFT);
-            }
+        headerImageView.setOnClickListener(v -> {
+            getRoot().pushFragment(new ProfileEditorView(), true);
+            drawerLayout.closeDrawer(Gravity.LEFT);
         });
     }
 

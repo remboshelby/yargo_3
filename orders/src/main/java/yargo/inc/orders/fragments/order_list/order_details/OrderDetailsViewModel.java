@@ -4,18 +4,21 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import io.reactivex.functions.Consumer;
+import javax.inject.Inject;
+
 import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.network.models.order_action.ActionResponse;
 import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.common.network.repository.OrderActionRepository;
+import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 
 public class OrderDetailsViewModel extends BaseViewModel {
-
     private MutableLiveData<OrderDetailResponse> orderDetailData = new MutableLiveData<>();
     private MutableLiveData<Integer> orderChangeResult = new MutableLiveData<>();
-    private OrderActionRepository orderActionRepository;
+
+    @Inject
+    protected OrderActionRepository orderActionRepository;
 
     public static final int ORDER_IS_VACANT = 1;
     public static final int ORDER_IS_ASSIGNED = 3;
@@ -23,7 +26,6 @@ public class OrderDetailsViewModel extends BaseViewModel {
     public static final int ORDER_WAIT_PAY = 7;
     public static final int ORDER_IS_DONE = 4;
     public static final int ORDER_CLIENT_CANCEL = 5;
-
 
     public static final int ORDER_ACTION_SOMETHING_WRONG = -1;
 
@@ -38,14 +40,13 @@ public class OrderDetailsViewModel extends BaseViewModel {
     public static final int ORDER_FINISED_SUCCESS = 6;
     public static final int ORDER_FINISHED_ALREADY_SET = 7;
 
-
     private static final String ERROR_ORDER_IS_BUSY_ORDER_STATUS_ASSIGNED = "заказ не доступен : находится в работе у другого пользователя";
     private static final String ERROR_ORDER_UFULL = "ANOTHER_ORDER_ALREADY_TAKEN";
     private static final String ERROR_START_ALREADY_SET = "STATUS_ALREADY_SET";
     private static final String ERROR_ACCOMPLISHED_ALREADY_SET = "указанный заказ недоступен: некорректный статус указанного заказа";
 
-    public OrderDetailsViewModel(OrderActionRepository orderActionRepository) {
-        this.orderActionRepository = orderActionRepository;
+    public OrderDetailsViewModel() {
+        OrderListsFragment.getOrdersComponent().inject(this);
     }
 
     public void observOrderDetailData(LifecycleOwner owner, Observer<OrderDetailResponse> observer) {

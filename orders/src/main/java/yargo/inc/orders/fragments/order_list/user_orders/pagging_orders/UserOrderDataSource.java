@@ -1,10 +1,10 @@
 package yargo.inc.orders.fragments.order_list.user_orders.pagging_orders;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PositionalDataSource;
+
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -18,9 +18,7 @@ public class UserOrderDataSource extends PositionalDataSource<OrderItem> {
     private int categoryOrderId;
 
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private MutableLiveData<Integer> recordCount = new MutableLiveData<>();
-
-    private int totalCount;
+    private MutableLiveData<Integer> totalCount= new MutableLiveData<>();
 
     public UserOrderDataSource(OrdersRepository ordersRepository, CompositeDisposable compositeDisposable, int categoryOrderId) {
         this.ordersRepository = ordersRepository;
@@ -30,17 +28,17 @@ public class UserOrderDataSource extends PositionalDataSource<OrderItem> {
         compositeDisposable.add(ordersRepository.getUsersOrdersFromDbCount(categoryOrderId)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::setTotalCount,
+                .subscribe(totalCount1 -> UserOrderDataSource.this.setTotalCount(totalCount1),
                         Throwable::printStackTrace));
     }
 
-    public int getTotalCount() {
+    public MutableLiveData<Integer> getTotalCount() {
         return totalCount;
     }
 
     public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
-        if (totalCount==0)
+        this.totalCount.postValue(totalCount);
+        if (totalCount == 0)
             isLoading.postValue(false);
     }
 
@@ -49,20 +47,20 @@ public class UserOrderDataSource extends PositionalDataSource<OrderItem> {
         isLoading.postValue(true);
 
         compositeDisposable.add(ordersRepository.getAllUserOrdersForView(params.requestedLoadSize, params.requestedStartPosition, categoryOrderId)
-        .observeOn(Schedulers.io())
-        .subscribeOn(Schedulers.io())
-        .subscribe(new Consumer<List<OrderItem>>() {
-            @Override
-            public void accept(List<OrderItem> userOrdersItems) throws Exception {
-                isLoading.postValue(false);
-                callback.onResult(userOrdersItems, params.requestedStartPosition, getTotalCount());
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-            }
-        }));
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<OrderItem>>() {
+                    @Override
+                    public void accept(List<OrderItem> userOrdersItems) throws Exception {
+                        isLoading.postValue(false);
+                        callback.onResult(userOrdersItems, params.requestedStartPosition, getTotalCount().getValue());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                }));
     }
 
     @Override

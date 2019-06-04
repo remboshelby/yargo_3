@@ -185,8 +185,6 @@ public class OrdersRepository {
 
     public void safeUserOrderInBd(final List<OrderItem> userOrdersItems) {
         Observable.fromCallable(() -> {
-
-
             ordersDao.insertAll(userOrdersItems);
             return userOrdersItems;
         }).subscribeOn(Schedulers.io())

@@ -1,8 +1,8 @@
 package yargo.inc.login.data;
 
-import java.io.Serializable;
-
 import androidx.annotation.Nullable;
+
+import java.io.Serializable;
 
 public class LoginData implements Serializable {
     @Nullable
@@ -13,7 +13,7 @@ public class LoginData implements Serializable {
     private String password;
 
     public String getAuthKey() {
-        return authKey==null ? "" : authKey;
+        return authKey == null ? "" : authKey;
     }
 
     public LoginData(String authKey, String appId, String email, String password) {
@@ -47,14 +47,9 @@ public class LoginData implements Serializable {
         return appId;
     }
 
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public boolean isFieldNotEmpty(){
-        if ( email.isEmpty() || password.isEmpty()){
+    public boolean isFieldNotEmpty() {
+        if (email.isEmpty() || password.isEmpty()) {
             return false;
-        }
-        else return true;
+        } else return true;
     }
 }

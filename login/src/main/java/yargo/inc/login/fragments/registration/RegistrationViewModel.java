@@ -1,27 +1,27 @@
 package yargo.inc.login.fragments.registration;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.common.network.models.login.User;
 import yargo.inc.common.network.models.user_info.RegistData.PersonData;
-import yargo.inc.common.network.models.user_info.RegistData.RegistrResponse;
 import yargo.inc.common.network.repository.RegistrRepository;
 
-import androidx.lifecycle.MutableLiveData;
-
 public class RegistrationViewModel extends BaseViewModel {
-    private RegistrRepository registrRepository;
-    private CommonSharedPreferences commonSharedPreferences;
-
+    @Inject
+    protected RegistrRepository registrRepository;
+    @Inject
+    protected CommonSharedPreferences commonSharedPreferences;
 
     private static final int SURNAME_LENTH = 2;
     private static final int NAME_LENTH = 2;
@@ -47,9 +47,7 @@ public class RegistrationViewModel extends BaseViewModel {
     private MutableLiveData<Integer> registrationStatus = new MutableLiveData<>();
 
 
-    public RegistrationViewModel(RegistrRepository registrRepository, CommonSharedPreferences commonSharedPreferences) {
-        this.registrRepository = registrRepository;
-        this.commonSharedPreferences = commonSharedPreferences;
+    public RegistrationViewModel() {
         personData.setValue(new PersonData("", "", "", "", "", false, false, "", "1", ""));
         isBtnNextOn.setValue(false);
     }
@@ -57,38 +55,33 @@ public class RegistrationViewModel extends BaseViewModel {
     public void observeBtnStatus(LifecycleOwner owner, Observer<Boolean> observer) {
         isBtnNextOn.observe(owner, observer);
     }
-    public void observeRegistrationStatus(LifecycleOwner owner, Observer<Integer> observer){
+
+    public void observeRegistrationStatus(LifecycleOwner owner, Observer<Integer> observer) {
         registrationStatus.observe(owner, observer);
     }
 
     public void makeRegistr() {
-        addDisposible(registrRepository.makeRegistrGet(personData.getValue().getName(),personData.getValue().getSurname(),personData.getValue().getSex(),personData.getValue().getEmail(),
-                personData.getValue().getTelephonNumber(),personData.getValue().getBirthday(),personData.getValue().getPassword(),personData.getValue().getCityId())
+        addDisposible(registrRepository.makeRegistrGet(personData.getValue().getName(), personData.getValue().getSurname(), personData.getValue().getSex(), personData.getValue().getEmail(),
+                personData.getValue().getTelephonNumber(), personData.getValue().getBirthday(), personData.getValue().getPassword(), personData.getValue().getCityId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<RegistrResponse>() {
-                    @Override
-                    public void accept(RegistrResponse registResponse) throws Exception {
-                        if (registResponse.getRegistrResponse().getType().equals("OK")) {
-                            pushAuthToken(registResponse.getRegistrResponse().getAuthKey());
-                            pushUser(registResponse.getRegistrResponse().getUser());
-                            registrationStatus.postValue(REGISTR_SUCCESS);
-                        } else if (registResponse.getRegistrResponse().getType().equals("error")) {
-                            if (registResponse.getRegistrResponse().getMessage().getPhone()!=null && registResponse.getRegistrResponse().getMessage().getEmail()==null)  {
-                                registrationStatus.postValue(ERROR_PHONE);
-                            } else if (registResponse.getRegistrResponse().getMessage().getEmail()!=null && registResponse.getRegistrResponse().getMessage().getPhone()==null) {
-                                registrationStatus.postValue(ERROR_EMAIL);
-                            }else if (!registResponse.getRegistrResponse().getMessage().getEmail().isEmpty() && !registResponse.getRegistrResponse().getMessage().getEmail().isEmpty()) {
-                                registrationStatus.postValue(ERROR_EMAIL_AND_PHONE);
-                            }
+                .subscribe(registResponse -> {
+                    if (registResponse.getRegistrResponse().getType().equals("OK")) {
+                        pushAuthToken(registResponse.getRegistrResponse().getAuthKey());
+                        pushUser(registResponse.getRegistrResponse().getUser());
+                        registrationStatus.postValue(REGISTR_SUCCESS);
+                    } else if (registResponse.getRegistrResponse().getType().equals("error")) {
+                        if (registResponse.getRegistrResponse().getMessage().getPhone() != null && registResponse.getRegistrResponse().getMessage().getEmail() == null) {
+                            registrationStatus.postValue(ERROR_PHONE);
+                        } else if (registResponse.getRegistrResponse().getMessage().getEmail() != null && registResponse.getRegistrResponse().getMessage().getPhone() == null) {
+                            registrationStatus.postValue(ERROR_EMAIL);
+                        } else if (!registResponse.getRegistrResponse().getMessage().getEmail().isEmpty() && !registResponse.getRegistrResponse().getMessage().getEmail().isEmpty()) {
+                            registrationStatus.postValue(ERROR_EMAIL_AND_PHONE);
                         }
                     }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        registrationStatus.setValue(UNKNOWN_ERROR);
-                        throwable.printStackTrace();
-                    }
+                }, throwable -> {
+                    registrationStatus.setValue(UNKNOWN_ERROR);
+                    throwable.printStackTrace();
                 }));
     }
 
@@ -170,16 +163,13 @@ public class RegistrationViewModel extends BaseViewModel {
     }
 
     public int isPasswodCorrect(String passwordConf) {
-        if ( passwordConf.equals(personData.getValue().getPassword()) && !passwordConf.isEmpty() && passwordConf.length()>PASSWORD_LENTH){
+        if (passwordConf.equals(personData.getValue().getPassword()) && !passwordConf.isEmpty() && passwordConf.length() > PASSWORD_LENTH) {
             return PASSWORD_CORRECT;
-        }
-        else if (passwordConf.length()<PASSWORD_LENTH){
+        } else if (passwordConf.length() < PASSWORD_LENTH) {
             return PASSWORD_IS_SHORT;
-        }
-        else if (passwordConf != personData.getValue().getPassword()){
+        } else if (passwordConf != personData.getValue().getPassword()) {
             return PASSWORDS_NOT_MATCH;
-        }
-        else {
+        } else {
             return PASSWORDS_NOT_MATCH;
         }
     }
@@ -221,14 +211,17 @@ public class RegistrationViewModel extends BaseViewModel {
     public void setRegistrationStatus() {
         this.registrationStatus.postValue(REGISTR_SUCCESS);
     }
-    public void replaceVacantSubscription(LifecycleOwner owner){
+
+    public void replaceVacantSubscription(LifecycleOwner owner) {
         onCleared();
         registrationStatus.removeObservers(owner);
     }
-    public void pushAuthToken(String authKey){
+
+    public void pushAuthToken(String authKey) {
         commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
     }
-    public void pushUser(User user){
+
+    public void pushUser(User user) {
         commonSharedPreferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, user);
     }
 }

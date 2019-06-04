@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -31,9 +30,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.common.network.models.order_detail.OrdersItem;
-import yargo.inc.common.network.repository.OrderActionRepository;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListViewModel;
@@ -49,8 +46,6 @@ import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsVi
 import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_WAIT_PAY;
 
 public class OrderDetailsView extends BaseFragment implements CustomToolbarOrderDetail.onCustomToolbarClick, CusttomBottomBar.onClickBtnListener {
-
-
     @BindView(R2.id.customBottomBar)
     CusttomBottomBar customBottomBar;
     @BindView(R2.id.toolbar)
@@ -71,8 +66,6 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
     private ProgressDialog progressDialog;
 
     @Inject
-    protected OrderActionRepository orderActionRepository;
-    @Inject
     protected OrderListViewModel orderListViewModel;
 
 
@@ -91,33 +84,30 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         init(view);
 
-        orderDetailsViewModel.observOrderDetailData(this, new Observer<OrderDetailResponse>() {
-            @Override
-            public void onChanged(OrderDetailResponse orderDetailResponse) {
-                customBottomBar.initBottombar();
+        orderDetailsViewModel.observOrderDetailData(this, orderDetailResponse -> {
+            customBottomBar.initBottombar();
 
 
-                OrdersItem ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
-                customToolbar.setToolbarTitle("Заявка №" + ordersItem.getID());
+            OrdersItem ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
+            customToolbar.setToolbarTitle(getString(R.string.request_number,ordersItem.getID()));
 
-                list.add(new OrderDetailItem(OrderDetailItem.HEADER_ITEM_VIEW, orderDetailResponse));
-                list.add(new OrderDetailItem(OrderDetailItem.MAP_ITEM_VIEW, orderDetailResponse));
-                list.add(new OrderDetailItem(OrderDetailItem.DISCRIPTION_ITEM_VIEW, orderDetailResponse));
-                list.add(new OrderDetailItem(OrderDetailItem.PAY_TYPE_ITEM_VIEW, orderDetailResponse));
-                list.add(new OrderDetailItem(OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.HEADER_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.MAP_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.DISCRIPTION_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.PAY_TYPE_ITEM_VIEW, orderDetailResponse));
+            list.add(new OrderDetailItem(OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW, orderDetailResponse));
 
-                orderDetailAdapter = new OrderDetailAdapter(list);
+            orderDetailAdapter = new OrderDetailAdapter(list);
 
-                LinearLayoutManager layoutManager = new LinearLayoutManager(OrderDetailsView.this.getRoot());
-                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(deatilRecyclerView.getContext(), layoutManager.getOrientation());
-                deatilRecyclerView.addItemDecoration(dividerItemDecoration);
-                deatilRecyclerView.setLayoutManager(layoutManager);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(OrderDetailsView.this.getRoot());
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(deatilRecyclerView.getContext(), layoutManager.getOrientation());
+            deatilRecyclerView.addItemDecoration(dividerItemDecoration);
+            deatilRecyclerView.setLayoutManager(layoutManager);
 
-                deatilRecyclerView.setAdapter(orderDetailAdapter);
+            deatilRecyclerView.setAdapter(orderDetailAdapter);
 
-                progressBar.setVisibility(View.GONE);
-                bottomNav.setVisibility(View.VISIBLE);
-            }
+            progressBar.setVisibility(View.GONE);
+            bottomNav.setVisibility(View.VISIBLE);
         });
         orderDetailsViewModel.observOrderChangeResult(this, result -> {
             progressDialog.cancel();
@@ -127,22 +117,22 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
                     getRoot().onBackPressed();
                     break;
                 case OrderDetailsViewModel.ORDER_ACTION_SOMETHING_WRONG:
-                    showErrorDialog("Заказ не может быть взят, что то пошло не так!");
+                    showErrorDialog(getString(R.string.order_cant_take_something_goes_wrong));
                     break;
                 case OrderDetailsViewModel.ORDER_GET_FAIL:
-                    showErrorDialog("Заказ не может быть взят!");
+                    showErrorDialog(getString(R.string.order_cant_be_taken));
                     break;
                 case ORDER_GET_ISBUSY:
-                    showErrorDialogExtended("Заказ не может быть взят, так как уже находится у другого исполнителя!");
+                    showErrorDialogExtended(getString(R.string.order_cant_take_other_user_get_it));
                     break;
                 case OrderDetailsViewModel.ORDER_GET_UFULL:
-                    showErrorDialog("Заказ не может быть взят, так как у вас достигнут лимит заказов!");
+                    showErrorDialog(getString(R.string.order_cant_take_limit_reached));
                     break;
                 case OrderDetailsViewModel.ORDER_STAR_ALREADY_SET:
-                    showErrorDialogExtended("Заказ уже переведен в статус \"В РАБОТЕ\"!");
+                    showErrorDialogExtended(getString(R.string.order_status_is_allready_at_work));
                     break;
                 case OrderDetailsViewModel.ORDER_FINISHED_ALREADY_SET:
-                    showErrorDialogExtended("Заказ уже переведен в статус \"ОЖИДАЕТ ОПЛАТЫ\"!");
+                    showErrorDialogExtended(getString(R.string.order_status_is_allready_wait_pay));
                     break;
                 case OrderDetailsViewModel.ORDER_START_SUCCESS:
                     orderListViewModel.setOrderStatusId(ORDER_IS_INWORK);
@@ -158,19 +148,21 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
         });
         super.onViewCreated(view, savedInstanceState);
     }
-    public void showErrorDialogExtended(String message){
+
+    public void showErrorDialogExtended(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(message);
         builder.setTitle("Ошибка");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    getRoot().onBackPressed();
-                }
-            });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getRoot().onBackPressed();
+            }
+        });
         builder.setCancelable(true);
         builder.create().show();
     }
+
     private void init(@NonNull View view) {
         OrderListsFragment.getOrdersComponent().inject(this);
         ButterKnife.bind(this, view);
@@ -179,7 +171,7 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new OrderDetailsViewModel(orderActionRepository);
+                return (T) new OrderDetailsViewModel();
             }
         }).get(OrderDetailsViewModel.class);
 
@@ -189,7 +181,7 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
         progressBar.setVisibility(View.VISIBLE);
 
         orderDetailsViewModel.getOrderDetail(orderListViewModel.getOrderId());
-        customToolbar.setToolbarTitle("Загрузка...");
+        customToolbar.setToolbarTitle(getString(R.string.loading));
 
     }
 
