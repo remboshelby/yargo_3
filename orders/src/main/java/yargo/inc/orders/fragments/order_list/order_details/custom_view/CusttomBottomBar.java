@@ -1,18 +1,27 @@
 package yargo.inc.orders.fragments.order_list.order_details.custom_view;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import yargo.inc.orders.R2;
+import yargo.inc.common.base.BaseActivity;
 import yargo.inc.orders.R;
+import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
 
@@ -23,9 +32,12 @@ import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsVi
 import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_VACANT;
 import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_WAIT_PAY;
 
-public class CusttomBottomBar extends ConstraintLayout {
+public class CusttomBottomBar extends ConstraintLayout implements CustomAlertDialog.CustomAlertDialogListener {
+
     @BindView(R2.id.detailBottomBar)
     Button detailBottomBar;
+
+    private AlertDialog orderDetailAlertDialog;
 
     private OrderDetailsViewModel orderDetailsViewModel;
     public onClickBtnListener listener;
@@ -86,16 +98,15 @@ public class CusttomBottomBar extends ConstraintLayout {
 
     @OnClick(R2.id.detailBottomBar)
     void onActionClick() {
-        listener.actionBtnClick();
         switch (orderDetailsViewModel.getOrderStatusId()) {
             case ORDER_IS_VACANT:
-                orderDetailsViewModel.actionGetOrder();
+                showGetOrederDialog(getContext());
                 break;
             case ORDER_IS_ASSIGNED:
-                orderDetailsViewModel.actionStartOrder();
+                showStartOrderDialog(getContext());
                 break;
             case ORDER_IS_INWORK:
-                orderDetailsViewModel.actionAccomplishedOrder();
+                showAccomplishedOrder(getContext());
                 break;
             case ORDER_WAIT_PAY:
                 break;
@@ -104,5 +115,57 @@ public class CusttomBottomBar extends ConstraintLayout {
 
     public void setListener(onClickBtnListener listener) {
         this.listener = listener;
+    }
+
+    public void showStartOrderDialog(Context context){
+        AlertDialog.Builder getOrder= new AlertDialog.Builder(context);
+        getOrder.setMessage(getResources().getString(R.string.start_order_confirmation)).setCancelable(false).
+                setPositiveButton(getResources().getString(R.string.YES), (dialogInterface, i) -> {
+                    orderDetailsViewModel.actionStartOrder();
+                    listener.actionBtnClick();
+                })
+                .setNegativeButton(getResources().getString(R.string.NO), (dialogInterface, i) -> dialogInterface.cancel());
+        AlertDialog alertDialog = getOrder.create();
+        alertDialog.setTitle(getResources().getString(R.string.request));
+        alertDialog.show();
+    }
+    public void showAccomplishedOrder(Context context){
+        AlertDialog.Builder getOrder= new AlertDialog.Builder(context);
+        getOrder.setMessage(getResources().getString(R.string.accomplished_order_confirmation)).setCancelable(false).
+                setPositiveButton(getResources().getString(R.string.YES), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        orderDetailsViewModel.actionAccomplishedOrder();
+                        listener.actionBtnClick();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.NO), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+        AlertDialog alertDialog = getOrder.create();
+        alertDialog.setTitle(getResources().getString(R.string.request));
+        alertDialog.show();
+    }
+
+    private void showGetOrederDialog(Context context) {
+        AlertDialog.Builder getOrderAlertDialog = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View mView = inflater.inflate(R.layout.alert_order_get, null);
+        ((CustomAlertDialog)mView.findViewById(R.id.customAlertDialog)).setListener(this);
+        getOrderAlertDialog.setView(mView);
+        orderDetailAlertDialog = getOrderAlertDialog.create();
+        orderDetailAlertDialog.show();
+    }
+
+    public void onbtnGetOrderYesClick(){
+        orderDetailsViewModel.actionGetOrder();
+        listener.actionBtnClick();
+        orderDetailAlertDialog.dismiss();
+    }
+    public void onbtnGetOrderNoClick(){
+        orderDetailAlertDialog.dismiss();
     }
 }

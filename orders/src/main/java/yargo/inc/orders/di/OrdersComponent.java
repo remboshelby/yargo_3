@@ -13,6 +13,7 @@ import yargo.inc.orders.fragments.order_list.order_commission.fragments.Commissi
 import yargo.inc.orders.fragments.order_list.order_commission.fragments.SuccessTokinizeView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
+import yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomAlertDialog;
 import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
 import yargo.inc.orders.fragments.order_list.profile_editor.custom_view.CustomToolBarEditor;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
@@ -31,17 +32,29 @@ import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToo
 public interface OrdersComponent {
 
     void inject(OrderListsFragment orderListsFragment);
+
     void inject(VacantOrderList vacantOrderList);
+
     void inject(CustomToolbarVacantOrders customToolbarVacantOrders);
+
     void inject(CustomToolbarUserOrders customToolbarUserOrders);
+
     void inject(UserOrderList userOrderList);
+
     void inject(OrderDetailsView orderDetailsView);
+
     void inject(UserOrdersItemAdapter userOrdersItemAdapter);
+
     void inject(FiltersView filtersView);
+
     void inject(FilterSettings filterSettings);
+
     void inject(FilterCategory filterCategory);
+
     void inject(CategoryItemView categoryItemView);
+
     void inject(FilterCity filterCity);
+
     void inject(CityItemView cityItemView);
 
     void inject(OrderCommissionView orderCommissionView);
@@ -56,8 +69,10 @@ public interface OrdersComponent {
 
     void inject(OrderDetailsViewModel orderDetailsViewModel);
 
+    void inject(CustomAlertDialog customAlertDialog);
+
     @Component.Builder
-    interface Builder{
+    interface Builder {
         @BindsInstance
         Builder root(OrderListsFragment orderListsFragment);
 

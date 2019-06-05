@@ -1,5 +1,7 @@
 package yargo.inc.orders.fragments.order_list;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -107,7 +109,7 @@ public class OrderListsFragment extends BaseFragment {
         orderListViewModel.observeOrderStatus(this, new Observer<OrderItem>() {
             @Override
             public void onChanged(OrderItem orderItem) {
-                if (orderItem==null || orderItem.getIdOrderStatus() == 1)
+                if (orderItem == null || orderItem.getIdOrderStatus() == 1)
                     pushFragmentIntoFragment(new VacantOrderList());
                 else {
                     Integer orderStatus = orderItem.getIdOrderStatus();
@@ -129,7 +131,8 @@ public class OrderListsFragment extends BaseFragment {
             } else if (menuItem.getItemId() == R.id.menu_exit) {
                 showExitDialog();
             } else if (menuItem.getItemId() == R.id.menu_instruction) {
-                getRoot().pushFragment(new OffertView(), true);
+                showInstruction();
+//                getRoot().pushFragment(new OffertView(), true);
             }
             drawerLayout.closeDrawer(Gravity.LEFT);
             return false;
@@ -190,6 +193,11 @@ public class OrderListsFragment extends BaseFragment {
                 .build();
 
         ordersComponent.inject(this);
+    }
+
+    private void showInstruction() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://api.yargo.pro/site/pay-instruction"));
+        startActivity(browserIntent);
     }
 
 }

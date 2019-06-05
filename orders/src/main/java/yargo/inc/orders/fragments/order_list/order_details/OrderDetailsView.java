@@ -1,7 +1,7 @@
 package yargo.inc.orders.fragments.order_list.order_details;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,13 +23,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import yargo.inc.common.base.BaseActivity;
 import yargo.inc.common.base.BaseFragment;
+import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.common.network.models.order_detail.OrdersItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
@@ -71,9 +75,6 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
 
     protected static OrderDetailsViewModel orderDetailsViewModel;
 
-    private ArrayList<OrderDetailItem> list = new ArrayList<>();
-
-    private OrderDetailAdapter orderDetailAdapter;
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -85,26 +86,13 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
         init(view);
 
         orderDetailsViewModel.observOrderDetailData(this, orderDetailResponse -> {
+            OrdersItem ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
             customBottomBar.initBottombar();
 
 
-            OrdersItem ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
-            customToolbar.setToolbarTitle(getString(R.string.request_number,ordersItem.getID()));
+            customToolbar.setToolbarTitle(getString(R.string.request_number, ordersItem.getID()));
 
-            list.add(new OrderDetailItem(OrderDetailItem.HEADER_ITEM_VIEW, orderDetailResponse));
-            list.add(new OrderDetailItem(OrderDetailItem.MAP_ITEM_VIEW, orderDetailResponse));
-            list.add(new OrderDetailItem(OrderDetailItem.DISCRIPTION_ITEM_VIEW, orderDetailResponse));
-            list.add(new OrderDetailItem(OrderDetailItem.PAY_TYPE_ITEM_VIEW, orderDetailResponse));
-            list.add(new OrderDetailItem(OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW, orderDetailResponse));
-
-            orderDetailAdapter = new OrderDetailAdapter(list);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(OrderDetailsView.this.getRoot());
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(deatilRecyclerView.getContext(), layoutManager.getOrientation());
-            deatilRecyclerView.addItemDecoration(dividerItemDecoration);
-            deatilRecyclerView.setLayoutManager(layoutManager);
-
-            deatilRecyclerView.setAdapter(orderDetailAdapter);
+            createOrderRecyclerView(orderDetailResponse);
 
             progressBar.setVisibility(View.GONE);
             bottomNav.setVisibility(View.VISIBLE);
@@ -123,16 +111,16 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
                     showErrorDialog(getString(R.string.order_cant_be_taken));
                     break;
                 case ORDER_GET_ISBUSY:
-                    showErrorDialogExtended(getString(R.string.order_cant_take_other_user_get_it));
+                    showErrorDialogExtended(getString(R.string.order_cant_take_other_user_get_it), getRoot());
                     break;
                 case OrderDetailsViewModel.ORDER_GET_UFULL:
                     showErrorDialog(getString(R.string.order_cant_take_limit_reached));
                     break;
                 case OrderDetailsViewModel.ORDER_STAR_ALREADY_SET:
-                    showErrorDialogExtended(getString(R.string.order_status_is_allready_at_work));
+                    showErrorDialogExtended(getString(R.string.order_status_is_allready_at_work), getRoot());
                     break;
                 case OrderDetailsViewModel.ORDER_FINISHED_ALREADY_SET:
-                    showErrorDialogExtended(getString(R.string.order_status_is_allready_wait_pay));
+                    showErrorDialogExtended(getString(R.string.order_status_is_allready_wait_pay), getRoot());
                     break;
                 case OrderDetailsViewModel.ORDER_START_SUCCESS:
                     orderListViewModel.setOrderStatusId(ORDER_IS_INWORK);
@@ -147,20 +135,6 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
             }
         });
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    public void showErrorDialogExtended(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(message);
-        builder.setTitle("Ошибка");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                getRoot().onBackPressed();
-            }
-        });
-        builder.setCancelable(true);
-        builder.create().show();
     }
 
     private void init(@NonNull View view) {
@@ -185,6 +159,15 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
 
     }
 
+    public void showErrorDialogExtended(String message, Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message);
+        builder.setTitle("Ошибка");
+        builder.setPositiveButton("OK", (dialog, which) -> ((BaseActivity) context).onBackPressed());
+        builder.setCancelable(true);
+        builder.create().show();
+    }
+
     @Override
     public void actionBtnClick() {
         progressDialog = new ProgressDialog(getContext());
@@ -198,6 +181,28 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
 
     public static OrderDetailsViewModel getOrderDetailsViewModel() {
         return orderDetailsViewModel;
+    }
+
+    private void createOrderRecyclerView(OrderDetailResponse orderDetailResponse) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(OrderDetailsView.this.getRoot());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(deatilRecyclerView.getContext(), layoutManager.getOrientation());
+        deatilRecyclerView.addItemDecoration(dividerItemDecoration);
+        deatilRecyclerView.setLayoutManager(layoutManager);
+        deatilRecyclerView.setAdapter(createOrderDetailAdapter(orderDetailResponse));
+    }
+
+    @NotNull
+    private OrderDetailAdapter createOrderDetailAdapter(OrderDetailResponse orderDetailResponse) {
+        OrderDetailAdapter orderDetailAdapter;
+        ArrayList<OrderDetailItem> list = new ArrayList<>();
+        list.add(new OrderDetailItem(OrderDetailItem.HEADER_ITEM_VIEW, orderDetailResponse));
+        list.add(new OrderDetailItem(OrderDetailItem.MAP_ITEM_VIEW, orderDetailResponse));
+        list.add(new OrderDetailItem(OrderDetailItem.DISCRIPTION_ITEM_VIEW, orderDetailResponse));
+        list.add(new OrderDetailItem(OrderDetailItem.PAY_TYPE_ITEM_VIEW, orderDetailResponse));
+        list.add(new OrderDetailItem(OrderDetailItem.CLIENT_ABOUT_ITEM_VIEW, orderDetailResponse));
+
+        orderDetailAdapter = new OrderDetailAdapter(list);
+        return orderDetailAdapter;
     }
 
     @Override

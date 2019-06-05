@@ -95,6 +95,8 @@ public class OrderDetailsViewModel extends BaseViewModel {
                     else if (response.getType().equals("error")){
                         if (response.getErrorCode().equals(ERROR_START_ALREADY_SET)){
                             orderChangeResult.postValue(ORDER_STAR_ALREADY_SET);
+                        }else if (response.getErrorCode().equals(ERROR_ORDER_UFULL)) {
+                            orderChangeResult.postValue(ORDER_GET_UFULL);
                         }
                     }
                 }));
@@ -111,7 +113,10 @@ public class OrderDetailsViewModel extends BaseViewModel {
                     else if (response.getType().equals("error")){
                         if (response.getMessage().equals(ERROR_ACCOMPLISHED_ALREADY_SET)){
                             orderChangeResult.postValue(ORDER_FINISHED_ALREADY_SET);
+                        }else if (response.getErrorCode().equals(ERROR_ORDER_UFULL)) {
+                            orderChangeResult.postValue(ORDER_GET_UFULL);
                         }
+
                     }
                 }));
     }
