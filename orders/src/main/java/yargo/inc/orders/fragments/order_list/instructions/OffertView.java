@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.orders.R;
+import yargo.inc.orders.fragments.order_list.instructions.models.OffertsModel;
 
 public class OffertView extends BaseFragment {
     @Override

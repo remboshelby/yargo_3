@@ -46,7 +46,7 @@ public class OffertAdapter extends RecyclerView.Adapter<BaseViewHolder<SubHeader
             case LOW_LEVEL:
                 return new BaseViewHolder<SubHeadersItem>(new LowItemView(parent.getContext())) {
                     @Override
-                    public void bind(SubHeadersItem item) {
+                        public void bind(SubHeadersItem item) {
                         ((LowItemView)itemView).bind(item);
                     }
                 };
