@@ -9,14 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import yargo.inc.orders.R2;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.orders.R;
@@ -26,7 +23,7 @@ import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterCategory;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterCity;
 import yargo.inc.orders.fragments.order_list.filters.custom_view.FilterSettings;
 
-public class FiltersView extends BaseFragment implements CustomFilterToolbar.onCustomFilterToolbarClick {
+public class FiltersView extends BaseFragment implements CustomFilterToolbar.OnCustomFilterToolbarClick {
 
 
 

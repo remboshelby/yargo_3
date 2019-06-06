@@ -20,17 +20,14 @@ import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import yargo.inc.common.base.BaseActivity;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.instructions.custom_view.CustomOffertsToolbar;
+import yargo.inc.orders.fragments.order_list.instructions.custom_view.CustomOffertsToolbar.OnCustomOffertsToolbarClick;
 import yargo.inc.orders.fragments.order_list.instructions.models.OffertsModel;
 
-import static yargo.inc.orders.fragments.order_list.instructions.custom_view.CustomOffertsToolbar.*;
-
-public class OffertView extends BaseActivity implements OnCustomOffertsToolbarClick {
-
+public class InstructionView extends BaseFragment implements OnCustomOffertsToolbarClick {
 
     @BindView(R2.id.customOffertsToolbar)
     CustomOffertsToolbar customOffertsToolbar;
@@ -38,47 +35,42 @@ public class OffertView extends BaseActivity implements OnCustomOffertsToolbarCl
     Toolbar toolbar;
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
-    @BindView(R2.id.offertList)
-    RecyclerView offertList;
     @BindView(R2.id.mainHeader)
     TextView mainHeader;
-    @BindView(R2.id.subHeader)
-    TextView subHeader;
+    @BindView(R2.id.instructionList)
+    RecyclerView instructionList;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected View inflate(LayoutInflater inflater, ViewGroup container) {
+        return inflater.inflate(R.layout.instruction_view, container, false);
+    }
 
-        init();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ButterKnife.bind(this, view);
+
+        getRoot().setSupportActionBar(toolbar);
+
+        customOffertsToolbar.setOnCustomOffertsToolbarClick(this);
+        customOffertsToolbar.setTitle(getString(R.string.menu_instruction));
 
         OffertsModel offertData = getOffertData();
         offertData.getSubHeaders();
 
         mainHeader.setText(offertData.getHeader());
-        subHeader.setText(offertData.getHeaderTitle());
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        offertList.setLayoutManager(layoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getRoot());
+        instructionList.setLayoutManager(layoutManager);
 
         OffertAdapter offertAdapter = new OffertAdapter(offertData.getSubHeaders());
-        offertList.setAdapter(offertAdapter);
+        instructionList.setAdapter(offertAdapter);
     }
-
-    private void init() {
-        setTheme(R.style.AppTheme);
-        setContentView(R.layout.offert_view);
-        ButterKnife.bind(this);
-
-        setSupportActionBar(toolbar);
-        customOffertsToolbar.setOnCustomOffertsToolbarClick(this);
-        customOffertsToolbar.setTitle(getString(R.string.offerts_for_user));
-    }
-
-
     private OffertsModel getOffertData() {
         String json = null;
         try {
-            InputStream inputStream = getResources().openRawResource(R.raw.offerts);
+            InputStream inputStream = getContext().getResources().openRawResource(R.raw.instruction);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
@@ -92,6 +84,6 @@ public class OffertView extends BaseActivity implements OnCustomOffertsToolbarCl
         return (OffertsModel) gson.fromJson(json, OffertsModel.class);
     }
     public void onBtnClick(){
-        onBackPressed();
+        getRoot().onBackPressed();
     }
 }

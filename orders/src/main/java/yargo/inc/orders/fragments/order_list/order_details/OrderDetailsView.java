@@ -2,6 +2,7 @@ package yargo.inc.orders.fragments.order_list.order_details;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailAdapter;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
+import yargo.inc.orders.fragments.order_list.instructions.OffertView;
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomToolbarOrderDetail;
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CusttomBottomBar;
 
@@ -209,5 +211,9 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
     public void onDestroyView() {
         orderDetailsViewModel = null;
         super.onDestroyView();
+    }
+    public void showOffert(){
+        startActivity(new Intent(getContext(),OffertView.class));
+//        getRoot().pushFragment(new OffertView(), true);
     }
 }

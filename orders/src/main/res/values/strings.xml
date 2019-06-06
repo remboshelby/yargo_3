@@ -69,10 +69,11 @@
     <string name="order_status_is_allready_wait_pay">Заказ уже переведен в статус \"ОЖИДАЕТ ОПЛАТЫ\"!</string>
     <string name="commission_payed_seccussfully">Комиссия к заявке оплачена!</string>
     <string name="request">Заяква</string>
-    <string name="oferts">Согласeн с условиями <a href="http://api.yargo.pro/site/oferta">оферты</a></string>
+    <string name="oferts">Согласeн с условиями</string>
     <string name="get_order" >Вы действительно хотите взять заявку?</string>
     <string name="start_order_confirmation">Вы действительно хотите приступить к выполнению заявки?</string>
     <string name="accomplished_order_confirmation">Вы действительно хотите cдать заявку?</string>
+    <string name="offerts_for_user">Оферта для исполнителей</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

@@ -3,7 +3,6 @@ package yargo.inc.orders.fragments.order_list.filters.custom_view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -24,13 +23,13 @@ public class CustomFilterToolbar extends ConstraintLayout {
 //    @BindView(R2.id.BtnConfirmFilter)
 //    Button BtnConfirmFilter;
 
-    public void setOnCustomFilterToolbarClick(onCustomFilterToolbarClick onCustomFilterToolbarClick) {
+    public void setOnCustomFilterToolbarClick(OnCustomFilterToolbarClick onCustomFilterToolbarClick) {
         this.onCustomFilterToolbarClick = onCustomFilterToolbarClick;
     }
 
-    public onCustomFilterToolbarClick onCustomFilterToolbarClick;
+    public OnCustomFilterToolbarClick onCustomFilterToolbarClick;
 
-    public interface onCustomFilterToolbarClick{
+    public interface OnCustomFilterToolbarClick {
         void btnBackClick();
     }
 

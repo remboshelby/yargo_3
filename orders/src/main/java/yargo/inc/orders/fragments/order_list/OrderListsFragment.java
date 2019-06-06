@@ -41,6 +41,7 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.di.DaggerOrdersComponent;
 import yargo.inc.orders.di.OrdersComponent;
 import yargo.inc.orders.fragments.order_list.filters.FiltersView;
+import yargo.inc.orders.fragments.order_list.instructions.InstructionView;
 import yargo.inc.orders.fragments.order_list.instructions.OffertView;
 import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
@@ -131,7 +132,8 @@ public class OrderListsFragment extends BaseFragment {
             } else if (menuItem.getItemId() == R.id.menu_exit) {
                 showExitDialog();
             } else if (menuItem.getItemId() == R.id.menu_instruction) {
-                showInstruction();
+//                showInstruction();
+                getRoot().pushFragment(new InstructionView(), true);
 //                getRoot().pushFragment(new OffertView(), true);
             }
             drawerLayout.closeDrawer(Gravity.LEFT);

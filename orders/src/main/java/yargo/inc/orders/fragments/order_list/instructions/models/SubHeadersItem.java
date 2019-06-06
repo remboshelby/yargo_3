@@ -15,9 +15,6 @@ public class SubHeadersItem{
 	@SerializedName("text")
 	private String text;
 
-	@SerializedName("subHeader")
-	private String subHeader;
-
 	public void setNumber(String number){
 		this.number = number;
 	}
@@ -42,22 +39,13 @@ public class SubHeadersItem{
 		return text;
 	}
 
-	public void setSubHeader(String subHeader){
-		this.subHeader = subHeader;
-	}
-
-	public String getSubHeader(){
-		return subHeader;
-	}
-
 	@Override
  	public String toString(){
 		return 
 			"SubHeadersItem{" + 
 			"number = '" + number + '\'' + 
 			",level = '" + level + '\'' + 
-			",text = '" + text + '\'' + 
-			",subHeader = '" + subHeader + '\'' + 
+			",text = '" + text + '\'' +
 			"}";
 		}
 }

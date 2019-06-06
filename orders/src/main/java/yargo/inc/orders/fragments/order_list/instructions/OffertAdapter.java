@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import yargo.inc.common.base.BaseViewHolder;
 import yargo.inc.orders.fragments.order_list.instructions.custom_view.LowItemView;
@@ -19,35 +20,35 @@ public class OffertAdapter extends RecyclerView.Adapter<BaseViewHolder<SubHeader
     public static final int MIDDLE_LEVEL = 2;
     public static final int LOW_LEVEL = 3;
 
-    private ArrayList<SubHeadersItem> dataSet;
+    private List<SubHeadersItem> dataSet;
 
-    public OffertAdapter(ArrayList<SubHeadersItem> dataSet) {
+    public OffertAdapter(List<SubHeadersItem> dataSet) {
         this.dataSet = dataSet;
     }
 
     @NonNull
     @Override
     public BaseViewHolder<SubHeadersItem> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case TOP_LEVEL:
                 return new BaseViewHolder<SubHeadersItem>(new TopItemView(parent.getContext())) {
                     @Override
                     public void bind(SubHeadersItem item) {
-                        ((TopItemView)itemView).bind(item);
+                        ((TopItemView) itemView).bind(item);
                     }
                 };
             case MIDDLE_LEVEL:
                 return new BaseViewHolder<SubHeadersItem>(new MiddleItemView(parent.getContext())) {
                     @Override
                     public void bind(SubHeadersItem item) {
-                        ((MiddleItemView)itemView).bind(item);
+                        ((MiddleItemView) itemView).bind(item);
                     }
                 };
             case LOW_LEVEL:
                 return new BaseViewHolder<SubHeadersItem>(new LowItemView(parent.getContext())) {
                     @Override
-                        public void bind(SubHeadersItem item) {
-                        ((LowItemView)itemView).bind(item);
+                    public void bind(SubHeadersItem item) {
+                        ((LowItemView) itemView).bind(item);
                     }
                 };
         }
@@ -57,7 +58,7 @@ public class OffertAdapter extends RecyclerView.Adapter<BaseViewHolder<SubHeader
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder<SubHeadersItem> holder, int position) {
         SubHeadersItem subHeadersItem = dataSet.get(position);
-        if (subHeadersItem!=null){
+        if (subHeadersItem != null) {
             (holder).bind(subHeadersItem);
         }
     }

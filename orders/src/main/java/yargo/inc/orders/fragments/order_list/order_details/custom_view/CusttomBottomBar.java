@@ -1,17 +1,12 @@
 package yargo.inc.orders.fragments.order_list.order_details.custom_view;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,7 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import yargo.inc.common.base.BaseActivity;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
@@ -44,6 +38,7 @@ public class CusttomBottomBar extends ConstraintLayout implements CustomAlertDia
 
     public interface onClickBtnListener {
         void actionBtnClick();
+        void showOffert();
     }
 
     public CusttomBottomBar(Context context) {
@@ -167,5 +162,8 @@ public class CusttomBottomBar extends ConstraintLayout implements CustomAlertDia
     }
     public void onbtnGetOrderNoClick(){
         orderDetailAlertDialog.dismiss();
+    }
+    public void showOffert(){
+        listener.showOffert();
     }
 }

@@ -22,6 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".orders.fragments.order_list.instructions.OffertView"/>
+
         <service android:name=".services.FirebaseMessaging"
             android:exported="false">
             <intent-filter android:priority="1000">

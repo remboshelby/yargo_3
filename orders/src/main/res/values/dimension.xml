@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_left_instruction_text_view">8dp</dimen>
+    <dimen name="margin_right_instruction_text_view">8dp</dimen>
+    <dimen name="margin_bottom_instruction_text_view">8dp</dimen>
+    <dimen name="margin_tom_instruction_text_view">8dp</dimen>
+</resources>

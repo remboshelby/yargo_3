@@ -40,14 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/subHeader"
-                style="@style/InstructionTopLevelSubHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/offertList"
+                android:id="@+id/instructionList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

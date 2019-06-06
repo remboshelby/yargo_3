@@ -1,9 +1,13 @@
 package yargo.inc.orders.fragments.order_list.order_details.custom_view;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,6 +40,7 @@ public class CustomAlertDialog extends FrameLayout {
     public interface CustomAlertDialogListener{
         void onbtnGetOrderNoClick();
         void onbtnGetOrderYesClick();
+        void showOffert();
     }
 
     private CustomAlertDialogListener listener;
@@ -55,6 +60,15 @@ public class CustomAlertDialog extends FrameLayout {
         ButterKnife.bind(this);
 
         textViewOferts.setClickable(true);
+        SpannableString link = makeLinkSpan( " оферты", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.showOffert();
+            }
+        });
+        textViewOferts.append(link);
+        makeLinksFocusable(textViewOferts);
+
         textViewOferts.setMovementMethod(LinkMovementMethod.getInstance());
 
         btnGetOrderYes.setEnabled(false);
@@ -75,6 +89,21 @@ public class CustomAlertDialog extends FrameLayout {
         super(context, attrs);
         init(context);
     }
+    private SpannableString makeLinkSpan(CharSequence text, View.OnClickListener listener) {
+        SpannableString link = new SpannableString(text);
+        link.setSpan(new ClickableString(listener), 0, text.length(),
+                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        return link;
+    }
+
+    private void makeLinksFocusable(TextView tv) {
+        MovementMethod m = tv.getMovementMethod();
+        if ((m == null) || !(m instanceof LinkMovementMethod)) {
+            if (tv.getLinksClickable()) {
+                tv.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        }
+    }
 
     public void setListener(CustomAlertDialogListener listener) {
         this.listener = listener;
@@ -88,5 +117,14 @@ public class CustomAlertDialog extends FrameLayout {
         listener.onbtnGetOrderNoClick();
     }
 
-
+    private static class ClickableString extends ClickableSpan {
+        private View.OnClickListener mListener;
+        public ClickableString(View.OnClickListener listener) {
+            mListener = listener;
+        }
+        @Override
+        public void onClick(View v) {
+            mListener.onClick(v);
+        }
+    }
 }
