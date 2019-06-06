@@ -1,8 +1,11 @@
 package yargo.inc.orders.fragments.order_list.order_details.custom_view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -17,9 +20,15 @@ import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 
+import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_ASSIGNED;
+import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_INWORK;
+
 public class ClientAboutView extends ConstraintLayout {
+
     private OrdersItem ordersItem;
 
+    @BindView(R2.id.clientPhoneNumber)
+    TextView clientPhoneNumber;
     @BindView(R2.id.titleClient)
     TextView titleClient;
     @BindView(R2.id.clientAvatar)
@@ -48,8 +57,16 @@ public class ClientAboutView extends ConstraintLayout {
     public void bind(OrderDetailItem item) {
         OrderDetailResponse orderDetailResponse = item.getOrderDetailResponse();
         ordersItem = orderDetailResponse.getResponse().getOrders().get(0);
-
+        if (ordersItem.getIdOrderStatus()==ORDER_IS_ASSIGNED || ordersItem.getIdOrderStatus()==ORDER_IS_INWORK){
+            clientPhoneNumber.setVisibility(VISIBLE);
+            clientPhoneNumber.setText(getContext().getString(R.string.telephoneNumber, ordersItem.getPhone()));
+            clientPhoneNumber.setOnClickListener(v -> dialContactPhone(ordersItem.getPhone()));
+        }
         clientAvatar.setImageResource(R.drawable.person);
         clientInfo.setText(ordersItem.getClient());
     }
+    public void dialContactPhone(final String phoneNumber){
+        getContext().startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",phoneNumber, null)));
+    }
+
 }

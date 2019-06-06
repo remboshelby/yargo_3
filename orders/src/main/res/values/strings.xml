@@ -50,10 +50,8 @@
     <string name="take_order">Взять заказ</string>
     <string name="order_pay_comission">Оплатить комиссию</string>
     <string name="finish_order">Завершить</string>
-    <string name="start_order">Приступить к работе</string>
+    <string name="start_order">В работе</string>
 
-    <string name="main_product_name">Comet</string>
-    <string name="main_product_description">Very bright, with an orbital period of 112 years.</string>
 
     <string name="main_price">Price</string>
     <string name="main_buy">Buy</string>
@@ -71,9 +69,14 @@
     <string name="request">Заяква</string>
     <string name="oferts">Согласeн с условиями</string>
     <string name="get_order" >Вы действительно хотите взять заявку?</string>
+
     <string name="start_order_confirmation">Вы действительно хотите приступить к выполнению заявки?</string>
     <string name="accomplished_order_confirmation">Вы действительно хотите cдать заявку?</string>
+    <string name="profile_chandging_confirmation">Вы действительно изменить данные профиля?</string>
+
     <string name="offerts_for_user">Оферта для исполнителей</string>
+    <string name="telephoneNumber">Телефон: %s</string>
+    <string name="help_number">+7 922 415-55-52</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

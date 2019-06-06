@@ -42,7 +42,6 @@ import yargo.inc.orders.di.DaggerOrdersComponent;
 import yargo.inc.orders.di.OrdersComponent;
 import yargo.inc.orders.fragments.order_list.filters.FiltersView;
 import yargo.inc.orders.fragments.order_list.instructions.InstructionView;
-import yargo.inc.orders.fragments.order_list.instructions.OffertView;
 import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
@@ -128,13 +127,11 @@ public class OrderListsFragment extends BaseFragment {
             } else if (menuItem.getItemId() == R.id.menu_my_orders) {
                 pushFragmentIntoFragment(new UserOrderList());
             } else if (menuItem.getItemId() == R.id.menu_call) {
-
+                dialContactPhone(getString(R.string.help_number));
             } else if (menuItem.getItemId() == R.id.menu_exit) {
                 showExitDialog();
             } else if (menuItem.getItemId() == R.id.menu_instruction) {
-//                showInstruction();
                 getRoot().pushFragment(new InstructionView(), true);
-//                getRoot().pushFragment(new OffertView(), true);
             }
             drawerLayout.closeDrawer(Gravity.LEFT);
             return false;
@@ -196,10 +193,9 @@ public class OrderListsFragment extends BaseFragment {
 
         ordersComponent.inject(this);
     }
-
-    private void showInstruction() {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://api.yargo.pro/site/pay-instruction"));
-        startActivity(browserIntent);
+    public void dialContactPhone(final String phoneNumber){
+        getContext().startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",phoneNumber, null)));
     }
+
 
 }

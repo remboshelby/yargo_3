@@ -80,13 +80,14 @@ public class OrdersModule {
     @Provides
     @OrdersScope
     public ProfileEditorViewModel profileEditorViewModel(OrderListsFragment host,
+                                                         Application application,
                                                          CommonSharedPreferences commonSharedPreferences,
                                                          final LoginRepository loginRepository){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new ProfileEditorViewModel(commonSharedPreferences, loginRepository);
+                return (T) new ProfileEditorViewModel(application,commonSharedPreferences, loginRepository);
             }
         }).get(ProfileEditorViewModel.class);
     }

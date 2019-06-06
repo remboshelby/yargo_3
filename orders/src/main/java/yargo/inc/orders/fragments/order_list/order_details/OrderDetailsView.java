@@ -214,6 +214,5 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
     }
     public void showOffert(){
         startActivity(new Intent(getContext(),OffertView.class));
-//        getRoot().pushFragment(new OffertView(), true);
     }
 }

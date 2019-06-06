@@ -38,8 +38,8 @@ import yargo.inc.orders.yandex_utils.Settings;
 
 public class CommissionDetailView extends BaseFragment {
     private static final int DOORS_SPECIAL = 2;
-    private static final double DOORS_COMMISSION = 0.2;
-    private static final double OTHER_COMMISSION = 0.1;
+    private static final double DOORS_COMMISSION = 0.1;
+    private static final double OTHER_COMMISSION = 0.2;
 
     static double commission_size;
 

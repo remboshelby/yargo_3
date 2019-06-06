@@ -1,6 +1,8 @@
 package yargo.inc.orders.fragments.order_list.profile_editor;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 
@@ -91,7 +94,7 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
                     sexRadioGroup.check(R.id.sexMale);
                 else sexRadioGroup.check(R.id.sexFemale);
 
-                Integer cityId = profileEditorViewModel.getUserMutableLiveData().getValue().getIdCity();
+                String cityId =String.valueOf(profileEditorViewModel.getUserMutableLiveData().getValue().getIdCity());
                 String[] array = getResources().getStringArray(R.array.citiesId);
                 Integer position = Arrays.asList(array).indexOf(cityId);
                 spinCity.setSelection(position);
@@ -107,7 +110,8 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
 
     @Override
     public void onAcceptPressed() {
-        profileEditorViewModel.pushUserInfo();
+
+        showAccomplishedProfileChanging(getContext());
 
     }
 
@@ -123,7 +127,7 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
 
     @OnItemSelected(R2.id.spinCity)
     void spinnerItemSelected(int position) {
-        profileEditorViewModel.setCityId(getResources().getIntArray(R.array.citiesId)[position]);
+        profileEditorViewModel.setCityId( Integer.valueOf(getResources().getStringArray(R.array.citiesId)[position]));
     }
 
     @OnClick(R2.id.editBdate)
@@ -154,5 +158,14 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
         } else if (radioButton.getId() == R.id.sexFemale && checked) {
             profileEditorViewModel.setSex(0);
         }
+    }
+    public void showAccomplishedProfileChanging(Context context){
+        AlertDialog.Builder getOrder= new AlertDialog.Builder(context);
+        getOrder.setMessage(getResources().getString(R.string.profile_chandging_confirmation)).setCancelable(false).
+                setPositiveButton(getResources().getString(R.string.YES), (dialogInterface, i) -> profileEditorViewModel.pushUserInfo())
+                .setNegativeButton(getResources().getString(R.string.NO), (dialogInterface, i) -> dialogInterface.cancel());
+        AlertDialog alertDialog = getOrder.create();
+        alertDialog.setTitle(getResources().getString(R.string.request));
+        alertDialog.show();
     }
 }
