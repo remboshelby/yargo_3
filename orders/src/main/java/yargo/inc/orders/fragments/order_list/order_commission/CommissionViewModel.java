@@ -16,18 +16,23 @@ import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.interactors.CommissionInteractor;
 import yargo.inc.common.interactors.DateInteractor;
 import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
+import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_commission.entity.PayEntity;
 import yargo.inc.orders.yandex_utils.Settings;
 
 public class CommissionViewModel extends BaseViewModel {
-    @Inject
-    protected CommissionInteractor commissionInteractor;
-    @Inject
-    protected DateInteractor dateInteractor;
+
 
     private MutableLiveData<PayEntity> payRequisites = new MutableLiveData<>();
     private MutableLiveData<OrderDetailResponse> orderDetailData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isPayed = new MutableLiveData<>();
+    private DateInteractor dateInteractor;
+    private CommissionInteractor commissionInteractor;
+
+    public CommissionViewModel(DateInteractor dateInteractor,CommissionInteractor commissionInteractor) {
+        this.dateInteractor = dateInteractor;
+        this.commissionInteractor = commissionInteractor;
+    }
 
     public void getOrderDetail(int idOrder) {
         addDisposible(commissionInteractor.getOrderDetail(idOrder)

@@ -15,6 +15,7 @@ import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomAlertDialog;
 import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorView;
+import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorViewModel;
 import yargo.inc.orders.fragments.order_list.profile_editor.custom_view.CustomToolBarEditor;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.utils.UserOrdersItemAdapter;
@@ -60,9 +61,7 @@ public interface OrdersComponent {
     void inject(OrderCommissionView orderCommissionView);
 
     void inject(CustomToolBarEditor customToolBarEditor);
-
-    void inject(ProfileEditorView profileEditorView);
-
+    
     void inject(SuccessTokinizeView successTokinizeView);
 
     void inject(CommissionDetailView commissionDetailView);
@@ -70,6 +69,8 @@ public interface OrdersComponent {
     void inject(OrderDetailsViewModel orderDetailsViewModel);
 
     void inject(CustomAlertDialog customAlertDialog);
+
+    void inject(ProfileEditorViewModel profileEditorViewModel);
 
     @Component.Builder
     interface Builder {

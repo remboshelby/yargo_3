@@ -171,7 +171,7 @@ public class OrderListsFragment extends BaseFragment {
     private void initHeader() {
         User user = orderListViewModel.getUser();
 
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tvDrawlerTitle)).setText(user.getUsername() + " " + user.getSurname());
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tvDrawlerTitle)).setText(user.getSurname() + " " + user.getUsername());
         CircleImageView_ headerImageView = navigationView.getHeaderView(0).findViewById(R.id.clientAvatar);
         headerImageView.setImageResource(R.drawable.person);
         headerImageView.setOnClickListener(v -> {

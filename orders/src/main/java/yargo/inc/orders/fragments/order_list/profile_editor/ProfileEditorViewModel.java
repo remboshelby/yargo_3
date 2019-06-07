@@ -7,6 +7,8 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -17,6 +19,7 @@ import yargo.inc.common.network.models.login.User;
 import yargo.inc.common.network.models.profile_editor_model.ProfileEditResponse;
 import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.orders.R;
+import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 
 import static yargo.inc.common.dto.CommonSharedPreferences.APP_ID;
 import static yargo.inc.common.dto.CommonSharedPreferences.AUTH_KEY;
@@ -24,14 +27,20 @@ import static yargo.inc.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 
 public class ProfileEditorViewModel extends BaseViewAndroidModel {
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> profileChangedMLD = new MutableLiveData<>();
+    private MutableLiveData<Boolean> someFieldIsChangedMLD = new MutableLiveData<>();
 
-    private CommonSharedPreferences commonSharedPreferences;
-    public LoginRepository loginRepository;
+    @Inject
+    protected CommonSharedPreferences commonSharedPreferences;
+    @Inject
+    protected LoginRepository loginRepository;
 
-    public ProfileEditorViewModel(@NonNull Application application, CommonSharedPreferences commonSharedPreferences, LoginRepository loginRepository) {
+    private User user;
+
+    public ProfileEditorViewModel(@NonNull Application application) {
         super(application);
-        this.commonSharedPreferences = commonSharedPreferences;
-        this.loginRepository = loginRepository;
+
+        OrderListsFragment.getOrdersComponent().inject(this);
         getUserInfo();
     }
 
@@ -39,9 +48,18 @@ public class ProfileEditorViewModel extends BaseViewAndroidModel {
         userMutableLiveData.observe(owner, observer);
     }
 
+    public void observProfileChanged(LifecycleOwner owner, Observer observer) {
+        profileChangedMLD.observe(owner, observer);
+    }
+
+    public void observFieldChanging(LifecycleOwner owner, Observer observer) {
+        someFieldIsChangedMLD.observe(owner, observer);
+    }
+
     public void getUserInfo() {
-        User object = (User) commonSharedPreferences.getObject(USER_ABOUT_RESPONSE, User.class);
-        userMutableLiveData.postValue(object);
+        user = (User) commonSharedPreferences.getObject(USER_ABOUT_RESPONSE, User.class);
+        userMutableLiveData.postValue(user);
+        profileChangedMLD.postValue(false);
     }
 
     public void pushUserInfo() {
@@ -56,12 +74,12 @@ public class ProfileEditorViewModel extends BaseViewAndroidModel {
                 userMutableLiveData.getValue().getBirthday())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ProfileEditResponse>() {
-                    @Override
-                    public void accept(ProfileEditResponse profileEditResponse) throws Exception {
-                        userMutableLiveData.postValue(profileEditResponse.getResponse().getUser());
-                        commonSharedPreferences.putObject(commonSharedPreferences.USER_ABOUT_RESPONSE, profileEditResponse.getResponse().getUser());
-                    }
+                .subscribe(profileEditResponse -> {
+                    userMutableLiveData.postValue(profileEditResponse.getResponse().getUser());
+                    commonSharedPreferences.putObject(commonSharedPreferences.USER_ABOUT_RESPONSE, profileEditResponse.getResponse().getUser());
+                    commonSharedPreferences.putObject(commonSharedPreferences.FILTERED_CITY, profileEditResponse.getResponse().getUser().getIdCity());
+
+                    profileChangedMLD.postValue(true);
                 }));
 
     }
@@ -71,22 +89,51 @@ public class ProfileEditorViewModel extends BaseViewAndroidModel {
     }
 
     public void setSex(int sex) {
-        userMutableLiveData.getValue().setSex(sex);
+        if (user.getSex() == sex) {
+            someFieldIsChangedMLD.postValue(false);
+        } else {
+            someFieldIsChangedMLD.postValue(true);
+            userMutableLiveData.getValue().setSex(sex);
+        }
     }
 
     public void setBirthday(String birthday) {
-        userMutableLiveData.getValue().setBirthday(birthday);
+        if (user.getBirthday().equals(birthday)) {
+            someFieldIsChangedMLD.postValue(false);
+        } else {
+            someFieldIsChangedMLD.postValue(true);
+            userMutableLiveData.getValue().setBirthday(birthday);
+        }
     }
 
     public void setCityId(int cityId) {
-        userMutableLiveData.getValue().setIdCity(cityId);
+        if (user.getIdCity() == cityId) {
+            someFieldIsChangedMLD.postValue(false);
+        } else {
+            someFieldIsChangedMLD.postValue(true);
+            userMutableLiveData.getValue().setIdCity(cityId);
+        }
     }
 
     public void setName(String name) {
-        userMutableLiveData.getValue().setUsername(name);
+        if (user.getUsername().equals(name)) {
+            someFieldIsChangedMLD.postValue(false);
+        } else {
+            someFieldIsChangedMLD.postValue(true);
+            userMutableLiveData.getValue().setUsername(name);
+        }
     }
 
     public void setSurname(String surname) {
-        userMutableLiveData.getValue().setSurname(surname);
+        if (user.getSurname().equals(surname)) {
+            someFieldIsChangedMLD.postValue(false);
+        } else {
+            someFieldIsChangedMLD.postValue(true);
+            userMutableLiveData.getValue().setSurname(surname);
+        }
+    }
+
+    public void setSomeFieldIsChangedMLD(boolean someFieldIsChangedMLD) {
+        this.someFieldIsChangedMLD.setValue(someFieldIsChangedMLD);
     }
 }

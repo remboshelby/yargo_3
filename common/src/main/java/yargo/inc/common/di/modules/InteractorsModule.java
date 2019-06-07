@@ -7,7 +7,7 @@ import yargo.inc.common.interactors.DateInteractor;
 import yargo.inc.common.network.repository.OrderActionRepository;
 
 @Module
-public class InteractorModule {
+public class InteractorsModule {
     @Provides
     CommissionInteractor commissionInteractor(OrderActionRepository orderActionRepository){
         return new CommissionInteractor(orderActionRepository);

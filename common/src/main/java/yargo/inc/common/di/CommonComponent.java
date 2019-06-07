@@ -1,6 +1,8 @@
 package yargo.inc.common.di;
 
 import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.interactors.CommissionInteractor;
+import yargo.inc.common.interactors.DateInteractor;
 import yargo.inc.common.network.repository.CommissionRepository;
 import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.common.network.repository.OrderActionRepository;
@@ -15,4 +17,8 @@ public interface CommonComponent {
     RegistrRepository registrRepository();
     OrderActionRepository orderActionRepository();
     CommissionRepository commissionRepository();
+
+    //interactors
+    CommissionInteractor commissionInteractor();
+    DateInteractor dateInteractor();
 }

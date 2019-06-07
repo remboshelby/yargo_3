@@ -55,6 +55,10 @@ public class CustomToolBarEditor extends ConstraintLayout {
     void onAcceptBtnClick(){
         listener.onAcceptPressed();
     }
+    public void setBtnCheckVisibility(boolean isVisible){
+        if(isVisible) imgBtnCheck.setVisibility(VISIBLE);
+        else imgBtnCheck.setVisibility(GONE);
+    }
     public void setListener(profileListener listener) {
         this.listener = listener;
     }

@@ -6,6 +6,7 @@ import yargo.inc.common.network.repository.OrderActionRepository;
 
 public class CommissionInteractor {
 
+
     private OrderActionRepository orderActionRepository;
 
     public CommissionInteractor(OrderActionRepository orderActionRepository) {

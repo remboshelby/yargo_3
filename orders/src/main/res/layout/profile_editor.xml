@@ -31,18 +31,39 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@android:drawable/dialog_holo_light_frame"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <AutoCompleteTextView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">.
+
+        <TextView
+            android:id="@+id/titleSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:text="@string/your_surname"
+            android:textSize="16sp" />
+
+        <EditText
             android:id="@+id/editSurname"
             style="@style/RegistrInputTextStyle"
+            android:layout_marginLeft="20dp"
             android:hint="@string/your_surname"
-            android:inputType="textEmailAddress" />
+            android:inputType="textNoSuggestions" />
 
-        <AutoCompleteTextView
+        <TextView
+            android:id="@+id/titleName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:text="@string/your_name"
+            android:textSize="16sp" />
+
+        <EditText
             android:id="@+id/editName"
             style="@style/RegistrInputTextStyle"
+            android:layout_marginLeft="20dp"
             android:hint="@string/your_name"
-            android:inputType="textEmailAddress" />
+            android:inputType="textNoSuggestions" />
 
         <TextView
             android:id="@+id/cityId"
@@ -111,10 +132,12 @@
         <AutoCompleteTextView
             android:id="@+id/editBdate"
             style="@style/RegistrInputTextStyle"
+            android:layout_marginLeft="20dp"
             android:clickable="true"
             android:focusable="false"
-            android:hint="@string/your_birthday"
+            android:inputType="textNoSuggestions"
 
+            android:hint="@string/your_birthday"
             android:longClickable="false"
             android:textSize="18sp" />
     </LinearLayout>

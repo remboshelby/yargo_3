@@ -17,10 +17,14 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.appbar.AppBarLayout;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.Provides;
 import yargo.inc.common.base.BaseFragment;
+import yargo.inc.common.interactors.CommissionInteractor;
+import yargo.inc.common.interactors.DateInteractor;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListViewModel;
@@ -38,8 +42,13 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
     AppBarLayout appbarLayout;
     @BindView(R2.id.commissonContainer)
     FrameLayout commissonContainer;
+
     @Inject
     protected OrderListViewModel orderListViewModel;
+    @Inject
+    protected CommissionInteractor commissionInteractor;
+    @Inject
+    protected DateInteractor dateInteractor;
 
     public CommissionViewModel commissionViewModel;
 
@@ -67,9 +76,10 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
 
         commissionViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
+            @Singleton
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new CommissionViewModel();
+                return (T) new CommissionViewModel(dateInteractor, commissionInteractor);
             }
         }).get(CommissionViewModel.class);
 
