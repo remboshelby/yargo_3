@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/contentLoadProgressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPayInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvAnatation"
@@ -13,6 +26,7 @@
         android:layout_marginTop="8dp"
         android:textColor="@android:color/black"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvOrderManager" />
 
@@ -28,6 +42,7 @@
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAnatation"
@@ -44,6 +59,7 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgPhone" />
 
@@ -57,6 +73,7 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvStartPrice" />
 
@@ -70,6 +87,7 @@
         android:layout_marginEnd="8dp"
         android:background="@color/colorPrimary"
         android:text="@string/commission_pay"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFinalPrice" />
@@ -83,6 +101,7 @@
         android:drawableLeft="@drawable/ic_schedule_black_24dp"
         android:text="@string/order_date"
         android:textColor="@android:color/black"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,6 +114,7 @@
         android:drawableLeft="@drawable/ic_location_on_black_24dp"
         android:text="@string/order_addres"
         android:textColor="@android:color/black"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvOrderDate" />
 
@@ -107,6 +127,7 @@
         android:drawableLeft="@drawable/ic_person_black_24dp"
         android:text="@string/order_manager"
         android:textColor="@android:color/black"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAdress" />
 
@@ -118,6 +139,7 @@
         android:layout_marginBottom="8dp"
         android:text="Оплата комиссионных сборов осуществляется по средствам использования сертифицированного сервиса Yandex КАССА"
         android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -19,7 +19,7 @@
     <string name="your_bithday">День рождения:</string>
     <string name="your_birthday">День рождения:</string>
     <!--Utils-->
-    <string name="loading">Загрузка</string>
+    <string name="loading">Загрузка...</string>
     <!--Drawler_Menu_Items-->
     <string name="menu_all_orders">Все заявки</string>
     <string name="menu_my_orders">Мои заявки</string>
@@ -74,9 +74,21 @@
     <string name="accomplished_order_confirmation">Вы действительно хотите cдать заявку?</string>
     <string name="profile_chandging_confirmation">Вы действительно изменить данные профиля?</string>
 
+
+
+
     <string name="offerts_for_user">Оферта для исполнителей</string>
     <string name="telephoneNumber">Телефон: %s</string>
     <string name="help_number">+7 922 415-55-52</string>
+    <string name="adress_html"><![CDATA[<b>Адресс: </b>]]></string>
+    <string name="customer_html"><![CDATA[<b>Заказчик: </b>]]></string>
+    <string name="date_html"><![CDATA[<b>Дата: </b>]]></string>
+    <string name="order_comission">Комиссия по заявке № %d</string>
+
+    <string name="order_end_part1"><![CDATA[Для завершения заявки <b><i>\"]]></string>
+    <string name="order_end_part2">\" (№</string>
+    <string name="order_end_part3"><![CDATA[)</i></b>]]></string>
+    <string name="order_end_part4">, необходимо осуществить оплату комиссионных сборов</string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

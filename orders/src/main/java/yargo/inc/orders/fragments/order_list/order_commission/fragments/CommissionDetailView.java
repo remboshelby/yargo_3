@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-
-import org.jetbrains.annotations.NotNull;
+import androidx.core.widget.ContentLoadingProgressBar;
 
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -27,7 +25,6 @@ import ru.yandex.money.android.sdk.Checkout;
 import ru.yandex.money.android.sdk.PaymentMethodType;
 import ru.yandex.money.android.sdk.ShopParameters;
 import yargo.inc.common.base.BaseFragment;
-import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.common.network.models.order_detail.OrdersItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
@@ -37,6 +34,8 @@ import yargo.inc.orders.fragments.order_list.order_commission.entity.PayEntity;
 import yargo.inc.orders.yandex_utils.Settings;
 
 public class CommissionDetailView extends BaseFragment {
+
+
     private static final int DOORS_SPECIAL = 2;
     private static final double DOORS_COMMISSION = 0.1;
     private static final double OTHER_COMMISSION = 0.2;
@@ -49,6 +48,9 @@ public class CommissionDetailView extends BaseFragment {
     public static final Currency RUB = Currency.getInstance("RUB");
 
     private static final String YANDEX_KEY = "live_NTQ0MDIxk7aBD5wWDF7ZVBHLSzSntBlZgfk2wEGMYmg";
+
+    @BindView(R2.id.contentLoadProgressBar)
+    ContentLoadingProgressBar contentLoadProgressBar;
 
     @BindView(R2.id.tvAnatation)
     TextView tvAnatation;
@@ -84,38 +86,33 @@ public class CommissionDetailView extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        init(view);
+
+        commissionViewModel.observOrderDetailData(this, orderDetailResponse -> {
+            setOrdersItem(orderDetailResponse.getResponse().getOrders().get(0));
+            int price = ordersItem.getPrice();
+
+            if (ordersItem.getIdSpecialization() == DOORS_SPECIAL) {
+                commission_size = DOORS_COMMISSION * price;
+            } else {
+                commission_size = OTHER_COMMISSION * price;
+            }
+            tvStartPrice.setText(getString(R.string.order_star_price, (String.valueOf(ordersItem.getPrice()) + Html.fromHtml(" &#x20bd"))));
+            tvAdress.setText((Html.fromHtml(getString(R.string.adress_html) + ordersItem.getAddress())));
+            tvOrderManager.setText((Html.fromHtml(getString(R.string.customer_html) + ordersItem.getClient())));
+            tvOrderDate.setText((Html.fromHtml(getString(R.string.date_html) + commissionViewModel.dateCreator(ordersItem.getStartworking()) + " - " + commissionViewModel.dateCreator(ordersItem.getDeadline()))));
+            tvFinalPrice.setText(getString(R.string.order_commisson_price, String.format("%.2f", commission_size)) + " " + Html.fromHtml(" &#x20bd"));
+            tvAnatation.setText(Html.fromHtml(getString(R.string.order_end_part1) + ordersItem.getName() + getString(R.string.order_end_part2) + ordersItem.getID() + getString(R.string.order_end_part3) +
+                    getString(R.string.order_end_part4)));
+            showContent();
+        });
+    }
+
+    private void init(@NonNull View view) {
         ButterKnife.bind(this, view);
         OrderListsFragment.getOrdersComponent().inject(this);
-
         Checkout.attach(getRoot().getSupportFragmentManager());
-        Checkout.setResultCallback(new Checkout.ResultCallback() {
-            @Override
-            public void onResult(@NotNull String paymentToken, @NotNull PaymentMethodType paymentMethodType) {
-                commissionViewModel.setPayRequisites(new PayEntity(paymentToken, paymentMethodType.name(), String.valueOf(amount), ordersItem.getName(), ordersItem.getID()));
-//                getRoot().pushFragment(new SuccessTokinizeView(commissionViewModel),false);
-            }
-        });
-
-        commissionViewModel.observOrderDetailData(this, new Observer<OrderDetailResponse>() {
-            @Override
-            public void onChanged(OrderDetailResponse orderDetailResponse) {
-                setOrdersItem(orderDetailResponse.getResponse().getOrders().get(0));
-                int price = ordersItem.getPrice();
-
-                if (ordersItem.getIdSpecialization() == DOORS_SPECIAL) {
-                    commission_size = DOORS_COMMISSION * price;
-                } else {
-                    commission_size = OTHER_COMMISSION * price;
-                }
-                tvStartPrice.setText(getString(R.string.order_star_price, (String.valueOf(ordersItem.getPrice()) + Html.fromHtml(" &#x20bd"))));
-                tvAdress.setText((Html.fromHtml("<b>Адресс: </b>" + ordersItem.getAddress())));
-                tvOrderManager.setText((Html.fromHtml("<b>Заказчик: </b>" + ordersItem.getClient())));
-                tvOrderDate.setText((Html.fromHtml("<b>Дата: </b>" + commissionViewModel.dateCreator(ordersItem.getStartworking()) + " - " + commissionViewModel.dateCreator(ordersItem.getDeadline()))));
-                tvFinalPrice.setText(getString(R.string.order_commisson_price, String.format("%.2f", commission_size)) + " " + Html.fromHtml(" &#x20bd"));
-                tvAnatation.setText(Html.fromHtml("Для завершения заявки <b><i>\"" + ordersItem.getName() + "\" (№ " + ordersItem.getID() + ")</i></b>" +
-                        ", необходимо осуществить оплату комиссионных сборов"));
-            }
-        });
+        Checkout.setResultCallback((paymentToken, paymentMethodType) -> commissionViewModel.setPayRequisites(new PayEntity(paymentToken, paymentMethodType.name(), String.valueOf(amount), ordersItem.getName(), ordersItem.getID())));
     }
 
     private boolean validateAmount() {
@@ -134,7 +131,7 @@ public class CommissionDetailView extends BaseFragment {
     void onPayClick() {
         onAmountChange(new BigDecimal(String.format("%.2f", commission_size)
                 .replace(",", ".")));
-        makeBuy("Комиссия по заявке №" + ordersItem.getID(),
+        makeBuy(getString(R.string.order_comission, ordersItem.getID()),
                 ordersItem.getName());
     }
 
@@ -154,5 +151,18 @@ public class CommissionDetailView extends BaseFragment {
                     )
             );
         }
+    }
+    public void showContent(){
+        tvAnatation.setVisibility(View.VISIBLE);
+        imgPhone.setVisibility(View.VISIBLE);
+        tvStartPrice.setVisibility(View.VISIBLE);
+        tvFinalPrice.setVisibility(View.VISIBLE);
+        btnMakePay.setVisibility(View.VISIBLE);
+        tvOrderDate.setVisibility(View.VISIBLE);
+        tvAdress.setVisibility(View.VISIBLE);
+        tvOrderManager.setVisibility(View.VISIBLE);
+        tvPayInfo.setVisibility(View.VISIBLE);
+
+        contentLoadProgressBar.setVisibility(View.GONE);
     }
 }

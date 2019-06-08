@@ -109,7 +109,7 @@ public class OrderListsFragment extends BaseFragment {
         orderListViewModel.observeOrderStatus(this, new Observer<OrderItem>() {
             @Override
             public void onChanged(OrderItem orderItem) {
-                if (orderItem == null || orderItem.getIdOrderStatus() == 1)
+                if (orderItem.getIdOrderStatus() == 0 || orderItem.getIdOrderStatus() == 1)
                     pushFragmentIntoFragment(new VacantOrderList());
                 else {
                     Integer orderStatus = orderItem.getIdOrderStatus();

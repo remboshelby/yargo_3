@@ -16,6 +16,8 @@ import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.common.network.utils.NoConnectivityException;
 import yargo.inc.login.data.LoginData;
 
+import static yargo.inc.common.dto.CommonSharedPreferences.DEFAULT_CITY;
+
 public class LoginViewModel extends BaseViewModel {
     private LoginRepository loginRepository;
     private CommonSharedPreferences commonSharedPreferences;
@@ -120,7 +122,9 @@ public class LoginViewModel extends BaseViewModel {
         commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
     }
     public void pushUser(User user){
-        commonSharedPreferences.putObject(CommonSharedPreferences.FILTERED_CITY, user.getIdCity());
+        if(user.getIdCity()!=0) commonSharedPreferences.putObject(CommonSharedPreferences.FILTERED_CITY, user.getIdCity());
+        else commonSharedPreferences.putObject(CommonSharedPreferences.FILTERED_CITY, DEFAULT_CITY);
+
         commonSharedPreferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, user);
     }
     public void sendTokenToServer() {

@@ -28,7 +28,6 @@ public class UserOrdersViewModel extends BaseViewModel {
 
     private MutableLiveData<Integer> orderCategoryId = new MutableLiveData<>();
 
-//    private MutableLiveData<Integer> userOrdersCount = new MutableLiveData<>();
 
     public UserOrdersViewModel(OrdersRepository ordersRepository) {
         this.ordersRepository = ordersRepository;
@@ -49,10 +48,7 @@ public class UserOrdersViewModel extends BaseViewModel {
     private LiveData<PagedList<OrderItem>> createFiltredUsersOrders(int categoryOrderId) {
         UserOrderDataSourceFactory userOrderDataSourceFactory = new UserOrderDataSourceFactory(ordersRepository, compositeDisposable, categoryOrderId);
         isLoading = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getIsLoading());
-        userOrderCount = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> {
-            String t ="fdsfs";
-            return input.getTotalCount();
-        });
+        userOrderCount = Transformations.switchMap(userOrderDataSourceFactory.getDataSourceLiveData(), input -> input.getTotalCount());
 
         return new LivePagedListBuilder<>(userOrderDataSourceFactory,
                 new PagedList.Config.Builder()
@@ -77,8 +73,5 @@ public class UserOrdersViewModel extends BaseViewModel {
     public void setStartPositon(int startPositon) {
         this.startPositon = startPositon;
     }
-//    public void setUserOrdersCount(int userOrdersCount) {
-//        this.userOrdersCount.postValue(userOrdersCount);
-//    }
 
 }

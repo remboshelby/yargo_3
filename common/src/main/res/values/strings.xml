@@ -76,5 +76,6 @@
     <string name="prompt_email">Логин (электронная почта):</string>
     <string name="prompt_password">Пароль</string>
     <string name="password_confirm">Подтверждение пароля</string>
+    <string name="loading" />
 
 </resources>

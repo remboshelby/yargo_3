@@ -21,6 +21,7 @@ public class CommonSharedPreferences {
     public static final String FILTERED_CITY = "filtered_city";
 
 
+    public static final String DEFAULT_CITY = "40127";
 
     public static final String SHARED_PREFERENCES = "shared_preferences";
 

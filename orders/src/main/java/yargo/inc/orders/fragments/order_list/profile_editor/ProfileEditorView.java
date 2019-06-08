@@ -110,21 +110,18 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
             }
         });
 
-        profileEditorViewModel.observUserLiveData(this, new Observer<User>() {
-            @Override
-            public void onChanged(User o) {
+        profileEditorViewModel.observUserLiveData(this, (Observer<User>) o -> {
 
-                editSurname.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getSurname());
-                editName.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getUsername());
+            editSurname.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getSurname());
+            editName.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getUsername());
 
-                editBdate.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getBirthday());
+            editBdate.setText(profileEditorViewModel.getUserMutableLiveData().getValue().getBirthday());
 
-                if (profileEditorViewModel.getUserMutableLiveData().getValue().getSex() == 1)
-                    sexRadioGroup.check(R.id.sexMale);
-                else sexRadioGroup.check(R.id.sexFemale);
+            if (profileEditorViewModel.getUserMutableLiveData().getValue().getSex() == 1)
+                sexRadioGroup.check(R.id.sexMale);
+            else sexRadioGroup.check(R.id.sexFemale);
 
-                setCitySpinnerSelection();
-            }
+            setCitySpinnerSelection();
         });
 
         profileEditorViewModel.observProfileChanged(this, new Observer<Boolean>() {

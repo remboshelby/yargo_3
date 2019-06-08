@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -38,6 +39,12 @@ public class CustomToolbarVacantOrders extends ConstraintLayout {
     ConstraintLayout customSearch;
     @BindView(R2.id.imgBtnSearch)
     ImageButton imgBtnSearch;
+
+    public interface searchStatusListener{
+        void toolbarHideKeyboard();
+    }
+
+    public searchStatusListener listener;
 
     public CustomToolbarVacantOrders(Context context) {
         super(context);
@@ -79,17 +86,29 @@ public class CustomToolbarVacantOrders extends ConstraintLayout {
             imgBtnSearch.setVisibility(GONE);
             tvToolBarTitle.setVisibility(GONE);
             customSearch.setVisibility(VISIBLE);
+
+            showKeyBoard();
+
         } else {
             imgBtnSearch.setVisibility(VISIBLE);
             tvToolBarTitle.setVisibility(VISIBLE);
             customSearch.setVisibility(GONE);
             tvSearch.setText("");
-
+            listener.toolbarHideKeyboard();
         }
+    }
+
+    private void showKeyBoard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(tvSearch, InputMethodManager.SHOW_IMPLICIT);
     }
 
     @OnTextChanged(R2.id.tvSearch)
     public void onSearchTextChanged() {
         vacantOrdersViewModel.setOrderDescription(tvSearch.getText().toString());
+    }
+
+    public void setListener(searchStatusListener listener) {
+        this.listener = listener;
     }
 }

@@ -30,7 +30,7 @@ import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
 import yargo.inc.orders.fragments.order_list.vacant_orders.utils.VacantOrdersItemAdapter;
 
-public class VacantOrderList extends BaseFragment implements VacantOrdersItemAdapter.itemClickListener {
+public class VacantOrderList extends BaseFragment implements VacantOrdersItemAdapter.itemClickListener, CustomToolbarVacantOrders.searchStatusListener {
     public static final String TAG = VacantOrderList.class.getSimpleName();
     @BindView(R2.id.imgBanner)
     ImageView imgBanner;
@@ -64,7 +64,10 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
         recyclerOrders.setNestedScrollingEnabled(true);
         vacantOrdersViewModel.observSearchText(this, t -> replaceSubscription());
 
+        orderListViewModel.setOrderStatusId(1);
+
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
+        customVacantToolbar.setListener(this);
 
         vacantOrdersItemAdapter = new VacantOrdersItemAdapter(this);
         swipeRefreshLayout.setOnRefreshListener(() -> replaceSubscription());
@@ -104,5 +107,8 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
     public void showItemDetails(OrderItem orderItem) {
         orderListViewModel.setOrder(orderItem);
         getRoot().pushFragment(new OrderDetailsView(), true);
+    }
+    public void toolbarHideKeyboard(){
+        hideKeyboard();
     }
 }

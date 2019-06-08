@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -57,7 +58,7 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
     @BindView(R2.id.toolbar)
     Toolbar toolbar;
     @BindView(R2.id.progressBar)
-    ProgressBar progressBar;
+    ContentLoadingProgressBar progressBar;
     @BindView(R2.id.bottomNav)
     BottomNavigationView bottomNav;
     @BindView(R2.id.scrollView)
@@ -96,7 +97,6 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
 
             createOrderRecyclerView(orderDetailResponse);
 
-            progressBar.setVisibility(View.GONE);
             bottomNav.setVisibility(View.VISIBLE);
         });
         orderDetailsViewModel.observOrderChangeResult(this, result -> {
@@ -191,6 +191,16 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
         deatilRecyclerView.addItemDecoration(dividerItemDecoration);
         deatilRecyclerView.setLayoutManager(layoutManager);
         deatilRecyclerView.setAdapter(createOrderDetailAdapter(orderDetailResponse));
+
+        showContent();
+    }
+
+    private void showContent() {
+        bottomNav.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.VISIBLE);
+        deatilRecyclerView.setVisibility(View.VISIBLE);
+
+        progressBar.setVisibility(View.GONE);
     }
 
     @NotNull

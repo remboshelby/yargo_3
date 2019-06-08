@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemSelected;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 
@@ -23,6 +24,8 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
 
     @Inject
     protected UserOrdersViewModel ordersViewModel;
+    @Inject
+    protected OrderListViewModel orderListViewModel;
 
     @BindView(R2.id.tvToolBarTitle)
     TextView tvToolBarTitle;
@@ -48,6 +51,8 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
         tvToolBarTitle.setText(getResources().getString(R.string.my_orders));
 
         ordersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[ordersViewModel.getStartPositon()]));
+
+        orderListViewModel.setOrderStatusId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[ordersViewModel.getStartPositon()]));
         spOrderCategory.setSelection(ordersViewModel.getStartPositon());
     }
     @OnItemSelected(R2.id.spOrderCategory)

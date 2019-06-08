@@ -23,7 +23,7 @@ public class OrderListViewModel extends BaseViewModel {
     public OrderListViewModel(CommonSharedPreferences commonSharedPreferences, OrdersRepository ordersRepository) {
         this.commonSharedPreferences = commonSharedPreferences;
         this.ordersRepository = ordersRepository;
-        currentOrder.setValue(null);
+        currentOrder.setValue(new OrderItem());
     }
 
     public void setOrder(OrderItem userOrdersItem) {
@@ -55,10 +55,9 @@ public class OrderListViewModel extends BaseViewModel {
     }
 
     public void clearTokenToServer() {
-        String authKey = "";
         String fcmToken = (String) commonSharedPreferences.getObject(CommonSharedPreferences.FCM_KEY, String.class);
         String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
-        addDisposible(ordersRepository.pushAppData(authKey, appId, fcmToken)
+        addDisposible(ordersRepository.pushAppData("", appId, fcmToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(appResponse -> {

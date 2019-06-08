@@ -4,8 +4,6 @@
     <string name="navigation_drawer_close">Close</string>
     <!--Login Fragment-->
 
-    <!--Utils-->
-    <string name="loading">Загрузка</string>
     <!--Drawler_Menu_Items-->
     <string name="menu_all_orders">Все заявки</string>
     <string name="menu_my_orders">Мои заявки</string>
