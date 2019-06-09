@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,18 +38,18 @@ import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.common.network.models.order_detail.OrdersItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailAdapter;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 import yargo.inc.orders.fragments.order_list.instructions.OffertView;
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomToolbarOrderDetail;
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CusttomBottomBar;
+import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 
 import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_GET_ISBUSY;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_ASSIGNED;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_INWORK;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_WAIT_PAY;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_ASSIGNED;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_INWORK;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_WAIT_PAY;
 
 public class OrderDetailsView extends BaseFragment implements CustomToolbarOrderDetail.onCustomToolbarClick, CusttomBottomBar.onClickBtnListener {
     @BindView(R2.id.customBottomBar)
@@ -73,7 +72,7 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
     private ProgressDialog progressDialog;
 
     @Inject
-    protected OrderListViewModel orderListViewModel;
+    protected UserOrdersViewModel userOrdersViewModel;
 
 
     protected static OrderDetailsViewModel orderDetailsViewModel;
@@ -103,7 +102,7 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
             progressDialog.cancel();
             switch (result) {
                 case OrderDetailsViewModel.ORDER_GET_SUCCESS:
-                    orderListViewModel.setOrderStatusId(ORDER_IS_ASSIGNED);
+                    userOrdersViewModel.setOrderCategoryId(ORDER_IS_ASSIGNED);
                     getRoot().onBackPressed();
                     break;
                 case OrderDetailsViewModel.ORDER_ACTION_SOMETHING_WRONG:
@@ -125,11 +124,11 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
                     showErrorDialogExtended(getString(R.string.order_status_is_allready_wait_pay), getRoot());
                     break;
                 case OrderDetailsViewModel.ORDER_START_SUCCESS:
-                    orderListViewModel.setOrderStatusId(ORDER_IS_INWORK);
+                    userOrdersViewModel.setOrderCategoryId(ORDER_IS_INWORK);
                     getRoot().onBackPressed();
                     break;
                 case OrderDetailsViewModel.ORDER_FINISED_SUCCESS:
-                    orderListViewModel.setOrderStatusId(ORDER_WAIT_PAY);
+                    userOrdersViewModel.setOrderCategoryId(ORDER_WAIT_PAY);
                     getRoot().onBackPressed();
                     break;
 
@@ -156,7 +155,7 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
 
         progressBar.setVisibility(View.VISIBLE);
 
-        orderDetailsViewModel.getOrderDetail(orderListViewModel.getOrderId());
+        orderDetailsViewModel.getOrderDetail(userOrdersViewModel.getOrderId());
         customToolbar.setToolbarTitle(getString(R.string.loading));
 
     }
@@ -222,7 +221,8 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
         orderDetailsViewModel = null;
         super.onDestroyView();
     }
-    public void showOffert(){
-        startActivity(new Intent(getContext(),OffertView.class));
+
+    public void showOffert() {
+        startActivity(new Intent(getContext(), OffertView.class));
     }
 }

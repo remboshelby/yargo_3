@@ -1,16 +1,11 @@
 package yargo.inc.orders.di;
 
 import android.app.Application;
-import android.content.Context;
 
 import yargo.inc.common.dto.CommonSharedPreferences;
-import yargo.inc.common.network.repository.LoginRepository;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.common.network.repository.OrdersRepository;
 import yargo.inc.orders.fragments.order_list.filters.FiltersViewModel;
-import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
-import yargo.inc.orders.fragments.order_list.profile_editor.ProfileEditorViewModel;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
 
@@ -41,28 +36,16 @@ public class OrdersModule {
     @Provides
     @OrdersScope
     public UserOrdersViewModel provideUserOrdersViewModel(OrderListsFragment host,
+                                                          CommonSharedPreferences commonSharedPreferences,
                                                           final OrdersRepository ordersRepository){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             @Singleton
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserOrdersViewModel(ordersRepository);
+                return (T) new UserOrdersViewModel(commonSharedPreferences, ordersRepository);
             }
         }).get(UserOrdersViewModel.class);
-    }
-    @Provides
-    @OrdersScope
-    public OrderListViewModel provideOrderListViewModel(OrderListsFragment host,OrdersRepository ordersRepository,
-                                                           CommonSharedPreferences commonSharedPreferences){
-        return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
-            @NonNull
-            @Override
-            @Singleton
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new OrderListViewModel(commonSharedPreferences, ordersRepository);
-            }
-        }).get(OrderListViewModel.class);
     }
     @Provides
     @OrdersScope

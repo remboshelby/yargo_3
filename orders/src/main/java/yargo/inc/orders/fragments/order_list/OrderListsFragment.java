@@ -47,6 +47,9 @@ import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_ASSIGNED;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_VACANT;
+
 public class OrderListsFragment extends BaseFragment {
     private static final String TAG = OrderListsFragment.class.getName();
 
@@ -66,8 +69,10 @@ public class OrderListsFragment extends BaseFragment {
     DrawerLayout drawerLayout;
     protected static OrdersComponent ordersComponent;
 
+    int current_state = -1;
+
     @Inject
-    protected OrderListViewModel orderListViewModel;
+    protected UserOrdersViewModel userOrdersViewModel;
 
     @Inject
     protected UserOrdersViewModel ordersViewModel;
@@ -106,17 +111,18 @@ public class OrderListsFragment extends BaseFragment {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        orderListViewModel.observeOrderStatus(this, new Observer<OrderItem>() {
+
+        userOrdersViewModel.observOrderCategoryId(this, new Observer<Integer>() {
             @Override
-            public void onChanged(OrderItem orderItem) {
-                if (orderItem.getIdOrderStatus() == 0 || orderItem.getIdOrderStatus() == 1)
-                    pushFragmentIntoFragment(new VacantOrderList());
-                else {
-                    Integer orderStatus = orderItem.getIdOrderStatus();
-                    String[] array = getResources().getStringArray(R.array.ordersCategoryId);
-                    Integer position = Arrays.asList(array).indexOf(String.valueOf(orderStatus));
-                    ordersViewModel.setStartPositon(position);
-                    pushFragmentIntoFragment(new UserOrderList());
+            public void onChanged(Integer orderStatus) {
+                if (current_state!=orderStatus){
+                    current_state = orderStatus;
+                    if (orderStatus== 0 || orderStatus == 1)
+                        pushFragmentIntoFragment(new VacantOrderList());
+                    else {
+                        pushFragmentIntoFragment(new UserOrderList());
+                    }
+
                 }
             }
         });
@@ -147,8 +153,8 @@ public class OrderListsFragment extends BaseFragment {
         AlertDialog.Builder accoutExitDialog = new AlertDialog.Builder(getRoot());
         accoutExitDialog.setMessage(getResources().getString(R.string.exit_question)).setCancelable(false).
                 setPositiveButton(getResources().getString(R.string.YES), (dialog, which) -> {
-                    orderListViewModel.pushAuthToken("");
-                    orderListViewModel.clearTokenToServer();
+                    userOrdersViewModel.pushAuthToken("");
+                    userOrdersViewModel.clearTokenToServer();
                     navigator.openFragment(getRoot(), "Login");
                 })
                 .setNegativeButton(getResources().getString(R.string.NO), (dialog, which) -> dialog.cancel()).create();
@@ -169,7 +175,7 @@ public class OrderListsFragment extends BaseFragment {
     }
 
     private void initHeader() {
-        User user = orderListViewModel.getUser();
+        User user = userOrdersViewModel.getUser();
 
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tvDrawlerTitle)).setText(user.getSurname() + " " + user.getUsername());
         CircleImageView_ headerImageView = navigationView.getHeaderView(0).findViewById(R.id.clientAvatar);

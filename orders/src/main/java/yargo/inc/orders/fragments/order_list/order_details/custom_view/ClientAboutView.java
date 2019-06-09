@@ -20,8 +20,8 @@ import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_ASSIGNED;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_INWORK;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_ASSIGNED;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_INWORK;
 
 public class ClientAboutView extends ConstraintLayout {
 

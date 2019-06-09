@@ -24,7 +24,6 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_commission.OrderCommissionView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
@@ -49,7 +48,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     protected UserOrdersViewModel ordersViewModel;
 
     @Inject
-    protected OrderListViewModel orderListViewModel;
+    protected UserOrdersViewModel orderListViewModel;
 
     private UserOrdersItemAdapter userOrdersItemAdapter;
 
@@ -66,7 +65,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
         ordersViewModel.observOrderCategoryId(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                UserOrderList.this.replaceSubscription();
+                    UserOrderList.this.replaceSubscription();
             }
         });
 
@@ -96,7 +95,6 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
         ordersViewModel.getUserOrders().observe(this, userOrdersItems -> userOrdersItemAdapter.submitList(userOrdersItems));
         ordersViewModel.observUserOrderCount(this, count -> {
             imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
-            Log.d(TAG, "USER_ORDER_COUNT: " +count);
         });
     }
 

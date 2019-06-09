@@ -19,12 +19,12 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
 
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_CLIENT_CANCEL;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_ASSIGNED;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_DONE;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_INWORK;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_IS_VACANT;
-import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_WAIT_PAY;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_CLIENT_CANCEL;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_ASSIGNED;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_DONE;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_INWORK;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_VACANT;
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_WAIT_PAY;
 
 public class CusttomBottomBar extends ConstraintLayout implements CustomAlertDialog.CustomAlertDialogListener {
 

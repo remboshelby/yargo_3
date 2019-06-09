@@ -21,13 +21,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 
 public class CustomAlertDialog extends FrameLayout {
 
     @Inject
-    protected OrderListViewModel orderListViewModel;
+    protected UserOrdersViewModel userOrdersViewModel;
     @BindView(R2.id.chbConfirOfferts)
     CheckBox chbConfirOfferts;
     @BindView(R2.id.textViewOferts)

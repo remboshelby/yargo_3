@@ -20,13 +20,6 @@ public class OrderDetailsViewModel extends BaseViewModel {
     @Inject
     protected OrderActionRepository orderActionRepository;
 
-    public static final int ORDER_IS_VACANT = 1;
-    public static final int ORDER_IS_ASSIGNED = 3;
-    public static final int ORDER_IS_INWORK = 8;
-    public static final int ORDER_WAIT_PAY = 7;
-    public static final int ORDER_IS_DONE = 4;
-    public static final int ORDER_CLIENT_CANCEL = 5;
-
     public static final int ORDER_ACTION_SOMETHING_WRONG = -1;
 
     public static final int ORDER_GET_SUCCESS = 0;

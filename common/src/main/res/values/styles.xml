@@ -50,4 +50,9 @@
     <style name="CustomToolBarTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/black</item>
     </style>
+    <style name="CustonProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:indeterminateTint">@color/colorPrimary</item>
+    </style>
 </resources>

@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,9 +23,9 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
+import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.custom_view.CustomToolbarVacantOrders;
 import yargo.inc.orders.fragments.order_list.vacant_orders.utils.VacantOrdersItemAdapter;
 
@@ -48,7 +47,7 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
     @Inject
     public VacantOrdersViewModel vacantOrdersViewModel;
     @Inject
-    protected OrderListViewModel orderListViewModel;
+    protected UserOrdersViewModel userOrdersViewModel;
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -64,7 +63,7 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
         recyclerOrders.setNestedScrollingEnabled(true);
         vacantOrdersViewModel.observSearchText(this, t -> replaceSubscription());
 
-        orderListViewModel.setOrderStatusId(1);
+//        userOrdersViewModel.setOrderStatusId(1);
 
         customVacantToolbar.setTitle(getString(R.string.vacant_orders));
         customVacantToolbar.setListener(this);
@@ -105,7 +104,7 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
 
     @Override
     public void showItemDetails(OrderItem orderItem) {
-        orderListViewModel.setOrder(orderItem);
+        userOrdersViewModel.setOrder(orderItem);
         getRoot().pushFragment(new OrderDetailsView(), true);
     }
     public void toolbarHideKeyboard(){

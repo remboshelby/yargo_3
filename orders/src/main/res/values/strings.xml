@@ -89,6 +89,7 @@
     <string name="order_end_part2">\" (№</string>
     <string name="order_end_part3"><![CDATA[)</i></b>]]></string>
     <string name="order_end_part4">, необходимо осуществить оплату комиссионных сборов</string>
+    <string name="final_price"><font size="20">Окончательная цена</font></string>
 
     <string-array name="ordersCategory">
         <item>Назначен</item>

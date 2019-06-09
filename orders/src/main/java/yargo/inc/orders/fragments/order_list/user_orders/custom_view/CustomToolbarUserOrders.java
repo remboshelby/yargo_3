@@ -16,16 +16,15 @@ import butterknife.ButterKnife;
 import butterknife.OnItemSelected;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 
 public class CustomToolbarUserOrders extends ConstraintLayout {
 
     @Inject
-    protected UserOrdersViewModel ordersViewModel;
-    @Inject
-    protected OrderListViewModel orderListViewModel;
+    protected UserOrdersViewModel userOrdersViewModel;
+
+    int current_position = -1;
 
     @BindView(R2.id.tvToolBarTitle)
     TextView tvToolBarTitle;
@@ -47,18 +46,17 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
         ButterKnife.bind(this);
         OrderListsFragment.getOrdersComponent().inject(this);
 
-        spOrderCategory.setAdapter(new ArrayAdapter<String>(context, R.layout.spiner_item, getResources().getStringArray(R.array.ordersCategory)));
+        spOrderCategory.setAdapter(new ArrayAdapter<>(context, R.layout.spiner_item, getResources().getStringArray(R.array.ordersCategory)));
         tvToolBarTitle.setText(getResources().getString(R.string.my_orders));
 
-        ordersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[ordersViewModel.getStartPositon()]));
+//        userOrdersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[userOrdersViewModel.getStartPositon()]));
 
-        orderListViewModel.setOrderStatusId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[ordersViewModel.getStartPositon()]));
-        spOrderCategory.setSelection(ordersViewModel.getStartPositon());
+        spOrderCategory.setSelection(userOrdersViewModel.getStartPositon());
     }
-    @OnItemSelected(R2.id.spOrderCategory)
+    @OnItemSelected(value = R2.id.spOrderCategory, callback = OnItemSelected.Callback.ITEM_SELECTED)
     void spinnerItemSelected(int position) {
-        ordersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[position]));
-        ordersViewModel.setStartPositon(position);
+            userOrdersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[position]));
+            userOrdersViewModel.setStartPositon(position);
     }
 
 }

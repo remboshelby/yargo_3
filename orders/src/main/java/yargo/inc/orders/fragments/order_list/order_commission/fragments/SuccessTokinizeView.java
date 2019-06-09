@@ -1,7 +1,6 @@
 package yargo.inc.orders.fragments.order_list.order_commission.fragments;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +24,6 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_commission.CommissionViewModel;
 import yargo.inc.orders.fragments.order_list.order_commission.entity.PayEntity;

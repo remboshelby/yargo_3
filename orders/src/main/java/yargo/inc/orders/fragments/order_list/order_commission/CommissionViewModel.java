@@ -8,26 +8,30 @@ import androidx.lifecycle.Observer;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import io.reactivex.schedulers.Schedulers;
 import ru.yandex.money.android.sdk.PaymentMethodType;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.interactors.CommissionInteractor;
 import yargo.inc.common.interactors.DateInteractor;
 import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
-import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_commission.entity.PayEntity;
 import yargo.inc.orders.yandex_utils.Settings;
 
 public class CommissionViewModel extends BaseViewModel {
 
+    private static final int DOORS_SPECIAL = 2;
+    private static final double DOORS_COMMISSION = 0.1;
+    private static final double OTHER_COMMISSION = 0.2;
 
     private MutableLiveData<PayEntity> payRequisites = new MutableLiveData<>();
     private MutableLiveData<OrderDetailResponse> orderDetailData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isPayed = new MutableLiveData<>();
     private DateInteractor dateInteractor;
     private CommissionInteractor commissionInteractor;
+
+
+    private MutableLiveData<Float> finalCoast = new MutableLiveData<>();
+    private MutableLiveData<Double> comissionPrice = new MutableLiveData<>();
 
     public CommissionViewModel(DateInteractor dateInteractor,CommissionInteractor commissionInteractor) {
         this.dateInteractor = dateInteractor;
@@ -44,6 +48,10 @@ public class CommissionViewModel extends BaseViewModel {
 
     public void observOrderDetailData(LifecycleOwner owner, Observer<OrderDetailResponse> observer) {
         orderDetailData.observe(owner, observer);
+    }
+
+    public void observComissionPrice(LifecycleOwner owner, Observer<Double> observer){
+        comissionPrice.observe(owner, observer);
     }
 
     public void observIsPayed(LifecycleOwner owner, Observer<Boolean> observer) {
@@ -86,5 +94,18 @@ public class CommissionViewModel extends BaseViewModel {
 
     public String dateCreator(String startworking) {
         return dateInteractor.dateCreator(startworking);
+    }
+
+    public void setFinalCoast(Float finalCoast) {
+        this.finalCoast.postValue(finalCoast);
+        calculateComissionPrice(finalCoast);
+    }
+
+    private void calculateComissionPrice(Float finalCoast) {
+        if (orderDetailData.getValue().getResponse().getOrders().get(0).getIdSpecialization() == DOORS_SPECIAL) {
+            comissionPrice.postValue(DOORS_COMMISSION * finalCoast);
+        } else {
+            comissionPrice.postValue(OTHER_COMMISSION * finalCoast);
+        }
     }
 }

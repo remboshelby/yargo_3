@@ -21,17 +21,18 @@ import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.Provides;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.interactors.CommissionInteractor;
 import yargo.inc.common.interactors.DateInteractor;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
-import yargo.inc.orders.fragments.order_list.OrderListViewModel;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.order_commission.fragments.CommissionDetailView;
 import yargo.inc.orders.fragments.order_list.order_commission.fragments.SuccessTokinizeView;
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomToolbarOrderDetail;
+import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
+
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_DONE;
 
 public class OrderCommissionView extends BaseFragment implements CustomToolbarOrderDetail.onCustomToolbarClick {
     @BindView(R2.id.customToolbar)
@@ -44,7 +45,7 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
     FrameLayout commissonContainer;
 
     @Inject
-    protected OrderListViewModel orderListViewModel;
+    protected UserOrdersViewModel orderListViewModel;
     @Inject
     protected CommissionInteractor commissionInteractor;
     @Inject
@@ -86,7 +87,7 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
         commissionViewModel.observPayData(this, payEntity -> pushFragmentIntoFragment(new SuccessTokinizeView(payEntity,commissionViewModel)));
         commissionViewModel.observIsPayed(this, aBoolean -> {
             if (aBoolean){
-                orderListViewModel.setOrderStatusId(4);
+                orderListViewModel.setOrderCategoryId(ORDER_IS_DONE);
                 ShowDialog();
             }
         });
