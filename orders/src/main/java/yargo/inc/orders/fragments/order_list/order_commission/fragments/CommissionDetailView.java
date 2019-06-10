@@ -174,6 +174,7 @@ public class CommissionDetailView extends BaseFragment {
         imgPhone.setVisibility(View.VISIBLE);
         moneyType.setVisibility(View.VISIBLE);
 //        tvStartPrice.setVisibility(View.VISIBLE);
+        finalCoast.setVisibility(View.VISIBLE);
         tvFinalPrice.setVisibility(View.VISIBLE);
         btnMakePay.setVisibility(View.VISIBLE);
         tvOrderDate.setVisibility(View.VISIBLE);

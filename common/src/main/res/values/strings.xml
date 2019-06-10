@@ -63,7 +63,7 @@
     </string-array>
 
     
-    <string name="order_addres"><b>Адресс:</b> %s</string>
+    <string name="order_addres"><b>Адрес:</b> %s</string>
     <string name="order_manager"><b>Заказчик:</b> %s</string>
     <string name="order_date"><b>Дата:</b> %s</string>
     <string name="commission_pay">Оплатить комиссию</string>

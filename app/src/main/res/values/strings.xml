@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">yargo_3</string>
+    <string name="app_name">Yargo</string>
     <string name="server_name">http://api.yargo.pro</string>
     <string name="main_toolbar_title">Placing an order</string>
 
