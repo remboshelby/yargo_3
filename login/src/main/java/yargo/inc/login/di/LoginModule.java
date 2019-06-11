@@ -32,18 +32,5 @@ public class LoginModule {
             }
         }).get(LoginViewModel.class);
     }
-//    @Provides
-//    @LoginScope
-//    public RegistrationViewModel provideRegistrationViewModel(LoginFragment host,
-//                                                              final RegistrRepository registrRepository,
-//                                                              CommonSharedPreferences commonSharedPreferences){
-//        return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
-//            @NonNull
-//            @Override
-//            @Singleton
-//            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-//                return (T) new RegistrationViewModel(registrRepository, commonSharedPreferences);
-//            }
-//        }).get(RegistrationViewModel.class);
-//    }
+
 }

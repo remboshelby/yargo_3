@@ -23,8 +23,6 @@ import androidx.lifecycle.Observer;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.Arrays;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -34,7 +32,6 @@ import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.common.di.CommonApplication;
 import yargo.inc.common.network.models.login.User;
-import yargo.inc.common.network.models.order_list.OrderItem;
 import yargo.inc.common.utils.CircleImageView_;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
@@ -47,8 +44,9 @@ import yargo.inc.orders.fragments.order_list.user_orders.UserOrderList;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrderList;
 
+import static yargo.inc.orders.fragments.order_list.OrderViewModel.ORDER_IS_VACANT;
+import static yargo.inc.orders.fragments.order_list.OrderViewModel.ORDER_USERS;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_ASSIGNED;
-import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_VACANT;
 
 public class OrderListsFragment extends BaseFragment {
     private static final String TAG = OrderListsFragment.class.getName();
@@ -69,13 +67,10 @@ public class OrderListsFragment extends BaseFragment {
     DrawerLayout drawerLayout;
     protected static OrdersComponent ordersComponent;
 
-    int current_state = -1;
-
+    @Inject
+    protected OrderViewModel orderViewModel;
     @Inject
     protected UserOrdersViewModel userOrdersViewModel;
-
-    @Inject
-    protected UserOrdersViewModel ordersViewModel;
 
     private ApplicationNavigator navigator;
 
@@ -112,26 +107,23 @@ public class OrderListsFragment extends BaseFragment {
         toggle.syncState();
 
 
-        userOrdersViewModel.observOrderCategoryId(this, new Observer<Integer>() {
+        orderViewModel.observOrderCategoryId(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer orderStatus) {
-                if (current_state!=orderStatus){
-                    current_state = orderStatus;
-                    if (orderStatus== 0 || orderStatus == 1)
+                    if (orderStatus== ORDER_IS_VACANT)
                         pushFragmentIntoFragment(new VacantOrderList());
-                    else {
+                    else if (orderStatus== ORDER_USERS){
                         pushFragmentIntoFragment(new UserOrderList());
                     }
-
-                }
             }
         });
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             if (menuItem.getItemId() == R.id.menu_orders) {
-                pushFragmentIntoFragment(new VacantOrderList());
+                orderViewModel.setOrderCategoryId(ORDER_IS_VACANT);
             } else if (menuItem.getItemId() == R.id.menu_my_orders) {
-                pushFragmentIntoFragment(new UserOrderList());
+                orderViewModel.setOrderCategoryId(ORDER_USERS);
+                userOrdersViewModel.setOrderCategoryId(ORDER_IS_ASSIGNED);
             } else if (menuItem.getItemId() == R.id.menu_call) {
                 dialContactPhone(getString(R.string.help_number));
             } else if (menuItem.getItemId() == R.id.menu_exit) {
@@ -153,8 +145,8 @@ public class OrderListsFragment extends BaseFragment {
         AlertDialog.Builder accoutExitDialog = new AlertDialog.Builder(getRoot());
         accoutExitDialog.setMessage(getResources().getString(R.string.exit_question)).setCancelable(false).
                 setPositiveButton(getResources().getString(R.string.YES), (dialog, which) -> {
-                    userOrdersViewModel.pushAuthToken("");
-                    userOrdersViewModel.clearTokenToServer();
+                    orderViewModel.pushAuthToken("");
+                    orderViewModel.clearTokenToServer();
                     navigator.openFragment(getRoot(), "Login");
                 })
                 .setNegativeButton(getResources().getString(R.string.NO), (dialog, which) -> dialog.cancel()).create();
@@ -175,7 +167,7 @@ public class OrderListsFragment extends BaseFragment {
     }
 
     private void initHeader() {
-        User user = userOrdersViewModel.getUser();
+        User user = orderViewModel.getUser();
 
         ((TextView) navigationView.getHeaderView(0).findViewById(R.id.tvDrawlerTitle)).setText(user.getSurname() + " " + user.getUsername());
         CircleImageView_ headerImageView = navigationView.getHeaderView(0).findViewById(R.id.clientAvatar);

@@ -30,8 +30,10 @@ import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.user_orders.custom_view.CustomToolbarUserOrders;
 import yargo.inc.orders.fragments.order_list.user_orders.utils.UserOrdersItemAdapter;
 
+import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_WAIT_PAY;
+
 public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter.itemClickListener {
-    private static final String TAG =UserOrderList.class.getSimpleName();
+    private static final String TAG = UserOrderList.class.getSimpleName();
 
     @BindView(R2.id.recyclerUserOrders)
     RecyclerView recyclerUserOrders;
@@ -45,10 +47,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     SwipeRefreshLayout swipeRefreshLayout;
 
     @Inject
-    protected UserOrdersViewModel ordersViewModel;
-
-    @Inject
-    protected UserOrdersViewModel orderListViewModel;
+    protected UserOrdersViewModel userOrdersViewModel;
 
     private UserOrdersItemAdapter userOrdersItemAdapter;
 
@@ -62,10 +61,12 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ordersViewModel.observOrderCategoryId(this, new Observer<Integer>() {
+        userOrdersViewModel.observOrderCategoryId(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                    UserOrderList.this.replaceSubscription();
+                Log.d("setOrderCategoryId", "observOrderCategoryId " + integer);
+                UserOrderList.this.replaceSubscription();
+                customUserToolbar.setCustomSelection(integer);
             }
         });
 
@@ -87,26 +88,26 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
         recyclerUserOrders.setLayoutManager(layoutManager);
         recyclerUserOrders.setAdapter(userOrdersItemAdapter);
 
-        ordersViewModel.onViewCreated();
+        userOrdersViewModel.onViewCreated();
     }
 
     private void startListening() {
-        ordersViewModel.getIsLoading().observe(this, aBoolean -> setLoadingState(aBoolean));
-        ordersViewModel.getUserOrders().observe(this, userOrdersItems -> userOrdersItemAdapter.submitList(userOrdersItems));
-        ordersViewModel.observUserOrderCount(this, count -> {
+        userOrdersViewModel.getIsLoading().observe(this, aBoolean -> setLoadingState(aBoolean));
+        userOrdersViewModel.getUserOrders().observe(this, userOrdersItems -> userOrdersItemAdapter.submitList(userOrdersItems));
+        userOrdersViewModel.observUserOrderCount(this, count -> {
             imgBanner.setVisibility(count > 0 ? View.GONE : View.VISIBLE);
         });
     }
 
     public void replaceSubscription() {
-        ordersViewModel.replaceUserOrdersSubscription(this);
+        userOrdersViewModel.replaceUserOrdersSubscription(this);
         startListening();
     }
 
     @Override
     public void showItemDetails(OrderItem userOrdersItem) {
-        orderListViewModel.setOrder(userOrdersItem);
-        if (userOrdersItem.getIdOrderStatus() != 7) {
+        userOrdersViewModel.setOrder(userOrdersItem);
+        if (userOrdersItem.getIdOrderStatus() != ORDER_WAIT_PAY) {
             getRoot().pushFragment(new OrderDetailsView(), true);
         } else {
             getRoot().pushFragment(new OrderCommissionView(), true);

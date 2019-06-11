@@ -19,11 +19,11 @@ import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsView;
 import yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel;
 
+import static yargo.inc.orders.fragments.order_list.OrderViewModel.ORDER_IS_VACANT;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_CLIENT_CANCEL;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_ASSIGNED;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_DONE;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_INWORK;
-import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_VACANT;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_WAIT_PAY;
 
 public class CusttomBottomBar extends ConstraintLayout implements CustomAlertDialog.CustomAlertDialogListener {
@@ -61,7 +61,8 @@ public class CusttomBottomBar extends ConstraintLayout implements CustomAlertDia
 
     public void initBottombar() {
         orderDetailsViewModel = OrderDetailsView.getOrderDetailsViewModel();
-        switch (orderDetailsViewModel.getOrderStatusId()) {
+        int orderStatusId = orderDetailsViewModel.getOrderStatusId();
+        switch (orderStatusId) {
             case ORDER_IS_VACANT:
                 detailBottomBar.setVisibility(VISIBLE);
                 detailBottomBar.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));

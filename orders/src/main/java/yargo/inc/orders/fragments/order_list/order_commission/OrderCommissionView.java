@@ -1,6 +1,7 @@
 package yargo.inc.orders.fragments.order_list.order_commission;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,6 +88,7 @@ public class OrderCommissionView extends BaseFragment implements CustomToolbarOr
         commissionViewModel.observPayData(this, payEntity -> pushFragmentIntoFragment(new SuccessTokinizeView(payEntity,commissionViewModel)));
         commissionViewModel.observIsPayed(this, aBoolean -> {
             if (aBoolean){
+                Log.d("setOrderCategoryId", "spinnerItemSelected + ORDER_IS_DONE");
                 orderListViewModel.setOrderCategoryId(ORDER_IS_DONE);
                 ShowDialog();
             }

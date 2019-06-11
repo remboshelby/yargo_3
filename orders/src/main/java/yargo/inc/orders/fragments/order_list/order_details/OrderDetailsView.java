@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import yargo.inc.common.network.models.order_detail.OrdersItem;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
+import yargo.inc.orders.fragments.order_list.OrderViewModel;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailAdapter;
 import yargo.inc.orders.fragments.order_list.common.utils.OrderDetailItem;
 import yargo.inc.orders.fragments.order_list.instructions.OffertView;
@@ -46,6 +48,7 @@ import yargo.inc.orders.fragments.order_list.order_details.custom_view.CustomToo
 import yargo.inc.orders.fragments.order_list.order_details.custom_view.CusttomBottomBar;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 
+import static yargo.inc.orders.fragments.order_list.OrderViewModel.ORDER_USERS;
 import static yargo.inc.orders.fragments.order_list.order_details.OrderDetailsViewModel.ORDER_GET_ISBUSY;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_ASSIGNED;
 import static yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel.ORDER_IS_INWORK;
@@ -73,6 +76,8 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
 
     @Inject
     protected UserOrdersViewModel userOrdersViewModel;
+    @Inject
+    protected OrderViewModel orderViewModel;
 
 
     protected static OrderDetailsViewModel orderDetailsViewModel;
@@ -102,6 +107,8 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
             progressDialog.cancel();
             switch (result) {
                 case OrderDetailsViewModel.ORDER_GET_SUCCESS:
+                    orderViewModel.setOrderCategoryId(ORDER_USERS);
+                    Log.d("setOrderCategoryId", "observOrderChangeResult + ORDER_IS_ASSIGNED");
                     userOrdersViewModel.setOrderCategoryId(ORDER_IS_ASSIGNED);
                     getRoot().onBackPressed();
                     break;
@@ -124,10 +131,12 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
                     showErrorDialogExtended(getString(R.string.order_status_is_allready_wait_pay), getRoot());
                     break;
                 case OrderDetailsViewModel.ORDER_START_SUCCESS:
+                    Log.d("setOrderCategoryId", "observOrderChangeResult + ORDER_IS_INWORK");
                     userOrdersViewModel.setOrderCategoryId(ORDER_IS_INWORK);
                     getRoot().onBackPressed();
                     break;
                 case OrderDetailsViewModel.ORDER_FINISED_SUCCESS:
+                    Log.d("setOrderCategoryId", "observOrderChangeResult + ORDER_WAIT_PAY");
                     userOrdersViewModel.setOrderCategoryId(ORDER_WAIT_PAY);
                     getRoot().onBackPressed();
                     break;

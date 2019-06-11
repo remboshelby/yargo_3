@@ -13,11 +13,6 @@ public class RegistrRepository {
     public RegistrRepository(RegistrApiService registrApiService) {
         this.registrApiService = registrApiService;
     }
-
-    public Observable<RegistrResponse> makeRegistr(HashMap<String, Object> personData) {
-        return registrApiService.makeRegistNewUser(personData);
-    }
-
     public Observable<RegistrResponse> makeRegistrGet(
             String username,
             String login,

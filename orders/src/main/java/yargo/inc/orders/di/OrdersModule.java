@@ -5,6 +5,7 @@ import android.app.Application;
 import yargo.inc.common.dto.CommonSharedPreferences;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.common.network.repository.OrdersRepository;
+import yargo.inc.orders.fragments.order_list.OrderViewModel;
 import yargo.inc.orders.fragments.order_list.filters.FiltersViewModel;
 import yargo.inc.orders.fragments.order_list.user_orders.UserOrdersViewModel;
 import yargo.inc.orders.fragments.order_list.vacant_orders.VacantOrdersViewModel;
@@ -59,5 +60,19 @@ public class OrdersModule {
                 return (T) new FiltersViewModel(application, commonSharedPreferences);
             }
         }).get(FiltersViewModel.class);
+    }
+    @Provides
+    @OrdersScope
+    public OrderViewModel provideOrderViewModel(OrderListsFragment host,
+                                                CommonSharedPreferences commonSharedPreferences,
+                                                OrdersRepository ordersRepository){
+        return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            @Singleton
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new OrderViewModel(commonSharedPreferences, ordersRepository);
+            }
+        }).get(OrderViewModel.class);
     }
 }

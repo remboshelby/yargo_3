@@ -22,7 +22,6 @@ import static yargo.inc.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 
 public class UserOrdersViewModel extends BaseViewModel {
 
-    public static final int ORDER_IS_VACANT = 1;
     public static final int ORDER_IS_ASSIGNED = 3;
     public static final int ORDER_IS_INWORK = 8;
     public static final int ORDER_WAIT_PAY = 7;
@@ -38,24 +37,22 @@ public class UserOrdersViewModel extends BaseViewModel {
     private LiveData<Integer> userOrderCount;
     private CompositeDisposable compositeDisposable;
 
-    private int startPositon = 0;
 
     private MutableLiveData<Integer> orderCategoryId = new MutableLiveData<>();
     private MutableLiveData<OrderItem> currentOrder = new MutableLiveData<>();
 
 
+    public void observOrderCategoryId(LifecycleOwner owner, Observer<Integer> valOrderCategoryId){
+        orderCategoryId.observe(owner, valOrderCategoryId);
+    }
+
     public UserOrdersViewModel(CommonSharedPreferences commonSharedPreferences,OrdersRepository ordersRepository) {
         this.commonSharedPreferences = commonSharedPreferences;
         this.ordersRepository = ordersRepository;
         compositeDisposable = getCompositeDisposable();
-        orderCategoryId.setValue(0);
     }
-
     public void observUserOrderCount(LifecycleOwner owner, Observer<Integer> userOrderCountValue){
         userOrderCount.observe(owner, userOrderCountValue);
-    }
-    public void observOrderCategoryId(LifecycleOwner owner, Observer<Integer> valOrderCategoryId){
-        orderCategoryId.observe(owner, valOrderCategoryId);
     }
     public void replaceUserOrdersSubscription(LifecycleOwner owner){
         compositeDisposable.clear();
@@ -80,34 +77,12 @@ public class UserOrdersViewModel extends BaseViewModel {
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
+
     public int getStartPositon() {
-        return startPositon;
+        return orderCategoryId.getValue()== null ? 3 : orderCategoryId.getValue();
     }
-    public void setStartPositon(int startPositon) {
-        this.startPositon = startPositon;
-
-    }
-
-    public void clearTokenToServer() {
-        String fcmToken = (String) commonSharedPreferences.getObject(CommonSharedPreferences.FCM_KEY, String.class);
-        String appId = (String) commonSharedPreferences.getObject(CommonSharedPreferences.APP_ID, String.class);
-        addDisposible(ordersRepository.pushAppData("", appId, fcmToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(appResponse -> {
-                }, throwable -> throwable.printStackTrace()));
-    }
-
     public void setOrder(OrderItem userOrdersItem) {
         currentOrder.postValue(userOrdersItem);
-    }
-
-    public void pushAuthToken(String authKey) {
-        commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
-    }
-
-    public User getUser() {
-        return (User) commonSharedPreferences.getObject(USER_ABOUT_RESPONSE, User.class);
     }
 
     public int getOrderId() {
