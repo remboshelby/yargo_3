@@ -31,14 +31,20 @@ import com.google.android.material.appbar.AppBarLayout;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import yargo.inc.common.base.BaseFragment;
+import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.interactors.ProfileEditorInteractor;
 import yargo.inc.common.network.models.login.User;
+import yargo.inc.common.network.repository.LoginRepository;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
+import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.orders.fragments.order_list.profile_editor.custom_view.CustomToolBarEditor;
 
 public class ProfileEditorView extends BaseFragment implements CustomToolBarEditor.profileListener {
@@ -66,6 +72,9 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
     AutoCompleteTextView editBdate;
 
     private ProfileEditorViewModel profileEditorViewModel;
+
+    @Inject
+    protected ProfileEditorInteractor profileEditorInteractor;
 
     @Override
     protected View inflate(LayoutInflater inflater, ViewGroup container) {
@@ -148,12 +157,13 @@ public class ProfileEditorView extends BaseFragment implements CustomToolBarEdit
         ButterKnife.bind(this, view);
         getRoot().setSupportActionBar(toolbar);
         customToolbar.setListener(this);
+        OrderListsFragment.getOrdersComponent().inject(this);
 
         profileEditorViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new ProfileEditorViewModel(getActivity().getApplication());
+                return (T) new ProfileEditorViewModel(getActivity().getApplication(), profileEditorInteractor);
             }
         }).get(ProfileEditorViewModel.class);
     }

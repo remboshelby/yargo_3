@@ -47,9 +47,6 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
     @Inject
     protected UserOrdersViewModel ordersViewModel;
 
-    @Inject
-    protected UserOrdersViewModel orderListViewModel;
-
     private UserOrdersItemAdapter userOrdersItemAdapter;
 
     @Override
@@ -105,7 +102,7 @@ public class UserOrderList extends BaseFragment implements UserOrdersItemAdapter
 
     @Override
     public void showItemDetails(OrderItem userOrdersItem) {
-        orderListViewModel.setOrder(userOrdersItem);
+        ordersViewModel.setOrder(userOrdersItem);
         if (userOrdersItem.getIdOrderStatus() != 7) {
             getRoot().pushFragment(new OrderDetailsView(), true);
         } else {

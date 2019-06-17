@@ -34,9 +34,6 @@ public class SuccessTokinizeView extends BaseFragment {
     @BindView(R2.id.webView)
     WebView webView;
 
-    @Inject
-    protected CommonSharedPreferences commonSharedPreferences;
-
     private CommissionViewModel commissionViewModel;
 
     ProgressDialog progressDialog;
@@ -51,7 +48,6 @@ public class SuccessTokinizeView extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        OrderListsFragment.getOrdersComponent().inject(this);
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Загрузка...");
         ButterKnife.bind(this, view);
@@ -61,7 +57,7 @@ public class SuccessTokinizeView extends BaseFragment {
         webView.setWebViewClient(new MyWebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
 
-        String authToken = (String) commonSharedPreferences.getObject(CommonSharedPreferences.AUTH_KEY, String.class);
+        String authToken = commissionViewModel.getAuthToken();
         webView.loadUrl("http://api.yargo.pro/payment/create?" +
                 "LoginForm[auth_key]=" + authToken +
                 "&Payment[payment_token]=" + payEntity.getPayToken() +

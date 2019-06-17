@@ -17,8 +17,7 @@ public class OrderDetailsViewModel extends BaseViewModel {
     private MutableLiveData<OrderDetailResponse> orderDetailData = new MutableLiveData<>();
     private MutableLiveData<Integer> orderChangeResult = new MutableLiveData<>();
 
-    @Inject
-    protected OrderActionRepository orderActionRepository;
+    private OrderActionRepository orderActionRepository;
 
     public static final int ORDER_ACTION_SOMETHING_WRONG = -1;
 
@@ -38,8 +37,8 @@ public class OrderDetailsViewModel extends BaseViewModel {
     private static final String ERROR_START_ALREADY_SET = "STATUS_ALREADY_SET";
     private static final String ERROR_ACCOMPLISHED_ALREADY_SET = "указанный заказ недоступен: некорректный статус указанного заказа";
 
-    public OrderDetailsViewModel() {
-        OrderListsFragment.getOrdersComponent().inject(this);
+    public OrderDetailsViewModel(OrderActionRepository orderActionRepository) {
+        this.orderActionRepository = orderActionRepository;
     }
 
     public void observOrderDetailData(LifecycleOwner owner, Observer<OrderDetailResponse> observer) {

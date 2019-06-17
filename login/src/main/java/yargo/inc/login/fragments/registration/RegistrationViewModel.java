@@ -13,15 +13,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.interactors.RegistrationInteractor;
 import yargo.inc.common.network.models.login.User;
 import yargo.inc.common.network.models.user_info.RegistData.PersonData;
 import yargo.inc.common.network.repository.RegistrRepository;
 
 public class RegistrationViewModel extends BaseViewModel {
-    @Inject
-    protected RegistrRepository registrRepository;
-    @Inject
-    protected CommonSharedPreferences commonSharedPreferences;
+    private RegistrationInteractor interactor;
 
     private static final int SURNAME_LENTH = 2;
     private static final int NAME_LENTH = 2;
@@ -42,12 +40,11 @@ public class RegistrationViewModel extends BaseViewModel {
     private MutableLiveData<PersonData> personData = new MutableLiveData<>();
     private MutableLiveData<Boolean> isBtnNextOn = new MutableLiveData<>();
 
-    private MutableLiveData<String> passwordConfirmation = new MutableLiveData<>();
-
     private MutableLiveData<Integer> registrationStatus = new MutableLiveData<>();
 
 
-    public RegistrationViewModel() {
+    public RegistrationViewModel(RegistrationInteractor interactor) {
+        this.interactor = interactor;
         personData.setValue(new PersonData("", "", "", "", "", false, false, "", "1", ""));
         isBtnNextOn.setValue(false);
     }
@@ -61,7 +58,7 @@ public class RegistrationViewModel extends BaseViewModel {
     }
 
     public void makeRegistr() {
-        addDisposible(registrRepository.makeRegistrGet(personData.getValue().getName(), personData.getValue().getSurname(), personData.getValue().getSex(), personData.getValue().getEmail(),
+        addDisposible(interactor.makeRegistrGet(personData.getValue().getName(), personData.getValue().getSurname(), personData.getValue().getSex(), personData.getValue().getEmail(),
                 personData.getValue().getTelephonNumber(), personData.getValue().getBirthday(), personData.getValue().getPassword(), personData.getValue().getCityId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -208,20 +205,11 @@ public class RegistrationViewModel extends BaseViewModel {
         }
     }
 
-    public void setRegistrationStatus() {
-        this.registrationStatus.postValue(REGISTR_SUCCESS);
-    }
-
-    public void replaceVacantSubscription(LifecycleOwner owner) {
-        onCleared();
-        registrationStatus.removeObservers(owner);
-    }
-
     public void pushAuthToken(String authKey) {
-        commonSharedPreferences.putObject(CommonSharedPreferences.AUTH_KEY, authKey);
+        interactor.setAuthToken(authKey);
     }
 
     public void pushUser(User user) {
-        commonSharedPreferences.putObject(CommonSharedPreferences.USER_ABOUT_RESPONSE, user);
+        interactor.setUserInfoAndFilteredCity(user);
     }
 }

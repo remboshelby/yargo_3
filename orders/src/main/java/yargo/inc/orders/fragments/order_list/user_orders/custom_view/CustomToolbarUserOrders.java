@@ -24,8 +24,6 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
     @Inject
     protected UserOrdersViewModel userOrdersViewModel;
 
-    int current_position = -1;
-
     @BindView(R2.id.tvToolBarTitle)
     TextView tvToolBarTitle;
     @BindView(R2.id.spOrderCategory)
@@ -48,9 +46,6 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
 
         spOrderCategory.setAdapter(new ArrayAdapter<>(context, R.layout.spiner_item, getResources().getStringArray(R.array.ordersCategory)));
         tvToolBarTitle.setText(getResources().getString(R.string.my_orders));
-
-//        userOrdersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[userOrdersViewModel.getStartPositon()]));
-
         spOrderCategory.setSelection(userOrdersViewModel.getStartPositon());
     }
     @OnItemSelected(value = R2.id.spOrderCategory, callback = OnItemSelected.Callback.ITEM_SELECTED)

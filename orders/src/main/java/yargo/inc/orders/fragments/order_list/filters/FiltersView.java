@@ -35,9 +35,6 @@ public class FiltersView extends BaseFragment implements CustomFilterToolbar.OnC
     AppBarLayout appbarFilter;
     @BindView(R2.id.filterViewContainer)
     NestedScrollView filterViewContainer;
-//    @BindView(R2.id.bottomFilterNav)
-//    BottomNavigationView bottomFilterNav;
-
 
     @Override
     protected int containerResId() {

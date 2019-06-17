@@ -36,6 +36,7 @@ import yargo.inc.common.base.BaseActivity;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.network.models.order_detail.OrderDetailResponse;
 import yargo.inc.common.network.models.order_detail.OrdersItem;
+import yargo.inc.common.network.repository.OrderActionRepository;
 import yargo.inc.orders.R;
 import yargo.inc.orders.R2;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
@@ -73,6 +74,8 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
 
     @Inject
     protected UserOrdersViewModel userOrdersViewModel;
+    @Inject
+    protected OrderActionRepository orderActionRepository;
 
 
     protected static OrderDetailsViewModel orderDetailsViewModel;
@@ -146,7 +149,7 @@ public class OrderDetailsView extends BaseFragment implements CustomToolbarOrder
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new OrderDetailsViewModel();
+                return (T) new OrderDetailsViewModel(orderActionRepository);
             }
         }).get(OrderDetailsViewModel.class);
 

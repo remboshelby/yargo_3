@@ -107,4 +107,10 @@ public class FiltersViewModel extends BaseViewAndroidModel {
         }
         return count;
     }
+    public void setFilteredCity(int cityId){
+        commonSharedPreferences.putObject(CommonSharedPreferences.FILTERED_CITY, cityId);
+    }
+    public String getFilteredCityName(){
+        return commonSharedPreferences.getFilteredCityName();
+    }
 }
