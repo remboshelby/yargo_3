@@ -27,7 +27,7 @@ public class UserOrdersViewModel extends BaseViewModel {
     public static final int ORDER_WAIT_PAY = 7;
     public static final int ORDER_IS_DONE = 4;
     public static final int ORDER_CLIENT_CANCEL = 5;
-    public static final int ORDER_CLIENT_CANCEL_ = 5;
+    public static final int ORDER_CLIENT_CANCEL__ = 5;
 
 
     private UserOrderInteractor interactor;
