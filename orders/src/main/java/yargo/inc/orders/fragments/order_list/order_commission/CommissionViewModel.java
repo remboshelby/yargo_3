@@ -108,4 +108,7 @@ public class CommissionViewModel extends BaseViewModel {
             comissionPrice.postValue(OTHER_COMMISSION * finalCoast);
         }
     }
+    public String getAuthToken(){
+       return commissionInteractor.getAuthToken();
+    }
 }

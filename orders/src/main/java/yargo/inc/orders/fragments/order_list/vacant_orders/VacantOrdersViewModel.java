@@ -8,6 +8,8 @@ import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
+import javax.inject.Inject;
+
 import io.reactivex.disposables.CompositeDisposable;
 import yargo.inc.common.base.BaseViewModel;
 import yargo.inc.common.network.models.order_list.OrderItem;

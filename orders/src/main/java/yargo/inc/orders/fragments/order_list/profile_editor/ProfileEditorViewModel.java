@@ -7,40 +7,28 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import javax.inject.Inject;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import yargo.inc.common.base.BaseViewAndroidModel;
-import yargo.inc.common.base.BaseViewModel;
-import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.interactors.ProfileEditorInteractor;
 import yargo.inc.common.network.models.login.User;
-import yargo.inc.common.network.models.profile_editor_model.ProfileEditResponse;
-import yargo.inc.common.network.repository.LoginRepository;
-import yargo.inc.orders.R;
-import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 
 import static yargo.inc.common.dto.CommonSharedPreferences.APP_ID;
-import static yargo.inc.common.dto.CommonSharedPreferences.AUTH_KEY;
-import static yargo.inc.common.dto.CommonSharedPreferences.USER_ABOUT_RESPONSE;
 
 public class ProfileEditorViewModel extends BaseViewAndroidModel {
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> profileChangedMLD = new MutableLiveData<>();
     private MutableLiveData<Boolean> someFieldIsChangedMLD = new MutableLiveData<>();
 
-    @Inject
-    protected CommonSharedPreferences commonSharedPreferences;
-    @Inject
-    protected LoginRepository loginRepository;
+
+    private ProfileEditorInteractor interactor;
 
     private User user;
 
-    public ProfileEditorViewModel(@NonNull Application application) {
+    public ProfileEditorViewModel(@NonNull Application application, ProfileEditorInteractor interactor) {
         super(application);
+        this.interactor = interactor;
 
-        OrderListsFragment.getOrdersComponent().inject(this);
         getUserInfo();
     }
 
@@ -57,17 +45,17 @@ public class ProfileEditorViewModel extends BaseViewAndroidModel {
     }
 
     public void getUserInfo() {
-        user = (User) commonSharedPreferences.getObject(USER_ABOUT_RESPONSE, User.class);
+        user = interactor.getUserInfo();
         userMutableLiveData.postValue(user);
         profileChangedMLD.postValue(false);
     }
 
     public void pushUserInfo() {
-        String authKey = (String) commonSharedPreferences.getObject(AUTH_KEY, String.class);
-        String appId = (String) commonSharedPreferences.getObject(APP_ID, String.class);
+        String authKey = interactor.getAuthToken();
+        String appId = interactor.getAppId();
 
 
-        addDisposible(loginRepository.editProfile(authKey, appId, userMutableLiveData.getValue().getUsername(),
+        addDisposible(interactor.editProfile(authKey, appId, userMutableLiveData.getValue().getUsername(),
                 userMutableLiveData.getValue().getSurname(),
                 userMutableLiveData.getValue().getSex(),
                 userMutableLiveData.getValue().getIdCity(),
@@ -75,9 +63,9 @@ public class ProfileEditorViewModel extends BaseViewAndroidModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(profileEditResponse -> {
-                    userMutableLiveData.postValue(profileEditResponse.getResponse().getUser());
-                    commonSharedPreferences.putObject(commonSharedPreferences.USER_ABOUT_RESPONSE, profileEditResponse.getResponse().getUser());
-                    commonSharedPreferences.putObject(commonSharedPreferences.FILTERED_CITY, profileEditResponse.getResponse().getUser().getIdCity());
+                    User user = profileEditResponse.getResponse().getUser();
+                    userMutableLiveData.postValue(user);
+                    interactor.setUserInfoAndFilteredCity(user);
 
                     profileChangedMLD.postValue(true);
                 }));

@@ -32,10 +32,10 @@ public class FilterCity extends BaseFragment implements FilterCityAdapter.cityIt
 
     @BindView(R2.id.filterCityRecycler)
     RecyclerView filterCityRecycler;
+
     @Inject
     protected FiltersViewModel filtersViewModel;
-    @Inject
-    protected CommonSharedPreferences commonSharedPreferences;
+
     private FilterCityAdapter filterCityAdapter;
     private ArrayList<CityModel> cityModels;
 
@@ -61,7 +61,7 @@ public class FilterCity extends BaseFragment implements FilterCityAdapter.cityIt
     }
 
     private ArrayList<CityModel> getCitiesArray() {
-        String filteredCityName = commonSharedPreferences.getFilteredCityName();
+        String filteredCityName = filtersViewModel.getFilteredCityName();
         String[] cityId = getResources().getStringArray(R.array.citiesId);
         String[] cityName = getResources().getStringArray(R.array.citiesName);
         ArrayList<CityModel> cityModels = new ArrayList<>();
@@ -86,7 +86,7 @@ public class FilterCity extends BaseFragment implements FilterCityAdapter.cityIt
 
     @Override
     public void onCityItemClick(CityModel cityModel) {
-        commonSharedPreferences.putObject(CommonSharedPreferences.FILTERED_CITY, cityModel.getId());
+        filtersViewModel.setFilteredCity(cityModel.getId());
         cityModels.clear();
         cityModels.addAll(getCitiesArray());
         filterCityAdapter.notifyDataSetChanged();

@@ -34,7 +34,7 @@ import butterknife.OnClick;
 import yargo.inc.common.base.BaseFragment;
 import yargo.inc.common.di.ApplicationNavigator;
 import yargo.inc.common.dto.CommonSharedPreferences;
-import yargo.inc.common.interactors.RegistrInteractor;
+import yargo.inc.common.interactors.RegistrationInteractor;
 import yargo.inc.login.R;
 import yargo.inc.login.R2;
 import yargo.inc.login.fragments.LoginFragment;
@@ -44,25 +44,28 @@ import yargo.inc.login.fragments.registration.registration_pages.RegistrPersonal
 import yargo.inc.login.utils_view.LockableViewPager;
 
 public class RegistrationFragment extends BaseFragment implements RegistrEnd.RegistrationEndListener {
+    @Inject
+    protected RegistrationInteractor registrationInteractor;
+
     protected static RegistrationViewModel registrationViewModel;
 
-    @Inject
-    protected RegistrInteractor registrInteractor;
 
     @BindView(R2.id.tabLayout)
     TabLayout tabLayout;
     private ApplicationNavigator navigator;
+
     @BindView(R2.id.imgBtnBackPress)
     ImageButton imgBtnBackPress;
     @BindView(R2.id.tvToobarNameRegistration)
     TextView tvToobarNameRegistration;
+
     @BindView(R2.id.btnRegistNext)
     Button btnRegistNext;
+
     @BindView(R2.id.appbarLayout)
     AppBarLayout appbarLayout;
     @BindView(R2.id.registrationContainer)
     LockableViewPager registrationСontainer;
-
     private static final int REGISTR_PAGE_COUNT = 3;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
@@ -135,9 +138,10 @@ public class RegistrationFragment extends BaseFragment implements RegistrEnd.Reg
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new RegistrationViewModel(registrInteractor);
+                return (T) new RegistrationViewModel(registrationInteractor);
             }
         }).get(RegistrationViewModel.class);
+
         navigator = LoginFragment.getNavigator();
     }
 

@@ -20,8 +20,6 @@ public class CustomFilterToolbar extends ConstraintLayout {
     ImageButton imageButton;
     @BindView(R2.id.tvToobarName)
     TextView tvToobarName;
-//    @BindView(R2.id.BtnConfirmFilter)
-//    Button BtnConfirmFilter;
 
     public void setOnCustomFilterToolbarClick(OnCustomFilterToolbarClick onCustomFilterToolbarClick) {
         this.onCustomFilterToolbarClick = onCustomFilterToolbarClick;

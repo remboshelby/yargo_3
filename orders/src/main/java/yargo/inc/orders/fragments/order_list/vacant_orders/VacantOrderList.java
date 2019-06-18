@@ -45,7 +45,7 @@ public class VacantOrderList extends BaseFragment implements VacantOrdersItemAda
     private VacantOrdersItemAdapter vacantOrdersItemAdapter;
 
     @Inject
-    public VacantOrdersViewModel vacantOrdersViewModel;
+    protected VacantOrdersViewModel vacantOrdersViewModel;
     @Inject
     protected UserOrdersViewModel userOrdersViewModel;
 

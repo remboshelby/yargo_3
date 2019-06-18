@@ -3,6 +3,7 @@ package yargo.inc.orders.di;
 import android.app.Application;
 
 import yargo.inc.common.dto.CommonSharedPreferences;
+import yargo.inc.common.interactors.UserOrderInteractor;
 import yargo.inc.orders.fragments.order_list.OrderListsFragment;
 import yargo.inc.common.network.repository.OrdersRepository;
 import yargo.inc.orders.fragments.order_list.OrderViewModel;
@@ -38,13 +39,13 @@ public class OrdersModule {
     @OrdersScope
     public UserOrdersViewModel provideUserOrdersViewModel(OrderListsFragment host,
                                                           CommonSharedPreferences commonSharedPreferences,
-                                                          final OrdersRepository ordersRepository){
+                                                          final UserOrderInteractor userOrderInteractor){
         return ViewModelProviders.of(host, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             @Singleton
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserOrdersViewModel(commonSharedPreferences, ordersRepository);
+                return (T) new UserOrdersViewModel(userOrderInteractor);
             }
         }).get(UserOrdersViewModel.class);
     }

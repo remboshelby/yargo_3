@@ -2,15 +2,12 @@ package yargo.inc.orders.fragments.order_list.user_orders.custom_view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-
-import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -26,8 +23,6 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
 
     @Inject
     protected UserOrdersViewModel userOrdersViewModel;
-
-    int current_position = -1;
 
     @BindView(R2.id.tvToolBarTitle)
     TextView tvToolBarTitle;
@@ -51,27 +46,12 @@ public class CustomToolbarUserOrders extends ConstraintLayout {
 
         spOrderCategory.setAdapter(new ArrayAdapter<>(context, R.layout.spiner_item, getResources().getStringArray(R.array.ordersCategory)));
         tvToolBarTitle.setText(getResources().getString(R.string.my_orders));
-
-
-        setCustomSelection(userOrdersViewModel.getStartPositon());
+        spOrderCategory.setSelection(userOrdersViewModel.getStartPositon());
     }
-
-    public void setCustomSelection(int postion) {
-        String s = String.valueOf(postion);
-        int t = Arrays.asList(getResources().getStringArray(R.array.ordersCategoryId)).indexOf(s);
-        Log.d("setOrderCategoryId", "SELECTION");
-        spOrderCategory.setSelection(t);
-    }
-
-    //    public void setSelectorPosition(){
-//        userOrdersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[position]));
-//    }
     @OnItemSelected(value = R2.id.spOrderCategory, callback = OnItemSelected.Callback.ITEM_SELECTED)
     void spinnerItemSelected(int position) {
-        Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[position]);
             userOrdersViewModel.setOrderCategoryId(Integer.valueOf(getResources().getStringArray(R.array.ordersCategoryId)[position]));
-            Log.d("setOrderCategoryId", "spinnerItemSelected");
-//            userOrdersViewModel.setStartPositon(position);
+            userOrdersViewModel.setStartPositon(position);
     }
 
 }

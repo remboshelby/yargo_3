@@ -72,6 +72,8 @@ public interface OrdersComponent {
 
     void inject(ProfileEditorViewModel profileEditorViewModel);
 
+    void inject(ProfileEditorView profileEditorView);
+
     @Component.Builder
     interface Builder {
         @BindsInstance

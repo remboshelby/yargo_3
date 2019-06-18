@@ -56,12 +56,9 @@ public class LoginFragment extends BaseFragment {
 
     @Inject
     protected LoginViewModel viewModel;
-    @Inject
-    protected CommonSharedPreferences preferences;
 
     protected static LoginComponent loginComponent;
     private static ApplicationNavigator navigator;
-
 
     private ProgressDialog progressDialog;
 
@@ -102,11 +99,11 @@ public class LoginFragment extends BaseFragment {
         });
         viewModel.observeData(this, loginResponse -> {
             if (loginResponse.getResponse().getType().equals("OK")) {
-                preferences.putObject(CommonSharedPreferences.AUTH_KEY, loginResponse.getResponse().getAuthKey());
+                viewModel.pushAuthToken(loginResponse.getResponse().getAuthKey());
                 navigator.openFragment(getRoot(), "Orders");
                 viewModel.sendTokenToServer();
             } else {
-                preferences.putObject(CommonSharedPreferences.AUTH_KEY, "");
+                viewModel.pushAuthToken("");
                 textInputLayoutEmail.setErrorEnabled(true);
                 textInputLayoutPassword.setErrorEnabled(true);
 
